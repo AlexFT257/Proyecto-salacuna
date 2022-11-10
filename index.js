@@ -16,8 +16,8 @@ app.options('*',cors());
 app.use('/api', asistenteParvuloRoutes);
 
 mongoose.set('useNewUrlParser',true);
-// mongoose.set('useFindeAndModify',false);
-// mongoose.set('useCreateIndex',true);
+//mongoose.set('useFindeAndModify',false); // crashea si se activa debe ser un video que no he visto
+mongoose.set('useCreateIndex',true);
 mongoose.set('useUnifiedTopology',true);
 
 mongoose.connect(process.env.DB,(error)=>{

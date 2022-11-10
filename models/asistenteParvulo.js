@@ -18,3 +18,5 @@ const asistenteParvuloSchema = new Schema({
         required: true
     }
 })
+
+module.exports= mongoose.model('asistente',asistenteParvuloSchema);
