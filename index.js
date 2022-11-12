@@ -7,13 +7,14 @@ dotenv.config();
 
 // insertar las rutas de los requisitos
 const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes')
-
+const parvuloRoutes = require('./routes/parvuloRoutes');
 
 app.use(cors());
 app.use(express.json());
 app.options('*',cors());
 
 app.use('/api', asistenteParvuloRoutes);
+app.use('/api', parvuloRoutes);
 
 mongoose.set('useNewUrlParser',true);
 //mongoose.set('useFindeAndModify',false); // crashea si se activa debe ser un video que no he visto
