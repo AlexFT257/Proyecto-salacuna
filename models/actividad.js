@@ -21,9 +21,9 @@ const actividadSchema = new Schema({
     },
     asistenteParvulo:{
         type: Schema.Types.ObjectId,
-        ref: 'AsistenteParvulo',
+        ref: 'asistenteParvulo',
         required: true
     },
 })
 
-module.exports= mongoose.model('Actividad',actividadSchema);
+module.exports= mongoose.model('actividad',actividadSchema);
