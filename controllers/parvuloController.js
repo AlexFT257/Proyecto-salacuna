@@ -1,7 +1,7 @@
 const parvulo = require('../models/parvulo');
+//crear parvulo
 const createParvulo = (req,res)=>{
     // revisar la informacion solicitada en el cuestionario
-   
     const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,nombreApoderado} = req.body;
     const newParvulo = new parvulo({
         nombre,
@@ -19,8 +19,8 @@ const createParvulo = (req,res)=>{
         }
         return res.status(201).send(parvulo)
     })
-}
-
+};
+//Obtener todos los parvulos
 const getParvulos = (req,res)=>{
     parvulo.find({},(error,parvulos)=>{
         if(error){
@@ -31,11 +31,11 @@ const getParvulos = (req,res)=>{
         }
         return res.status(200).send(parvulos)
     })
-}
-
+};
+//Actualizar parvulo por rut
 const updateParvulo = (req,res)=>{
-    const {id}=req.params;
-    parvulo.findByIdAndUpdate(id,req.body,(error,parvulo)=>{
+    const {rut}=req.params.rut;
+    parvulo.findOne(rut,(error,parvulo)=>{
         if(error){
             return res.status(400).send({message: "No se ha podido actualizar el parvulo"})
         }
@@ -44,12 +44,39 @@ const updateParvulo = (req,res)=>{
         }
         return res.status(200).send({message: "Parvulo modificado"})
     })
-} 
+} ;
 
-
+//Eliminar parvulo por rut
+const deleteParvulo = (req,res)=>{
+    const {rut}=req.params.rut;
+    parvulo.findOne(rut,(error,parvulo)=>{
+        if(error){
+            return res.status(400).send({message: "No se ha podido eliminar el parvulo"})
+        }
+        if(!parvulo){
+            return res.status(404).send({message: "No se ha encontrado el parvulo"})
+        }
+        return res.status(200).send({message: "Parvulo eliminado"})
+    })
+};
+//Obtener parvulo por rut
+const getOneParvulo = (req,res)=>{
+    const {rut}=req.params.rut;
+    parvulo.findOne(rut,(error,parvulo)=>{
+        if(error){
+            return res.status(400).send({message: "No se ha podido obtener el parvulo" + error})
+        }
+        if(!parvulo){
+            return res.status(404).send({message: "No se ha encontrado el parvulo"})
+        }
+        return res.status(200).send(parvulo)
+    })
+};
 
 module.exports = {
         createParvulo,
         getParvulos,
-        updateParvulo
-    }
+        updateParvulo,
+        deleteParvulo,
+        getOneParvulo
+ };
