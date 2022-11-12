@@ -14,6 +14,7 @@ app.use(express.json());
 app.options('*',cors());
 
 app.use('/api', asistenteParvuloRoutes);
+app.use('/api', actividadRoutes);
 
 mongoose.set('useNewUrlParser',true);
 //mongoose.set('useFindeAndModify',false); // crashea si se activa debe ser un video que no he visto
