@@ -26,7 +26,7 @@ const createAsistente = (req, res) => {
 
 const getAsistentes = (req, res) => {
   AsistenteParvulo.find({})
-    .populate({ path: "nombre apellido rut" })
+    .populate({ path: " rut" })
     .exec((error, asistentes) => {
       if (error) {
         return res
@@ -44,7 +44,7 @@ const getAsistentes = (req, res) => {
 
 const updateAsistente = (req, res) => {
   const { rut } = req.params;
-  AsistenteParvulo.findByIdAndUpdate(rut, req.body, (error, asistente) => {
+  AsistenteParvulo.findOneAndUpdate(rut,req.body, (error, asistente) => {
     if (error) {
       return res
         .status(400)
@@ -61,7 +61,6 @@ const updateAsistente = (req, res) => {
 
 const deleteAsistente = (req, res) => {
   const { rut } = req.params;
-
   AsistenteParvulo.findOneAndDelete(rut, (error, asistente) => {
     if (error) {
       return res
