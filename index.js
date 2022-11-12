@@ -7,7 +7,7 @@ dotenv.config();
 
 // insertar las rutas de los requisitos
 const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes')
-
+const actividadRoutes = require('./routes/actividadRoutes')
 
 app.use(cors());
 app.use(express.json());
