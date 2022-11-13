@@ -20,8 +20,8 @@ const actividadSchema = new Schema({
         required: true
     },
     asistenteParvulo:{
-        type: Schema.Types.ObjectId,
-        ref: 'asistenteParvulo',
+        type: Schema.ObjectId,
+        ref: 'asistente',
         required: true
     },
 })

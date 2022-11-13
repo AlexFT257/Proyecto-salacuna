@@ -66,7 +66,7 @@ const deleteActividad = (req, res) => {
         .status(400)
         .send({ message: "No se pude eliminar la actividad" });
     }
-    if (!asistente) {
+    if (!actividad) {
       return res
         .status(400)
         .send({ message: "No se ha podido encontrar la actividad" });
