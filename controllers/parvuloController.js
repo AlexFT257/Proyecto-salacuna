@@ -34,8 +34,8 @@ const getParvulos = (req,res)=>{
 };
 //Actualizar parvulo por rut
 const updateParvulo = (req,res)=>{
-    const {rut}=req.params.rut;
-    parvulo.findOneAndUpdate(rut,(error,parvulo)=>{
+    const {rut}=req.params;
+    parvulo.findOneAndUpdate({rut},req.body,(error,parvulo)=>{
         if(error){
             return res.status(400).send({message: "No se ha podido actualizar el parvulo"})
         }
@@ -61,8 +61,8 @@ const deleteParvulo = (req,res)=>{
 };
 //Obtener parvulo por rut
 const getOneParvulo = (req,res)=>{
-    const {rut}=req.params.rut;
-    parvulo.findOne(rut,(error,parvulo)=>{
+    const {rut}=req.params;
+    parvulo.findOne({rut},(error,parvulo)=>{
         if(error){
             return res.status(400).send({message: "No se ha podido obtener el parvulo" + error})
         }
