@@ -26,7 +26,7 @@ const createAsistente = (req, res) => {
 
 const getAsistentes = (req, res) => {
   AsistenteParvulo.find({})
-    .populate({ path: " rut" })
+    .populate()
     .exec((error, asistentes) => {
       if (error) {
         return res
