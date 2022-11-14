@@ -9,7 +9,7 @@ const actividadSchema = new Schema({
     },
     hora:{
         type: String,
-        required: true
+        required: false
     },
     nombre:{
         type: String,
