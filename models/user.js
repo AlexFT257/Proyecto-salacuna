@@ -30,6 +30,18 @@ const userSchema = new Schema({
     foto:{
         type: Schema.ObjectId,
         ref: 'file',
+    },
+    fechaNa:{
+        type: Date,
+        required: true
+    },
+    domicilio:{
+        type: String,
+        required: false // cambiar despues
+    },
+    telefono:{
+        type: String,
+        required: true
     }
 })
 
