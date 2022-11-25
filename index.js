@@ -6,9 +6,10 @@ const app = express();
 dotenv.config();
 
 // insertar las rutas de los requisitos
-const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes')
-const actividadRoutes = require('./routes/actividadRoutes')
+const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes');
+const actividadRoutes = require('./routes/actividadRoutes');
 const parvuloRoutes = require('./routes/parvuloRoutes');
+const asistenciasRoutes = require('./routes/asistenciaRoutes');
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +18,7 @@ app.options('*',cors());
 app.use('/api', asistenteParvuloRoutes);
 app.use('/api', actividadRoutes);
 app.use('/api', parvuloRoutes);
+app.use('/api', asistenciasRoutes);
 
 mongoose.set('useNewUrlParser',true);
 //mongoose.set('useFindeAndModify',false); // crashea si se activa debe ser un video que no he visto
