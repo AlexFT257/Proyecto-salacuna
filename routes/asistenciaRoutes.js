@@ -7,4 +7,6 @@ api.update('/asistencia/actualizar/:id', asistenciaController.actualizarAsistenc
 api.delete('/asistencia/eliminar/:id', asistenciaController.eliminarAsistencia);
 api.get('/asistencia/obtener', asistenciaController.obtenerAsistencia);
 
+api.post('/asistencia/notificar_retiro', retiroController.notificarRetiro);
+
 module.exports = api;
