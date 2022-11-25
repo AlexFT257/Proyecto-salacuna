@@ -28,8 +28,9 @@ const userSchema = new Schema({
         ]
     },
     foto:{
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'file',
+        required: false
     },
     fechaNa:{
         type: Date,

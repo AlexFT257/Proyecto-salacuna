@@ -9,4 +9,4 @@ api.post("/file/:archivo", upload.array('archivos'), fileSize, fileController.up
 api.get('/files', fileController.getFiles)
 api.get('/file/download/:id', fileController.getSpecificFile)
 
-module.exports = api
+module.exports = api;

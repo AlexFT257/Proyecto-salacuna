@@ -52,12 +52,14 @@ const getAsistentes = (req, res) => {
 
 const getAsistente = (req, res) => {
   const { rut } = req.params;
-  User.findOne({rut:rut}, (err, user) => {
+  User.findOne({ rut: rut }, (err, user) => {
     if (err) {
       return res.status(400).send({ message: "Error al obtener el usuario" });
     }
     if (!user) {
-      return res.status(400).send({ message: "Error al obtener el usuario (usuario no existe)" });
+      return res
+        .status(400)
+        .send({ message: "Error al obtener el usuario (usuario no existe)" });
     }
     if (user.role != "asistente") {
       return res
@@ -75,7 +77,7 @@ const updateAsistente = (req, res) => {
       return res.status(400).send({ message: "Error al obtener el usuario" });
     }
     if (!user) {
-      return res.status(400).send({ message: "Error al obtener el usuario" });
+      return res.status(400).send({ message: "Error al obtener el usuario (usuario vacio)" });
     }
     if (user.role != "asistente") {
       return res
@@ -88,25 +90,23 @@ const updateAsistente = (req, res) => {
   });
 };
 
-const getSelectionAsistentes = (req,res)=>{
-  const {ruts} = req.body;
-  User.find({rut:ruts},(err,users)=>{
+const getSelectionAsistentes = (req, res) => {
+  const { ruts } = req.body;
+  User.find({ rut: ruts }, (err, users) => {
     if (err) {
       return res.status(400).send({ message: "Error al obtener el usuario" });
     }
     if (!users) {
       return res.status(400).send({ message: "Error al obtener el usuario" });
     }
-    users.forEach(user => {
+    users.forEach((user) => {
       if (user.role != "asistente") {
         return res
           .status(400)
           .send({ message: "Error, el usuario no es asistente de parvulo" });
       }
     });
-    return res
-      .status(200)
-      .send(users);
+    return res.status(200).send(users);
   });
 };
 
@@ -130,9 +130,9 @@ const deleteAsistente = (req, res) => {
   });
 };
 
-const deleteSelectionAsistentes = (req,res)=>{
-  const {ruts} = req.body;
-  User.deleteMany({rut:ruts},(err,users)=>{
+const deleteSelectionAsistentes = (req, res) => {
+  const { ruts } = req.body;
+  User.deleteMany({ rut: ruts }, (err, users) => {
     if (err) {
       return res.status(400).send({ message: "Error al obtener el usuario" });
     }
@@ -149,10 +149,9 @@ const deleteSelectionAsistentes = (req,res)=>{
     }
     return res
       .status(200)
-      .send({message:"Asistentes eliminados correctamente"});
+      .send({ message: "Asistentes eliminados correctamente" });
   });
-}
-
+};
 
 module.exports = {
   createUser,
