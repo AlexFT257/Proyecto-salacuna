@@ -36,7 +36,7 @@ const parvuloSchema=new Schema({
         required: true
     },
     apoderado:{
-        type: Schema.Types.ObjectId,
+        type: Schema.ObjectId,
         ref: 'user',
         required: true
     }
