@@ -2,14 +2,14 @@ const actividad = require("../models/actividad");
 const User = require("../models/user");
 
 const createActividad = (req, res) => {
-  if (req.body.asistenteParvulo) {
-    const { fecha, hora, nombre, descripcion, asistenteParvulo } = req.body;
+  if (req.body.responsable) {
+    const { fecha, titulo, descripcion, responsable, parvulos } = req.body;
     const newActividad = new actividad({
       fecha,
-      hora,
-      nombre,
+      titulo,
       descripcion,
-      asistenteParvulo,
+      responsable,
+      parvulos
     });
     newActividad.save((error, actividad) => {
       if (error) {
@@ -25,7 +25,7 @@ const createActividad = (req, res) => {
 
 const getActividades = (req, res) => {
   actividad.find({})
-  .populate('asistenteParvulo')
+  .populate('responsable')
   .populate('parvulos')
   .exec((error, actividades) => {
     if (error) {
@@ -55,14 +55,14 @@ const updateActividad = (req, res) => {
         .status(400)
         .send({ message: "No se ha podido encontrar la actividad" });
     }
-    return res.status(200).send({ message: "Actividad modificada", actividad });
+    return res.status(200).send({ message: "Actividad modificada"});
   });
 };
 
 const deleteActividad = (req, res) => {
   const { id } = req.params;
 
-  actividad.findOneAndDelete(id, (error, actividad) => {
+  actividad.findByIdAndDelete(id, (error, actividad) => {
     if (error) {
       return res
         .status(400)
@@ -82,7 +82,8 @@ const deleteActividad = (req, res) => {
 const getActividad = (req, res) => {
     const { id } = req.params;
     actividad.findById(id)
-    .populate('asistenteParvulo')
+    .populate('responsable')
+    .populate('parvulos')
     .exec((error, actividad) => {
         if (error) {
             return res
@@ -99,10 +100,32 @@ const getActividad = (req, res) => {
     );
 };
 
+const getActividadesByParvulo = (req, res) => {
+    const { id } = req.params;
+    actividad.find({parvulos: id})
+    .populate('responsable')
+    .populate('parvulos')
+    .exec((error, actividades) => {
+        if (error) {
+            return res
+            .status(400)
+            .send({ message: "No se pudo realizar la busqueda" });
+        }
+        if (actividades.length === 0) {
+            return res
+            .status(404)
+            .send({ message: "No se encontraron actividades" });
+        }
+        return res.status(200).send(actividades);
+        }
+    );
+};
+
 module.exports = {
     createActividad,
     getActividades,
     updateActividad,
     deleteActividad,
     getActividad,
+    getActividadesByParvulo
 };
