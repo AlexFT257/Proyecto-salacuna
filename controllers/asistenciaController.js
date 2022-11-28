@@ -22,8 +22,7 @@ const registrarAsistencia = (req, res) => {
 
 const obtenerAsistencia = (req, res) => {
     Asistencia.find({}).sort('rut').populate({
-        path: 'rut', select: 'ASISTENCIA_REGISTRADA.FECHA_REGISTRO ASISTENCIA_REGISTRADA.RUT_PARVULARIA ASISTENCIA_REGISTRADA.PARVULARIOS' 
-    }).exec((error, asistencia) => {
+        path: 'rut'}).exec((error, asistencia) => {
         if(error){
             console.log(error);
             return res.status(400).send({
