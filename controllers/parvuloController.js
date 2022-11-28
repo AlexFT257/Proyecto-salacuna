@@ -1,34 +1,23 @@
 const parvulo = require('../models/parvulo');
-
 const createParvulo = (req,res)=>{
     // revisar la informacion solicitada en el cuestionario
     const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,apoderado} = req.body;
-    // revisar si el appoderado existe
-    findById(apoderado,(error,apoderado)=>{
+    const newParvulo = new parvulo({
+        nombre,
+        rut,
+        fechaNacimiento,
+        edad,
+        direccion,
+        telefonoEmergencia,
+        condicionesMedicas,
+        apoderado
+    })
+    newParvulo.save((error,parvulo)=>{
         if(error){
-            return res.status(400).send({message:"Error al obtener el apoderado"});
+            return res.status(400).send({message: "No se ha podido crear el parvulo"+error})
         }
-        if(!apoderado){
-            return res.status(400).send({message:"Error al obtener el apoderado (apoderado no existe)"});
-        }
-        // crear el parvulo
-        const newParvulo = new parvulo({
-            nombre,
-            rut,
-            fechaNacimiento,
-            edad,
-            direccion,
-            telefonoEmergencia,
-            condicionesMedicas,
-            apoderado
-        });
-        newParvulo.save((err,parvulo)=>{
-            if(err){
-                return res.status(400).send({message:"Error al crear el parvulo"});
-            }
-            return res.status(201).send(parvulo);
-        });
-    });
+        return res.status(201).send(parvulo)
+    })
 };
 //Obtener todos los parvulos
 const getParvulos = (req,res)=>{
@@ -84,10 +73,26 @@ const getOneParvulo = (req,res)=>{
 };
 
 
+// Buscar un apoderado por su id
+const getOneParvuloByApoderado = (req,res)=>{
+    const {apoderado}=req.body;
+    parvulo.findById({apoderado},req.body,(error,parvulo)=>{
+        if(error){
+            return res.status(400).send({message: "No se ha podido obtener el apoderado" + error})
+        }
+        if(!apoderado){
+            return res.status(404).send({message: "apoderado no existe en la base de datos"})
+        }
+        return res.status(200).send(parvulo)
+    })
+};
+
+
 module.exports = {
         createParvulo,
         getParvulos,
         updateParvulo,
         deleteParvulo,
-        getOneParvulo
+        getOneParvulo,
+        getOneParvuloByApoderado
     }
