@@ -4,6 +4,7 @@ const api = express.Router();
 
 const asistenteAuth = require('../middlewares/parvulariaAuth');
 
+api.post('/asistente',asistenteAuth,asistenteParvuloController.createAsistente);
 api.get('/asistentes',asistenteAuth, asistenteParvuloController.getAsistentes);
 api.get('/asistente/search/:rut',asistenteAuth,asistenteParvuloController.getAsistente);
 api.get('/asistente/search',asistenteAuth,asistenteParvuloController.getSelectionAsistentes);
