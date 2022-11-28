@@ -87,6 +87,20 @@ const createParvulo = (req,res)=>{
     })
 }
 
+//obterner parvulos de un apoderado
+const getParvulosByApoderado = (req,res)=>{
+    const {apoderado}=req.params;
+    parvulo.find({apoderado:apoderado},(error,parvulos)=>{
+        if(error){
+            return res.status(400).send({message: "No se ha podido obtener los parvulos"})
+        }
+        if(parvulos.length===0){
+            return res.status(404).send({message: "No hay parvulos"})
+        }
+        return res.status(200).send(parvulos)
+    }
+    )
+}
 
 
 
@@ -98,5 +112,6 @@ module.exports = {
         updateParvulo,
         deleteParvulo,
         getOneParvulo,
-        createParvulo
+        createParvulo,
+        getParvulosByApoderado
     }
