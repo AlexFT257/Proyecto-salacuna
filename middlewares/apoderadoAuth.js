@@ -1,7 +1,7 @@
 const User = require("../models/user");
 
 export const apoderadoAuth = async (req, res, next) => {
-    const { id } = req.params.usuarioId;
+    const { id } = req.get("X-Caller-Id");
     const user = await User.findById(id);
     if (user.role === "apoderado") {
         next();
