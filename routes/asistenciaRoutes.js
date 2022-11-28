@@ -3,6 +3,7 @@ const asistenciaController = require('../controllers/asistenciaController.js');
 const retiroController = require('../controllers/retiroController.js');
 const api = express.Router();
 
+
 api.post('/asistencia/registrar/:id', asistenciaController.registrarAsistencia);
 api.put('/asistencia/actualizar/:id', asistenciaController.actualizarAsistencia);
 api.delete('/asistencia/eliminar/:id', asistenciaController.eliminarAsistencia);

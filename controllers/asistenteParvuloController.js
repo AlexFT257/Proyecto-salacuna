@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require("../models/user");
 
 const createAsistente = (req, res) => {
   const {
@@ -24,7 +24,7 @@ const createAsistente = (req, res) => {
     telefono,
   });
   // obligando el rol de asistente
-  newUser.role='asistente';
+  newUser.role = "asistente";
   newUser.save((err, user) => {
     if (err) {
       return res.status(400).send({ message: "Error al crear el usuario" });
@@ -34,21 +34,17 @@ const createAsistente = (req, res) => {
 };
 
 const getAsistentes = (req, res) => {
-  AsistenteParvulo.find({})
-    .populate()
-    .exec((error, asistentes) => {
-      if (error) {
-        return res
-          .status(400)
-          .send({ message: "No se pudo realizar la busqueda" });
-      }
-      if (asistentes.length === 0) {
-        return res
-          .status(404)
-          .send({ message: "No se encontraron asistentes" });
-      }
-      return res.status(200).send(asistentes);
-    });
+  User.find({ role: "asistente" }, (error, asistentes) => {
+    if (error) {
+      return res
+        .status(400)
+        .send({ message: "No se pudo realizar la busqueda" });
+    }
+    if (asistentes.length === 0) {
+      return res.status(404).send({ message: "No se encontraron asistentes" });
+    }
+    return res.status(200).send(asistentes);
+  });
 };
 
 const getAsistente = (req, res) => {
@@ -78,7 +74,9 @@ const updateAsistente = (req, res) => {
       return res.status(400).send({ message: "Error al obtener el usuario" });
     }
     if (!user) {
-      return res.status(400).send({ message: "Error al obtener el usuario (usuario vacio)" });
+      return res
+        .status(400)
+        .send({ message: "Error al obtener el usuario (usuario vacio)" });
     }
     if (user.role != "asistente") {
       return res
@@ -153,7 +151,6 @@ const deleteSelectionAsistentes = (req, res) => {
       .send({ message: "Asistentes eliminados correctamente" });
   });
 };
-
 
 module.exports = {
   createAsistente,
