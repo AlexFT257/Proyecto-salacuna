@@ -11,7 +11,6 @@ const userRoutes = require('./routes/userRoutes');
 const parvuloRoutes = require('./routes/parvuloRoutes');
 const asistenciaRoutes = require('./routes/asistenciaRoutes');
 const fileRoutes = require("./routes/fileRoutes");
-const userRoutes = require("./routes/userRoutes");
 
 app.use(cors());
 app.use(express.json());

@@ -3,20 +3,19 @@ var nodemailer = require('nodemailer');
 var correo = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'marco.acuna1901@alumnos.ubiobio.cl',
-    pass: 'CAMBIAR'
+    user: `${process.env.MAIL_USER}`,
+    pass: `${process.env.MAIL_PASS}`
   }
 });
 
 const notificarRetiro = (req, res) => {
-    const {rut, parvulo} = req.params;
-    const {to, subject, rutParvulo} = req.body;
+    const {to, rutParvulo} = req.body;
 
     var mailOptions = {
-        from: 'marco.acuna1901@alumnos.ubiobio.cl',
+        from: `${process.env.MAIL_USER}`,
         to,
         subject: `Su pupilo ha sido retirado`,
-        text: `Su pupilo: ${rutParvulo} fue retirado a las ${(new Date.now).toLocaleDateString()}`
+        text: `Su pupilo: ${rutParvulo} fue retirado a las ${Date.now}`
       };
 
       correo.sendMail(mailOptions, function(error, info){
