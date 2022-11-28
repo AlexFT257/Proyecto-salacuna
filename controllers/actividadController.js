@@ -3,7 +3,6 @@ const parvulo = require("../models/parvulo");
 
 const createActividad = (req, res) => {
   if (req.body.responsable) {
-<<<<<<< HEAD
     const { fecha, titulo, descripcion, responsable, parvulos, foto } = req.body;
     const newActividad = new actividad({
       fecha,    
@@ -12,15 +11,6 @@ const createActividad = (req, res) => {
       responsable,
       parvulos,
       foto,
-=======
-    const { fecha, titulo, descripcion, responsable, parvulos } = req.body;
-    const newActividad = new actividad({
-      fecha,
-      titulo,
-      descripcion,
-      responsable,
-      parvulos
->>>>>>> 394865b02fca3deb015b0641ecda46d45ac4ff16
     });
     newActividad.save((error, actividad) => {
       if (error) {
