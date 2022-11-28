@@ -21,8 +21,9 @@ const registrarAsistencia = (req, res) => {
 }
 
 const obtenerAsistencia = (req, res) => {
-    Asistencia.find({}).sort('rut').populate({
-        path: 'rut'}).exec((error, asistencia) => {
+    const { rutParvularia } = req.get('X-Caller-Id');
+    Asistencia.find({}).sort('fecha').populate({
+        rut: rutParvularia}).exec((error, asistencia) => {
         if(error){
             console.log(error);
             return res.status(400).send({
