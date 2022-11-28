@@ -5,7 +5,7 @@ const apoderadoAuth = async (req, res, next) => {
   if (!id) {
     return res.status(400).send({ message: "Id vacio" });
   }
-  const user = await User.findOne(id);
+  const user = await User.User.findById({_id:id });
   if (user.role == "apoderado") {
     next();
   } else {
