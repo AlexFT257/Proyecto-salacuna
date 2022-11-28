@@ -11,6 +11,7 @@ const userRoutes = require('./routes/userRoutes');
 const parvuloRoutes = require('./routes/parvuloRoutes');
 const asistenciaRoutes = require('./routes/asistenciaRoutes');
 const fileRoutes = require("./routes/fileRoutes");
+const actividadRoutes = require("./routes/actividadRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -22,7 +23,7 @@ app.use('/api', asistenteParvuloRoutes);
 app.use('/api', userRoutes);
 app.use('/api', parvuloRoutes);
 app.use('/api', asistenciaRoutes);
-
+app.use('/api', actividadRoutes);
 app.use("/api",userRoutes);
 app.use("/api", fileRoutes);
 
