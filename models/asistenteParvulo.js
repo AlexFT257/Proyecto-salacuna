@@ -23,19 +23,19 @@ const asistenteParvuloSchema = new Schema({
     },
     edad:{
         type: Number,
-        requiered: false
+        requiered: true
     },
     fechaNa:{
         type: Date,
-        required: false
+        required: true
     },
     mail:{
         type: String,
-        required: false
+        required: true
     },
     domicilio:{
         type: String,
-        required: false,
+        required: true,
         minLenght: 1,
         maxLenght: 100
     },
@@ -45,14 +45,7 @@ const asistenteParvuloSchema = new Schema({
         minLenght: 8,
         maxLenght: 8
     }
-    /* 
-        todo: ver como manejar las fotos
-    foto:{
     
-    }
-    */
-    
-
 })
 
 module.exports= mongoose.model('asistente',asistenteParvuloSchema);

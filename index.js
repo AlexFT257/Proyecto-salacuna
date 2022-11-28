@@ -9,7 +9,7 @@ dotenv.config();
 const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes');
 const actividadRoutes = require('./routes/actividadRoutes');
 const parvuloRoutes = require('./routes/parvuloRoutes');
-const asistenciasRoutes = require('./routes/asistenciaRoutes');
+const asistenciaRoutes = require('./routes/asistenciaRoutes');
 const fileRoutes = require("./routes/fileRoutes");
 const userRoutes = require("./routes/userRoutes");
 
@@ -22,7 +22,7 @@ app.options("*", cors());
 app.use('/api', asistenteParvuloRoutes);
 app.use('/api', actividadRoutes);
 app.use('/api', parvuloRoutes);
-app.use('/api', asistenciasRoutes);
+app.use('/api', asistenciaRoutes);
 
 app.use("/api",userRoutes);
 app.use("/api", fileRoutes);

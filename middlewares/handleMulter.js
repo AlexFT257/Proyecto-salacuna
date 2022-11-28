@@ -23,7 +23,7 @@ const upload = multer({
         if (file.mimetype === 'image/png') {
             console.log("El archivo es un png")
         } else {
-            console.log("El archivo tiene otra extension")
+            console.log("El archivo tiene otra extension (solo se admiten png)")
         }
         cb(null, true)
     },

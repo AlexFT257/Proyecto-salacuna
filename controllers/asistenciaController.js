@@ -84,3 +84,9 @@ const eliminarAsistencia = (req, res) => {
     });
 }
 
+module.exports = {
+    registrarAsistencia,
+    obtenerAsistencia,
+    actualizarAsistencia,
+    eliminarAsistencia
+};

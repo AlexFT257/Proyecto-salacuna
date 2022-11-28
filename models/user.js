@@ -38,7 +38,7 @@ const userSchema = new Schema({
     },
     domicilio:{
         type: String,
-        required: false // cambiar despues
+        required: true
     },
     telefono:{
         type: String,

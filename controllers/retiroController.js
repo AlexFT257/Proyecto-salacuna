@@ -27,3 +27,7 @@ const notificarRetiro = (req, res) => {
         }
     });
 }
+
+module.exports = {
+  notificarRetiro
+};
