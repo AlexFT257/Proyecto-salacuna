@@ -1,7 +1,7 @@
 const actividad = require("../models/actividad");
+const User = require("../models/user");
 
 const createActividad = (req, res) => {
-  
   if (req.body.asistenteParvulo) {
     const { fecha, hora, nombre, descripcion, asistenteParvulo } = req.body;
     const newActividad = new actividad({
@@ -26,6 +26,7 @@ const createActividad = (req, res) => {
 const getActividades = (req, res) => {
   actividad.find({})
   .populate('asistenteParvulo')
+  .populate('parvulos')
   .exec((error, actividades) => {
     if (error) {
       return res
