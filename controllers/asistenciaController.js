@@ -21,8 +21,9 @@ const registrarAsistencia = (req, res) => {
 }
 
 const obtenerAsistencia = (req, res) => {
-    Asistencia.find({}).sort('rut').populate({
-        path: 'rut'}).exec((error, asistencia) => {
+    const { rutParvularia } = req.get('X-Caller-Id');
+    Asistencia.find({}).sort('fecha').populate({
+        rut: rutParvularia}).exec((error, asistencia) => {
         if(error){
             console.log(error);
             return res.status(400).send({
@@ -42,8 +43,8 @@ const obtenerAsistencia = (req, res) => {
 }
 
 const actualizarAsistencia = (req, res) => {
-    const { rut } = req.params;
-    Asistencia.findOneAndUpdate(rut, req.body, (error, asistencia) => {
+    const { id } = req.params;
+    Asistencia.findOneAndUpdate(id, req.body, (error, asistencia) => {
         if(error){
             console.log(error);
             return res.status(400).send({
@@ -63,8 +64,8 @@ const actualizarAsistencia = (req, res) => {
 }
 
 const eliminarAsistencia = (req, res) => {
-    const { rut } = req.params;
-    Asistencia.findOneAndDelete(rut, (error, asistencia) => {
+    const { id } = req.params;
+    Asistencia.findOneAndDelete(id, (error, asistencia) => {
         if(error){
             console.log(error);
             return res.status(400).send({

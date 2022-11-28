@@ -5,7 +5,13 @@ const apoderadoAuth = async (req, res, next) => {
   if (!id) {
     return res.status(400).send({ message: "Id vacio" });
   }
-  const user = await User.findOne(id);
+
+  const user = await User.findById(id);
+  
+  if (!user) {
+    return res.status(404).send({ message: "Usuario no encontrado"});
+  }
+
   if (user.role == "apoderado") {
     next();
   } else {
