@@ -9,9 +9,9 @@ dotenv.config();
 const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes');
 const userRoutes = require('./routes/userRoutes');
 const parvuloRoutes = require('./routes/parvuloRoutes');
-
-
-
+const asistenciaRoutes = require('./routes/asistenciaRoutes');
+const fileRoutes = require("./routes/fileRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -19,11 +19,13 @@ app.options("*", cors());
 
 
 
-
 app.use('/api', asistenteParvuloRoutes);
 app.use('/api', userRoutes);
 app.use('/api', parvuloRoutes);
+app.use('/api', asistenciaRoutes);
 
+app.use("/api",userRoutes);
+app.use("/api", fileRoutes);
 
 mongoose.set("useNewUrlParser", true);
 mongoose.set('useFindAndModify',false);

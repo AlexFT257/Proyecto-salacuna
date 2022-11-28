@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
+
 const parvuloSchema=new Schema({
     nombre:{
         type: String,
@@ -18,10 +19,6 @@ const parvuloSchema=new Schema({
         type: Date,
         required: false
     },
-    edad:{
-        type: Number,
-        required: true
-    },
     direccion:{
         type: String,
         required: true,
@@ -38,12 +35,12 @@ const parvuloSchema=new Schema({
         type: String,
         required: true
     },
-    nombreApoderado:{
-        type: String,
-        required: true,
-        minLenght: 1,
-        maxLenght: 100
-    },
+    apoderado:{
+        type: Schema.ObjectId,
+        ref: 'user',
+        required: true
+    }
+
 })
 
 module.exports=mongoose.model('parvulo',parvuloSchema);

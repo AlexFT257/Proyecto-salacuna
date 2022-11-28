@@ -7,11 +7,7 @@ const actividadSchema = new Schema({
         type: Date,
         required: true
     },
-    hora:{
-        type: String,
-        required: false
-    },
-    nombre:{
+    titulo:{
         type: String,
         required: true
     },
@@ -19,10 +15,22 @@ const actividadSchema = new Schema({
         type: String,
         required: true
     },
-    asistenteParvulo:{
+    responsable:{
         type: Schema.ObjectId,
-        ref: 'asistente',
+        ref: 'user',
         required: true
+    },
+    parvulos:[
+        {
+            type: Schema.ObjectId,
+            ref: 'parvulo',
+            required: false
+        }
+    ], 
+    foto:{
+        type: Schema.ObjectId,
+        ref: 'file',
+        required: false
     },
 })
 
