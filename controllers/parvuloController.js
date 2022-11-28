@@ -1,24 +1,6 @@
 const parvulo = require('../models/parvulo');
-const createParvulo = (req,res)=>{
-    // revisar la informacion solicitada en el cuestionario
-    const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,apoderado} = req.body;
-    const newParvulo = new parvulo({
-        nombre,
-        rut,
-        fechaNacimiento,
-        edad,
-        direccion,
-        telefonoEmergencia,
-        condicionesMedicas,
-        apoderado
-    })
-    newParvulo.save((error,parvulo)=>{
-        if(error){
-            return res.status(400).send({message: "No se ha podido crear el parvulo"+error})
-        }
-        return res.status(201).send(parvulo)
-    })
-};
+const user = require('../models/user');
+
 //Obtener todos los parvulos
 const getParvulos = (req,res)=>{
     parvulo.find({},(error,parvulos)=>{
@@ -73,19 +55,41 @@ const getOneParvulo = (req,res)=>{
 };
 
 
-// Buscar un apoderado por su id
-const getOneParvuloByApoderado = (req,res)=>{
-    const {apoderado}=req.body;
-    parvulo.findById({apoderado},req.body,(error,parvulo)=>{
+// validar que exista un usurio por Schema.ObjectId ref user
+const createParvulo = (req,res)=>{
+    const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,apoderado} = req.body;
+    user.findById({_id:apoderado},(error,user)=>{
         if(error){
-            return res.status(400).send({message: "No se ha podido obtener el apoderado" + error})
+            return res.status(400).send({message: "error al validar el aopoderado"})
         }
-        if(!apoderado){
-            return res.status(404).send({message: "apoderado no existe en la base de datos"})
+        if(!user){
+            return res.status(404).send({message: "apoderado usuario no existe"})
         }
-        return res.status(200).send(parvulo)
+        if(user.role != "apoderado"){
+            return res.status(400).send({message: "El USUARIO NO ES APODERADO, INGRESE UN USUARIO CON ROL DE APODERADO"})
+        }
+        const newParvulo = new parvulo({
+            nombre,
+            rut,
+            fechaNacimiento,
+            edad,
+            direccion,
+            telefonoEmergencia,
+            condicionesMedicas,
+            apoderado
+        })
+        newParvulo.save((error,parvulo)=>{
+            if(error){
+                return res.status(400).send({message: "No se ha podido crear el parvulo"+error})
+            }
+            return res.status(201).send(parvulo)
+        })
     })
-};
+}
+
+
+
+
 
 
 module.exports = {
@@ -94,5 +98,5 @@ module.exports = {
         updateParvulo,
         deleteParvulo,
         getOneParvulo,
-        getOneParvuloByApoderado
+        createParvulo
     }

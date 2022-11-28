@@ -10,5 +10,5 @@ api.delete('/parvulo/delete/:rut',parvulariaAuth,parvuloController.deleteParvulo
 api.get('/parvulo/search/:rut',parvulariaAuth,parvuloController.getOneParvulo);
 
 
-api.get('/parvulo/search',parvuloController.getOneParvuloByApoderado);
+
 module.exports=api;
