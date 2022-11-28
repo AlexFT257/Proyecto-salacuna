@@ -28,7 +28,7 @@ const actividadSchema = new Schema({
         }
     ], 
     foto:{
-        type: Schema.Type.ObjectId,
+        type: Schema.ObjectId,
         ref: 'file',
         required: false
     },

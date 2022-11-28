@@ -1,8 +1,8 @@
 const express = require('express');
 const actividadController = require('../controllers/actividadController');
 const api = express.Router();
-const { parvulariaAuth } = require('../middlewares/parvulariaAuth');
-const { apoderadoAuth } = require('../middlewares/apoderadoAuth');
+const parvulariaAuth = require('../middlewares/parvulariaAuth');
+const apoderadoAuth  = require('../middlewares/apoderadoAuth');
 
 api.post('/actividad', parvulariaAuth, actividadController.createActividad);
 api.get('/actividades',actividadController.getActividades);
