@@ -1,4 +1,5 @@
 const fileModel = require("../models/file")
+const fs = require('fs');
 
 const uploadNewFile = (req, res) => {
     const { files } = req
@@ -40,10 +41,29 @@ const getSpecificFile = (req, res) => {
     })
 }
 
+const deleteFile= (req,res)=>{
+    const {id} = req.params;
+    fileModel.findByIdAndDelete(id,async (err,file)=>{
+        if (err) {
+            return res.status(400).send({ message: "Error al obtener el archivo" })
+        }
+        if (!file) {
+            return res.status(404).send({ message: "Archivo no existe" })
+        }
+        await fs.unlink(file.url,(err)=>{
+            if (err){
+                console.error(err)
+                return res.status(400).send({ message: "Error al obtener el archivo" })
+            }
+            return res.status(200).send({ message: "Archivo Eliminado" })
+        })
+    })
+}
 
 
 module.exports = {
     uploadNewFile,
     getFiles,
     getSpecificFile,
+    deleteFile
 }
