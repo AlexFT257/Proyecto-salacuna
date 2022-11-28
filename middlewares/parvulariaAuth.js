@@ -3,7 +3,7 @@ const User = require("../models/user");
 export const parvulariaAuth = async (req, res, next) => {
     const { id } = req.params.usuarioId;
     const user = await User.findById(id);
-    if (user.role === "parvularia" || user.role === "asistenteParvulo") {
+    if (user.role === "parvularia" || user.role === "asistente") {
         next();
     }
     else {
