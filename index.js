@@ -6,7 +6,11 @@ const app = express();
 dotenv.config();
 
 // insertar las rutas de los requisitos
-const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes')
+const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes');
+const userRoutes = require('./routes/userRoutes');
+const parvuloRoutes = require('./routes/parvuloRoutes');
+
+
 
 
 app.use(cors());
@@ -17,6 +21,9 @@ app.options("*", cors());
 
 
 app.use('/api', asistenteParvuloRoutes);
+app.use('/api', userRoutes);
+app.use('/api', parvuloRoutes);
+
 
 mongoose.set("useNewUrlParser", true);
 mongoose.set('useFindAndModify',false);
