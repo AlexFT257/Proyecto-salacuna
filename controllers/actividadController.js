@@ -1,8 +1,12 @@
 const actividad = require("../models/actividad");
-const parvulo = require("../models/parvulo");
+const User = require("../models/user");
 
 const createActividad = (req, res) => {
   if (req.body.responsable) {
+    const user = User.findById(req.body.responsable);
+    if (user.role === "apoderado") {
+      return res.status(403).send({ message: "Usuario responsable no autorizado" });
+    }
     const { fecha, titulo, descripcion, responsable, parvulos, foto } = req.body;
     const newActividad = new actividad({
       fecha,    
@@ -21,6 +25,8 @@ const createActividad = (req, res) => {
       }
       return res.status(201).send(actividad);
     });
+  } else {
+    return res.status(400).send({ message: "Usuario responsable no ingresado" });
   }
 };
 
@@ -122,11 +128,33 @@ const getActividadesByParvulo = (req, res) => {
     );
 };
 
+const getActividadesByResponsable = (req, res) => {
+    const { id } = req.params;
+    actividad.find({responsable: id})
+    .populate('responsable')
+    .populate('parvulos')
+    .exec((error, actividades) => {
+        if (error) {
+            return res
+            .status(400)
+            .send({ message: "No se pudo realizar la busqueda" });
+        }
+        if (actividades.length === 0) {
+            return res
+            .status(404)
+            .send({ message: "No se encontraron actividades" });
+        }
+        return res.status(200).send(actividades);
+        }
+    );
+};
+
 module.exports = {
     createActividad,
     getActividades,
     updateActividad,
     deleteActividad,
     getActividad,
-    getActividadesByParvulo
+    getActividadesByParvulo,
+    getActividadesByResponsable
 };
