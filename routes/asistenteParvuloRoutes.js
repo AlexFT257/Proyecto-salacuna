@@ -2,10 +2,12 @@ const express = require('express');
 const asistenteParvuloController = require('../controllers/asistenteParvuloController');
 const api = express.Router();
 
-api.post('/asistenteParvulo',asistenteParvuloController.createAsistente);
-api.get('/asistentesParvulo',asistenteParvuloController.getAsistentes);
-api.put('/asistentesParvulo/update/:rut',asistenteParvuloController.updateAsistente);
-api.delete('/asistenteParvulo/delete/:rut',asistenteParvuloController.deleteAsistente);
-api.get('/asistenteParvulo/search/:rut',asistenteParvuloController.getAsistente);
+api.get('/asistentes',userController.getAsistentes);
+api.get('/asistente/search/:rut',userController.getAsistente);
+api.get('/asistente/search',userController.getSelectionAsistentes);
+api.put('/asistente/update/:rut',userController.updateAsistente);
+api.delete('/asistente/delete/:rut',userController.deleteAsistente);
+api.delete('/asistente/delete',userController.deleteSelectionAsistentes);
+
 
 module.exports=api;
