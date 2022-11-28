@@ -7,7 +7,7 @@ dotenv.config();
 
 // insertar las rutas de los requisitos
 const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes');
-const actividadRoutes = require('./routes/actividadRoutes');
+const userRoutes = require('./routes/userRoutes');
 const parvuloRoutes = require('./routes/parvuloRoutes');
 const asistenciaRoutes = require('./routes/asistenciaRoutes');
 const fileRoutes = require("./routes/fileRoutes");
@@ -20,7 +20,7 @@ app.options("*", cors());
 
 
 app.use('/api', asistenteParvuloRoutes);
-app.use('/api', actividadRoutes);
+app.use('/api', userRoutes);
 app.use('/api', parvuloRoutes);
 app.use('/api', asistenciaRoutes);
 
