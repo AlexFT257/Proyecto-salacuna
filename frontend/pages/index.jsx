@@ -3,10 +3,44 @@ import {Perfil} from "../components/Perfil"
 import {Footer} from "../components/Footer"
 import {Asistentes} from "../components/Asistentes"
 // import {dashboardIcon} from "../public/dashboard.png"
+import { useRouter } from "next/router";
+import cookie from "js-cookie";
+import { useEffect } from "react";
+import { checkToken } from "../data/user";
 
+// funcion para verificar si el token es valido
+export const getServerSideProps = async (context) => {
+  try {
+    const response = await checkToken(context.req.headers.cookie);
+    // si el token es valido, no se redirecciona
+    return {
+      props: {
+        data: response.data,
+      },
+    };
+  } catch (error) {
+    // si el token no es valido, se redirecciona a la pagina de login
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+  }
+    
+  }
+};
 
+const Home = ({data}) =>{
 
-export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = cookie.get("token");
+    if (!token || token === "undefined") {
+      router.push("/login");
+    }
+  }, []);
+
   return (
     // modelando la pagina
     // dashboard de la izq
@@ -20,3 +54,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;

@@ -44,8 +44,11 @@ const getUsers = (req, res) => {
 // funciones de autentificacion de usuario
 
 const login = (req, res) => {
-  const id  = req.headers['x-caller-id'];
-  console.log(id);
+  const id  = req.get("X-Caller-Id");
+  console.log(id + " inicio sesion");
+  if (!id || id === "null") {
+    return res.status(400).send({ message: "No se envio el id o es indefinido" });
+  }
   User.findById(id, (err, user) => {
     if (err) {
       return res.status(500).send({ message: err });
@@ -65,6 +68,7 @@ const login = (req, res) => {
 };
 
 const logout = (req, res) => {
+  console.log(req.user + " cerro sesion");
   res.clearCookie("token");
   return res.status(200).send({ message: "Sesion cerrada" });
 };
@@ -78,5 +82,5 @@ module.exports = {
   getUsers,
   login,
   checkToken,
-  logout,
+  logout
 };

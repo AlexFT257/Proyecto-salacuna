@@ -1,6 +1,20 @@
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 import React from "react";
+// import { logout } from "../data/user";
 
 export const LeftBar = () => {
+
+  const router = useRouter();
+
+  // segun el profe da error si se usa el logout de data/user
+  const logingOut = async () => {
+    // const response = await axios.get(`${process.env.API_URL}/logout`);
+    Cookies.remove("token");
+    router.push("/login");
+  };
+
   return (
     <div className="LeftBar flex flex-col w-fit max-sm:flex-row max-sm:h-full max-sm:w-screen h-screen shadow-black shadow-2xl  ">
       {/* boton para mostrar el menu cuando la pantalla es muy chica */}
@@ -77,10 +91,10 @@ export const LeftBar = () => {
       {/* footer */}
       <hr className="navDivider p-1 max-sm:hidden mb-2"  />
       <div className="navFooter  justify-center flex flex-col m-4 max-sm:hidden max-lg:content-center">
-        <div className="navItem flex flex-row  shadow-xl  rounded-lg max-lg:content-center max-lg:justify-center">
+        <button onClick={logingOut} className="navItem flex flex-row  shadow-xl  rounded-lg max-lg:content-center max-lg:justify-center">
           <img src="/log-out.png" alt="logout" className="w-6 h-6" />
           <h2 className="ml-2 max-lg:hidden">Log Out</h2>
-        </div>
+        </button>
       </div>
     </div>
   );
