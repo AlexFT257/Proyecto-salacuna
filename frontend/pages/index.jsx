@@ -4,6 +4,8 @@ import {Footer} from "../components/Footer"
 import {Asistentes} from "../components/Asistentes"
 // import {dashboardIcon} from "../public/dashboard.png"
 
+
+
 export default function Home() {
   return (
     // modelando la pagina

@@ -5,6 +5,9 @@ const dotenv = require("dotenv");
 const app = express();
 dotenv.config();
 
+// importes de login
+const cookieParser = require("cookie-parser");
+
 // insertar las rutas de los requisitos
 const asistenteParvuloRoutes = require('./routes/asistenteParvuloRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -13,7 +16,9 @@ const asistenciaRoutes = require('./routes/asistenciaRoutes');
 const fileRoutes = require("./routes/fileRoutes");
 const actividadRoutes = require("./routes/actividadRoutes");
 
-app.use(cors());
+// TODO: reemplazar el origin por la ruta de la app en el server
+app.use(cookieParser());
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.options("*", cors());
 

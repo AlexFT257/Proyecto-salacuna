@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { createToken } = require("../services/token");
 
 const createUser = (req, res) => {
   const {
@@ -40,8 +41,42 @@ const getUsers = (req, res) => {
   });
 };
 
+// funciones de autentificacion de usuario
+
+const login = (req, res) => {
+  const id  = req.headers['x-caller-id'];
+  console.log(id);
+  User.findById(id, (err, user) => {
+    if (err) {
+      return res.status(500).send({ message: err });
+    }
+    if (!user) {
+      return res.status(404).send({ message: "No existe el usuario" });
+    }
+    res.cookie("token", createToken(user), { httpOnly: true });
+    return res
+      .status(200)
+      .send({
+        message: "Inicio sesion correctamente",
+        token: createToken(user),
+        user: user.nombre,
+      });
+  });
+};
+
+const logout = (req, res) => {
+  res.clearCookie("token");
+  return res.status(200).send({ message: "Sesion cerrada" });
+};
+
+const checkToken = (req, res) => {
+  return res.status(200).send({ message: "Token valido" });
+};
 
 module.exports = {
   createUser,
   getUsers,
-}
+  login,
+  checkToken,
+  logout,
+};

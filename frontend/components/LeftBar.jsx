@@ -2,7 +2,7 @@ import React from "react";
 
 export const LeftBar = () => {
   return (
-    <div className="LeftBar flex flex-col w-fit   max-sm:flex-row max-sm:h-fit max-sm:w-screen h-screen shadow-black shadow-2xl  ">
+    <div className="LeftBar flex flex-col w-fit max-sm:flex-row max-sm:h-full max-sm:w-screen h-screen shadow-black shadow-2xl  ">
       {/* boton para mostrar el menu cuando la pantalla es muy chica */}
       <div className="hidden max-sm:flex flex-nowrap">
           <input type="checkbox" id="toggler" />

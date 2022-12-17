@@ -1,0 +1,97 @@
+.asistentesContainer {
+  align-items: center;
+}
+.asistentesTitle {
+  font-weight: 600;
+  font-size: 3rem;
+  text-shadow: 3px 2px 12px #131515;
+}
+
+@media (max-width: 1024px) {
+  .tableContainer {
+    overflow-x: auto;
+    scrollbar-color: #339989 #131515;
+    border-radius: 1rem;
+  }
+}
+.asistentesTable {
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+  white-space: nowrap;
+  border-color: #131515;
+  background-color: #fffafb;
+  color: #131515;
+}
+.tableItem {
+  font-size: 1rem;
+  font-display: inherit;
+}
+
+.delButton {
+  width: fit-content;
+  height: fit-content;
+}
+
+.delButton:hover {
+  transform: scale(1.25);
+  transition: 0.3s ease-in-out;
+}
+.editButton {
+  width: fit-content;
+  height: fit-content;
+}
+
+.editButton:hover {
+  transform: scale(1.25);
+  transition: 0.3s ease-in-out;
+}
+
+.formBody {
+  border: #131515;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.formTitle {
+  font-size: xx-large;
+  text-shadow: 2px 2px 7px#131515;
+}
+
+.formItems {
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
+
+.formItems input {
+  outline: none;
+  border-radius: 1rem;
+  background-color: #e9ecf5;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  border-bottom: 2px solid #131515;
+}
+.formItems input:focus {
+  background-color: #f1f3f9;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 0px 7px 1px #131515;
+}
+
+.formBody .formBtnEnviar {
+  display: flex;
+  border: 2px solid #131515;
+  font-size: larger;
+  font-weight: bold;
+  background: #fffafb;
+  color: #131515;
+  font-size: medium;
+  transition: 0.2s ease-in;
+}
+.formBtnEnviar:hover {
+  background-color: #7de2d1;
+}
+.formBtnEnviar:active {
+  background-color: #339989;
+  transition: 0.2s ease-in-out;
+}
