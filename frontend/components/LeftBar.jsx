@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import React from "react";
+import Link from "next/link";
 // import { logout } from "../data/user";
 
 export const LeftBar = () => {
@@ -57,7 +58,8 @@ export const LeftBar = () => {
             alt="icono de actividades"
             className=" w-6 h-6"
           />
-          <h2 className="ml-2 max-lg:hidden">Actividades</h2>
+          <Link href="/actividades"><h2 className="ml-2 max-lg:hidden">Actividades</h2></Link>
+          
         </div>
 
         <div className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
