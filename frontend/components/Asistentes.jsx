@@ -8,7 +8,7 @@ const jwt = require("jwt-simple");
 export const Asistentes = () => {
   const [asistentes, setAsistentes] = useState([]);
 
-  // TODO: modificar la funcion para la id de la persona que esta ejecutandola
+  // funcion que se ejecuta al cargar la pagina, para obtener los asistentes de la base de datos
   const getAsistentes = async () => {
     const token = Cookies.get("token");
     const decoded = jwt.decode(token, process.env.SECRET_KEY);
@@ -19,12 +19,12 @@ export const Asistentes = () => {
     setAsistentes(response.data);
   };
 
-  
+  // se ejecuta la funcion getAsistentes al cargar la pagina
   useEffect(() => {
     getAsistentes();
-    
   }, []);
 
+  // funcion que se ejecuta al presionar el boton eliminar y elimina el asistente de la base de datos
   const deleteAsistente = async (rut) => {
     try {
       const token = Cookies.get("token");
@@ -45,18 +45,17 @@ export const Asistentes = () => {
     }
   };
 
+  // funcion que se ejecuta al presionar el boton editar y edita el asistente de la base de datos
   const showAsistentes = () => {
     return asistentes.map((asistente) => {
-      // Q: como validar que el asistente tenga foto?
-      // a: si el asistente tiene foto, se muestra la foto, sino se muestra la imagen por defecto
 
+      // si el asistente tiene foto, se muestra la foto, si no, se muestra la foto por defecto
       const profilePic = asistente.foto
         ? `${process.env.API_URL}/file/download/${asistente.foto}`
         : "/user.png";
 
       return (
         <tr key={asistente._id}>
-          {/* <td><img src={asistente.foto} alt="" /></td> */}
           <td>
             <img
               src={profilePic}
@@ -89,6 +88,7 @@ export const Asistentes = () => {
     });
   };
 
+  // valores para el formulario de crear asistente se fuerza el valor de asistente para que no se pueda cambiar y se agrega el id de la foto por defecto
   const [values, setValues] = useState({
     nombre: "",
     apellido: "",
@@ -101,6 +101,7 @@ export const Asistentes = () => {
     foto: "639ea1b3a638230afce91add",
   });
 
+  // funcion que se ejecuta al escribir en el input y guarda el valor en el state
   const onChange = (e) => {
     setValues({
       ...values,
@@ -108,9 +109,11 @@ export const Asistentes = () => {
     });
   };
 
+  // funcion que se ejecuta al presionar el boton crear asistente y crea el asistente en la base de datos
   const sendForm = async (e) => {
     e.preventDefault();
     try {
+      // la siguiente seccion de codigo decodifica el token para obtener el id del usuario que esta creando el asistente
       const token = Cookies.get("token");
       const decoded = jwt.decode(token, process.env.SECRET_KEY);
       // comprobar de que se selecciono una foto para el asistente
@@ -123,6 +126,7 @@ export const Asistentes = () => {
           formData,
           {
             headers: {
+              // se envia el id del usuario que esta creando el asistente (decoded.sub)
               "X-Caller-Id": decoded.sub,
               "Content-Type": "multipart/form-data",
             },
@@ -136,7 +140,7 @@ export const Asistentes = () => {
           });
         }
       }
-
+      // se crea el asistente en la base de datos con los datos del formulario
       const response = await axios.post(
         `${process.env.API_URL}/asistente`,
         values,
@@ -148,23 +152,43 @@ export const Asistentes = () => {
         }
       );
       console.log(response);
+      // si el asistente se crea correctamente, se muestra un mensaje de exito y se recarga la pagina
       if (response.status === 200) {
         useEffect();
-        alert("Asistente registrado");
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Asistente creado con exito",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
-        alert(
-          "Error al crear asistente, verificar que el usuario no este registrado (posible rut duplicado)"
-        );
+        // si el asistente no se crea correctamente, se muestra un mensaje de error
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Error al crear asistente",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
       }
     } catch (error) {
-      alert(
-        "Error al crear asistente, verificar que el usuario no este registrado (posible rut duplicado)"
-      );
+      // si el asistente no se crea correctamente, se muestra un mensaje de error
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error al crear asistente",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
+  // valores para mostrar el formulario de editar asistente
   const [showForm, setShowForm] = useState(false);
 
+  // funcion que se ejecuta al presionar el boton editar asistente y muestra el formulario de editar asistente
   const togglePopUp = (editRut) => {
     console.log(editRut);
     setEditValues({
@@ -174,6 +198,7 @@ export const Asistentes = () => {
     setShowForm(!showForm);
   };
 
+  // funcion que se ejecuta al presionar el boton editar asistente y muestra el rut del asistente que se va a editar en el formulario (no se puede editar el rut)
   const getRutInput = () => {
     return (
       <>
@@ -191,6 +216,7 @@ export const Asistentes = () => {
     );
   };
 
+  // valores para editar asistente
   const [editValues, setEditValues] = useState({
     nombre: "",
     apellido: "",
@@ -203,6 +229,7 @@ export const Asistentes = () => {
     foto: "",
   });
 
+  // funcion que se ejecuta al escribir en el input y guarda el valor en el state
   const onChangeEdit = (e) => {
     setEditValues({
       ...editValues,
@@ -210,33 +237,42 @@ export const Asistentes = () => {
     });
   };
 
+  // valores para guardar la foto del asistente que se va a editar
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // funcion que se ejecuta al seleccionar una foto y guarda la foto en el state
   const onFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
+  // valores para guardar la foto del asistente que se va a crear
   const [selectFileCreateAsistente, setSelectFileCreateAsistente] = useState(null);
   
+  // funcion que se ejecuta al seleccionar una foto y guarda la foto en el state (formulario crear asistente)
   const onFileChangeCreateAsistente = (e) => {
     setSelectFileCreateAsistente(e.target.files[0]);
   };
 
+  // funcion que se ejecuta al presionar el boton editar asistente y envia los datos del formulario al backend
   const sendEditForm = async (e) => {
     e.preventDefault();
     try {
+      // se decodifica el token para obtener el id del usuario que esta creando el asistente
       const token = Cookies.get("token");
       const payload = jwt.decode(token, process.env.SECRET_KEY);
       // si se selecciono un archivo se envia el archivo
       if (selectedFile) {
+        // se crea un formdata para enviar el archivo
         const formData = new FormData();
         formData.append("archivos", selectedFile);
         console.log(formData);
+        // se envia el archivo al backend
         const response = await axios.post(
           `${process.env.API_URL}/file/${selectedFile.name}`,
           formData,
           {
             headers: {
+              // se envia el id del usuario que esta creando el asistente en el header (payload.sub)
               "X-Caller-Id": payload.sub,
               "Content-Type": "multipart/form-data",
             },
@@ -245,7 +281,7 @@ export const Asistentes = () => {
 
         console.log("Respose foto: ");
         console.log(response.data[0]._id);
-
+        // si el archivo se sube correctamente se guarda el id del archivo en el state
         if (response.status === 201) {
           setEditValues({
             ...editValues,
@@ -267,7 +303,7 @@ export const Asistentes = () => {
         );
         console.log("filteredValues");
         console.log(filteredValues);
-
+        // se envian los valores al backend
         const response = await axios.put(
           `${process.env.API_URL}/asistente/update/${editValues.rut}`,
           filteredValues,
@@ -279,11 +315,24 @@ export const Asistentes = () => {
           }
         );
         console.log(response);
+        // si el asistente se edita correctamente se muestra un mensaje de exito
         if (response.status === 200) {
-          alert("Asistente editado");
+          Swal.fire({
+            icon: "success",
+            title: "Asistente editado",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // usar el useEffect para actualizar la tabla de asistentes genera un error de dependencia infinita por lo que se comento la linea
           // useEffect();
         } else {
-          alert("Error al editar asistente");
+          // si hay un error al editar el asistente se muestra un mensaje de error
+          Swal.fire({
+            icon: "error",
+            title: "Error al editar asistente",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       } else {
         // si no hay valores vacios se envian todos los valores
@@ -298,15 +347,34 @@ export const Asistentes = () => {
           }
         );
         console.log(response);
+        // si el asistente se edita correctamente se muestra un mensaje de exito
         if (response.status === 200) {
-          alert("Asistente editado");
+          Swal.fire({
+            icon: "success",
+            title: "Asistente editado",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          // usar el useEffect para actualizar la tabla de asistentes genera un error de dependencia infinita por lo que se comento la linea
           // useEffect();
         } else {
-          alert("Error al editar asistente");
+          // si hay un error al editar el asistente se muestra un mensaje de error
+          Swal.fire({
+            icon: "error",
+            title: "Error al editar asistente",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }
       }
     } catch (error) {
-      alert("Error al editar asistente (comunicacion con el servidor");
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al editar asistente",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
