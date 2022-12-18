@@ -25,6 +25,7 @@ const createUser = (req, res) => {
     domicilio,
     telefono,
   });
+  newUser.foto = "639ea1b3a638230afce91add";
   newUser.save((err, user) => {
     if (err) {
       return res.status(400).send({ message: "Error al crear el usuario" });
@@ -81,6 +82,7 @@ const checkToken = (req, res) => {
 
 const getUserFoto = (req, res) => {
   const id  = req.get("X-Caller-Id");
+  console.log("getting photo of "+id);
   User.findById(id, (err, user) => {
     if (err) {
       return res.status(400).send({ message: "Error al obtener el usuario" });
@@ -92,12 +94,12 @@ const getUserFoto = (req, res) => {
     }
     File.findById(user.foto, (err, file) => {
       if (err) {
-        return res.status(400).send({ message: "Error al obtener la foto" });
+        return res.status(400).send({ message: "Error al obtener la foto",name:user.nombre, apellido:user.apellido });
       }
       if (!file) {
         return res
           .status(400)
-          .send({ message: "Error al obtener la foto (foto no existe)" });
+          .send({ message: "Error al obtener la foto (foto no existe)",name:user.nombre, apellido:user.apellido});
       }
       
       return res.status(200).send({name:user.nombre, apellido:user.apellido, foto:file._id});
