@@ -1,5 +1,7 @@
 .footerContainer {
   background-color: #131515;
+  display: flex;
+  margin-top: auto;
 }
 .footerItem {
   color: #fffafb;

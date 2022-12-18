@@ -4,28 +4,26 @@
   border: #131515;
   border-style: solid;
   border-width: 2px;
-  cursor: pointer;
 }
-.profileContainer:hover {
+/*.profileContainer:hover {
   background-color: #7de2d1;
   transition: 0.3s ease-in-out;
 }
 .profileContainer:active {
   background-color: #339989;
   transition: 0.1s ease-out;
-}
+} */
 .profileItems {
   font-weight: 550;
 }
 .profileImage {
   background-color: #fffafb;
+  border: #131515;
+  border-style: solid;
+  border-width: 2px;
+  overflow: hidden;
 }
 
-.profileDropdown-content {
-  color: #131515;
-  cursor: pointer;
-  display: none;
-}
 .profile {
   background-color: #fffafb;
   border: #131515;
@@ -35,18 +33,4 @@
 }
 .asistenteProfile {
   font-size: 0.69rem;
-}
-
-.profileDropdown-content a {
-  padding: 1rem;
-  text-decoration: none;
-}
-
-.dropdownContainer:hover .profileDropdown-content {
-  display: flex;
-  flex-direction: column;
-
-  padding: auto;
-  transform: translateY(2rem);
-  transition: 0.5s ease-in-out;
 }

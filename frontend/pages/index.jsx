@@ -1,7 +1,7 @@
 import { LeftBar } from "../components/LeftBar";
-import {Perfil} from "../components/Perfil"
-import {Footer} from "../components/Footer"
-import {Asistentes} from "../components/Asistentes"
+import { Perfil } from "../components/Perfil";
+import { Footer } from "../components/Footer";
+import { Asistentes } from "../components/Asistentes";
 // import {dashboardIcon} from "../public/dashboard.png"
 import { useRouter } from "next/router";
 import cookie from "js-cookie";
@@ -25,12 +25,11 @@ export const getServerSideProps = async (context) => {
         destination: "/login",
         permanent: false,
       },
-  }
+    };
   }
 };
 
-const Home = ({data}) =>{
-
+const Home = ({ data }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -44,14 +43,11 @@ const Home = ({data}) =>{
     // modelando la pagina
     // dashboard de la izq
     <div className="flex max-sm:flex-col  h-screen w-screen ">
-      
-      <LeftBar/>
+      <LeftBar />
       <Asistentes />
-      <Perfil/>
-      
-      <Footer/>  
+      <Perfil />
     </div>
   );
-}
+};
 
 export default Home;
