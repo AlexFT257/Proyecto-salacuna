@@ -11,7 +11,7 @@ export const Asistentes = () => {
   // TODO: modificar la funcion para la id de la persona que esta ejecutandola
   const getAsistentes = async () => {
     const token = Cookies.get("token");
-    const decoded = jwt.decode(token, process.env.SECRET_KEY);
+    const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
     const response = await axios.get(`${process.env.API_URL}/asistentes`, {
       headers: { "X-Caller-Id": decoded.sub },
     });

@@ -58,12 +58,13 @@ const login = (req, res) => {
       return res.status(404).send({ message: "No existe el usuario" });
     }
     console.log(user);
-    res.cookie("token", createToken(user), { httpOnly: true });
+    const token = createToken(user);
+    res.cookie("token", token, { httpOnly: true });
     return res
       .status(200)
       .send({
         message: "Inicio sesion correctamente",
-        token: createToken(user),
+        token: token,
         user: user.nombre,
       });
   });
