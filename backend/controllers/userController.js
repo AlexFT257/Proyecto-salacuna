@@ -1,3 +1,4 @@
+const File = require("../models/file");
 const User = require("../models/user");
 const { createToken } = require("../services/token");
 
@@ -44,18 +45,19 @@ const getUsers = (req, res) => {
 // funciones de autentificacion de usuario
 
 const login = (req, res) => {
-  const id  = req.get("X-Caller-Id");
-  console.log(id + " inicio sesion");
-  if (!id || id === "null") {
+  const { rut } = req.body;
+  console.log(rut + " inicio sesion");
+  if (!rut || rut === "null") {
     return res.status(400).send({ message: "No se envio el id o es indefinido" });
   }
-  User.findById(id, (err, user) => {
+  User.findOne({rut:rut}, (err, user) => {
     if (err) {
       return res.status(500).send({ message: err });
     }
     if (!user) {
       return res.status(404).send({ message: "No existe el usuario" });
     }
+    console.log(user);
     res.cookie("token", createToken(user), { httpOnly: true });
     return res
       .status(200)
@@ -77,10 +79,38 @@ const checkToken = (req, res) => {
   return res.status(200).send({ message: "Token valido" });
 };
 
+const getUserFoto = (req, res) => {
+  const id  = req.get("X-Caller-Id");
+  User.findById(id, (err, user) => {
+    if (err) {
+      return res.status(400).send({ message: "Error al obtener el usuario" });
+    }
+    if (!user) {
+      return res
+        .status(400)
+        .send({ message: "Error al obtener el usuario (usuario no existe)" });
+    }
+    File.findById(user.foto, (err, file) => {
+      if (err) {
+        return res.status(400).send({ message: "Error al obtener la foto" });
+      }
+      if (!file) {
+        return res
+          .status(400)
+          .send({ message: "Error al obtener la foto (foto no existe)" });
+      }
+      
+      return res.status(200).send({name:user.nombre, apellido:user.apellido, foto:file._id});
+    });
+  });
+};
+
+
 module.exports = {
   createUser,
   getUsers,
   login,
   checkToken,
-  logout
+  logout,
+  getUserFoto,
 };

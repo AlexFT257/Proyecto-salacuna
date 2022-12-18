@@ -1,14 +1,12 @@
 import axios from "axios";
 
-const login = async (id) => {
+const login = async (rut) => {
   try {
-    console.log(id);
+    console.log(rut);
+    // 
     const response = await axios.post(
       `${process.env.API_URL}/login`,
-      {},
-      {
-        headers: { "X-Caller-Id": id },
-      }
+      rut
     );
     console.log(response);
     return response;

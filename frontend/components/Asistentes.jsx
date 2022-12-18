@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { checkToken } from "../data/user";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
+const jwt = require('jwt-simple');
 
 export const Asistentes = () => {
   const [asistentes, setAsistentes] = useState([]);
 
   // TODO: modificar la funcion para la id de la persona que esta ejecutandola
   const getAsistentes = async () => {
+    const token = Cookies.get("token");
+    const decoded = jwt.decode(token, process.env.SECRET_KEY);
     const response = await axios.get(`${process.env.API_URL}/asistentes`, {
-      headers: { "X-Caller-Id": "63924e8b83941c5ca47046b4" },
+      headers: { "X-Caller-Id": decoded.sub },
     });
     console.log(response);
     setAsistentes(response.data);
@@ -17,19 +23,21 @@ export const Asistentes = () => {
     getAsistentes();
   }, []);
 
-  // TODO: modificar la funcion para la id de la persona que esta ejecutandola
+  
   const deleteAsistente = async (rut) => {
     try {
+      const token = Cookies.get("token");
+      const decoded = jwt.decode(token, process.env.SECRET_KEY);
       const response = await axios.delete(
         `${process.env.API_URL}/asistente/delete/${rut}`,
-        { headers: { "X-Caller-Id": "63924e8b83941c5ca47046b4" } }
+        { headers: { "X-Caller-Id": decoded.sub } }
       );
       console.log(response);
       if (response.status == 200) {
         useEffect();
         alert("Asistente eliminado");
-      }else{
-        alert("Error al eliminar el usuario")
+      } else {
+        alert("Error al eliminar el usuario");
       }
     } catch (error) {
       alert(" error en al eliminar");
@@ -57,7 +65,7 @@ export const Asistentes = () => {
             >
               <img src="/minus_key.png" alt="" className=" h-6 w-6" />
             </button>
-            <button className="editButton">
+            <button className="editButton" onClick={togglePopUp}>
               <img src="/asterisct_key.png" alt="" className="h-6 w-6" />
             </button>
           </td>
@@ -89,13 +97,13 @@ export const Asistentes = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.API_URL}/asistente`,
+        `${process.env.API_URL}/asistente/${values.rut}`,
         values,
         {
           headers: {
             "X-Caller-Id": "63924e8b83941c5ca47046b4",
             "Content-Type": "application/json",
-          },
+          }
         }
       );
       if (response.status == 200) {
@@ -110,6 +118,69 @@ export const Asistentes = () => {
       alert(
         "Error al crear asistente, verificar que el usuario no este registrado (posible rut duplicado)"
       );
+    }
+  };
+
+  const [showForm, setShowForm] = useState(false);
+
+  const togglePopUp = () => {
+    setShowForm(!showForm);
+  };
+
+  const [editValues, setEditValues] = useState({
+    nombre: "",
+    apellido: "",
+    rut: "",
+    mail: "",
+    role: "asistente",
+    fechaNa: "",
+    domicilio: "",
+    telefono: "",
+  });
+
+  const onChangeEdit = (e) => {
+    setEditValues({
+      ...editValues,
+      [e.target.name]: e.target.value,
+    });
+    
+  };
+
+   const sendEditForm = async (e) => {
+    e.preventDefault();
+    try {
+      
+      const token = Cookies.get("token");
+      const payload = jwt.decode(token, process.env.SECRET_KEY);
+      console.log(payload.sub);
+      const response = await axios.put(`${process.env.API_URL}/asistente/update/${editValues.rut}`, editValues, {
+        headers: {
+          "X-Caller-Id": payload.sub,
+          "Content-Type": "application/json",
+        }
+      });
+      console.log(response);
+      if (response.status == 200) {
+        
+        Swal.fire({
+          title: "Asistente editado",
+          icon: "success",
+          confirmButtonText: "Ok",
+        });
+        useEffect();
+      } else {
+        Swal.fire({
+          title: "Error al editar asistente",
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error al editar asistente",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
     }
   };
 
@@ -223,8 +294,87 @@ export const Asistentes = () => {
               </form>
             </div>
           </div>
-          {/* footer de botones */}
         </div>
+
+        {/* ventana emergente para editar al asistente */}
+        {showForm && <div className="editPopUp" >
+          <div className="editPopUpContainer">
+            <div className="editPopUpHeader flex flex-row">
+              <h2 className="editPopUpTitle ml-2">Editar asistente</h2>
+              <button onClick={togglePopUp} className="editPopUpBtnClose mr-2 pl-4 pr-4 rounded-full" >X</button>
+            </div>
+            <div className="editPopUpBody">
+              <form
+                action=""
+                id="asistente"
+                onSubmit={sendEditForm}
+                className="editForm m-2 mt-0  flex flex-col "
+                autoComplete="on"
+              >
+                <label htmlFor="">Nombre</label>
+                <input
+                  type="text"
+                  id="nombre"
+                  name="nombre"
+                  onChange={onChangeEdit}
+                  placeholder="Nombre"
+                />
+                <label htmlFor="">Apellido</label>
+                <input
+                  type="text"
+                  id="apellido"
+                  name="apellido"
+                  onChange={onChangeEdit}
+                  placeholder="Apellido"
+                />
+                <label htmlFor="">Rut</label>
+                <input
+                  type="text"
+                  id="rut"
+                  name="rut"
+                  onChange={onChangeEdit}
+                  placeholder="XX.XXX.XXX-X"
+                  pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
+                />
+                <label htmlFor="">Mail</label>
+                <input
+                  type="text"
+                  id="mail"
+                  name="mail"
+                  onChange={onChangeEdit}
+                  placeholder="correo@mail.com"
+                  pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                />
+                <label htmlFor="">Fecha de nacimiento</label>
+                <input
+                  type="date"
+                  name="fechaNa"
+                  id="fechaNa"
+                  onChange={onChangeEdit}
+                />
+                <label htmlFor="">Direccion</label>
+                <input
+                  type="text"
+                  id="domicilio"
+                  name="domicilio"
+                  onChange={onChangeEdit}
+                />
+                <label htmlFor="">Telefono</label>
+                <input
+                  type="number"
+                  id="telefono"
+                  name="telefono"
+                  onChange={onChangeEdit}
+                />
+                <input
+                  type="submit"
+                  value="Enviar"
+                  className="formBtnEnviar  m-2 p-2 pl-4 pr-4  justify-center content-center rounded-full shadow-md shadow-slate-900 "
+                />
+              </form>
+            </div>
+          </div>
+        </div>}
       </div>
     </div>
   );

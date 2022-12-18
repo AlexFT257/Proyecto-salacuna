@@ -95,3 +95,80 @@
   background-color: #339989;
   transition: 0.2s ease-in-out;
 }
+
+.editPopUp {
+  display: flex;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.editPopUpContainer {
+  background-color: #fffafb;
+  margin: auto;
+  padding: 1.5rem;
+  border: 1px solid #888;
+  width: 80%;
+  height: fit-content;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px 1px #131515;
+}
+
+.editPopUpContainer .editPopUpTitle {
+  font-size: xx-large;
+  text-shadow: 2px 2px 7px#131515;
+}
+.editPopUpHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.editPopUpHeader .editPopUpBtnClose {
+  font-size: xx-large;
+  color: #131515;
+  
+  border: 2px solid #131515;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #e9ecf5;
+  transition: 0.2s ease-in;
+}
+.editPopUpBtnClose:hover {
+  background-color: #7de2d1;
+  box-shadow: 0px 0px 7px 1px #7de2d1;
+}
+.editPopUpBtnClose:active {
+  background-color: #339989;
+  transition: 0.2s ease-in-out;
+}
+
+.editPopUpBody {
+  width: 80%;
+  margin: auto;
+}
+.editForm input {
+  padding: 0.5rem;
+  margin: 0.5rem;
+  border-radius: 1rem;
+  background-color: #e9ecf5;
+  border-bottom: 2px solid #131515;
+  outline: none;
+
+}
+.editForm input:focus {
+  background-color: #f1f3f9;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 0px 7px 1px #131515;
+}
+
+.editForm label{
+  font-size: large;
+  font-weight: 500;
+  color: #131515;
+}

@@ -5,6 +5,7 @@ const auth = require("../middlewares/auth");
 
 api.post("/user", userController.createUser);
 api.get("/users", userController.getUsers);
+api.get("/userFoto", userController.getUserFoto);
 
 // rutas de autentificacion de usuario
 api.post("/login", userController.login);

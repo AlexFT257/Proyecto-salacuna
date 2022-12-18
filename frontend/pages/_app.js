@@ -9,7 +9,7 @@ import axios from 'axios'
 
 
 function MyApp({ Component, pageProps }) {
-  
+  // axios.defaults.withCredentials = true;
   
   return (
       <><Component {...pageProps}/></>

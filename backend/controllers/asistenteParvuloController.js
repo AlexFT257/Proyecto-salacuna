@@ -152,6 +152,7 @@ const deleteSelectionAsistentes = (req, res) => {
   });
 };
 
+
 module.exports = {
   createAsistente,
   // funciones de asistente de parvulo
