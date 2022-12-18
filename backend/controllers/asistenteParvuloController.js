@@ -33,6 +33,7 @@ const createAsistente = (req, res) => {
   });
 };
 
+<<<<<<< HEAD:backend/controllers/asistenteParvuloController.js
 const getAsistentes = (req, res) => {
   User.find({ role: "asistente" }, (error, asistentes) => {
     if (error) {
@@ -62,11 +63,18 @@ const getAsistente = (req, res) => {
       return res
         .status(400)
         .send({ message: "Error, el usuario no es asistente de parvulo" });
+=======
+const getUsers = (req, res) => {
+  User.find({}, (err, user) => {
+    if (err) {
+      return res.status(400).send({ message: "Error al obtener los usuarios" });
+>>>>>>> a147ffed329c21a71ab72192bc0405e31a86fac9:controllers/userController.js
     }
     return res.status(200).send(user);
   });
 };
 
+<<<<<<< HEAD:backend/controllers/asistenteParvuloController.js
 const updateAsistente = (req, res) => {
   const { rut } = req.params;
   User.findOneAndUpdate(rut, req.body, (err, user) => {
@@ -162,4 +170,9 @@ module.exports = {
   updateAsistente,
   deleteAsistente,
   deleteSelectionAsistentes,
+=======
+module.exports = {
+  createUser,
+  getUsers,
+>>>>>>> a147ffed329c21a71ab72192bc0405e31a86fac9:controllers/userController.js
 };
