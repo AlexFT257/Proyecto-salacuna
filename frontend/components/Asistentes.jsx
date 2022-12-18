@@ -3,7 +3,7 @@ import axios from "axios";
 import { checkToken } from "../data/user";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-const jwt = require('jwt-simple');
+const jwt = require("jwt-simple");
 
 export const Asistentes = () => {
   const [asistentes, setAsistentes] = useState([]);
@@ -19,11 +19,12 @@ export const Asistentes = () => {
     setAsistentes(response.data);
   };
 
+  
   useEffect(() => {
     getAsistentes();
+    
   }, []);
 
-  
   const deleteAsistente = async (rut) => {
     try {
       const token = Cookies.get("token");
@@ -46,11 +47,22 @@ export const Asistentes = () => {
 
   const showAsistentes = () => {
     return asistentes.map((asistente) => {
+      // Q: como validar que el asistente tenga foto?
+      // a: si el asistente tiene foto, se muestra la foto, sino se muestra la imagen por defecto
+
+      const profilePic = asistente.foto
+        ? `${process.env.API_URL}/file/download/${asistente.foto}`
+        : "/user.png";
+
       return (
         <tr key={asistente._id}>
           {/* <td><img src={asistente.foto} alt="" /></td> */}
           <td>
-            <img src="/user.png" alt="foto" className="h-6 w-6" />
+            <img
+              src={profilePic}
+              alt="foto"
+              className="asistenteFoto h-10 w-10 max-md:w-6 max-md:h-6 overflow-hidden rounded-full "
+            />
           </td>
           <td>{asistente.nombre}</td>
           <td>{asistente.apellido}</td>
@@ -65,7 +77,10 @@ export const Asistentes = () => {
             >
               <img src="/minus_key.png" alt="" className=" h-6 w-6" />
             </button>
-            <button className="editButton" onClick={togglePopUp}>
+            <button
+              className="editButton"
+              onClick={() => togglePopUp(asistente.rut)}
+            >
               <img src="/asterisct_key.png" alt="" className="h-6 w-6" />
             </button>
           </td>
@@ -83,6 +98,7 @@ export const Asistentes = () => {
     fechaNa: "",
     domicilio: "",
     telefono: "",
+    foto: "639ea1b3a638230afce91add",
   });
 
   const onChange = (e) => {
@@ -92,21 +108,47 @@ export const Asistentes = () => {
     });
   };
 
-  // TODO: modificar la funcion para la id de la persona que esta ejecutandola
   const sendForm = async (e) => {
     e.preventDefault();
     try {
+      const token = Cookies.get("token");
+      const decoded = jwt.decode(token, process.env.SECRET_KEY);
+      // comprobar de que se selecciono una foto para el asistente
+      if (selectFileCreateAsistente) {
+        // si existe una foto, se sube la foto y se guarda el id de la foto en la base de datos
+        const formData = new FormData();
+        formData.append("archivos", selectFileCreateAsistente);
+        const response = await axios.post(
+          `${process.env.API_URL}/file/upload/${selectFileCreateAsistente.name}`,
+          formData,
+          {
+            headers: {
+              "X-Caller-Id": decoded.sub,
+              "Content-Type": "multipart/form-data",
+            },
+          });
+        console.log(response);
+        if (response.status === 201) {
+          // se guarda el id de la foto en la base de datos
+          setValues({
+            ...values,
+            foto: response.data[0]._id,
+          });
+        }
+      }
+
       const response = await axios.post(
-        `${process.env.API_URL}/asistente/${values.rut}`,
+        `${process.env.API_URL}/asistente`,
         values,
         {
           headers: {
-            "X-Caller-Id": "63924e8b83941c5ca47046b4",
+            "X-Caller-Id": decoded.sub,
             "Content-Type": "application/json",
-          }
+          },
         }
       );
-      if (response.status == 200) {
+      console.log(response);
+      if (response.status === 200) {
         useEffect();
         alert("Asistente registrado");
       } else {
@@ -123,8 +165,30 @@ export const Asistentes = () => {
 
   const [showForm, setShowForm] = useState(false);
 
-  const togglePopUp = () => {
+  const togglePopUp = (editRut) => {
+    console.log(editRut);
+    setEditValues({
+      ...editValues,
+      rut: editRut,
+    });
     setShowForm(!showForm);
+  };
+
+  const getRutInput = () => {
+    return (
+      <>
+        <label htmlFor="">Rut</label>
+        <input
+          type="text"
+          id="rut"
+          name="rut"
+          placeholder="XX.XXX.XXX-X"
+          pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
+          readOnly
+          value={editValues.rut}
+        />
+      </>
+    );
   };
 
   const [editValues, setEditValues] = useState({
@@ -136,6 +200,7 @@ export const Asistentes = () => {
     fechaNa: "",
     domicilio: "",
     telefono: "",
+    foto: "",
   });
 
   const onChangeEdit = (e) => {
@@ -143,44 +208,105 @@ export const Asistentes = () => {
       ...editValues,
       [e.target.name]: e.target.value,
     });
-    
   };
 
-   const sendEditForm = async (e) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const onFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const [selectFileCreateAsistente, setSelectFileCreateAsistente] = useState(null);
+  
+  const onFileChangeCreateAsistente = (e) => {
+    setSelectFileCreateAsistente(e.target.files[0]);
+  };
+
+  const sendEditForm = async (e) => {
     e.preventDefault();
     try {
-      
       const token = Cookies.get("token");
       const payload = jwt.decode(token, process.env.SECRET_KEY);
-      console.log(payload.sub);
-      const response = await axios.put(`${process.env.API_URL}/asistente/update/${editValues.rut}`, editValues, {
-        headers: {
-          "X-Caller-Id": payload.sub,
-          "Content-Type": "application/json",
+      // si se selecciono un archivo se envia el archivo
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("archivos", selectedFile);
+        console.log(formData);
+        const response = await axios.post(
+          `${process.env.API_URL}/file/${selectedFile.name}`,
+          formData,
+          {
+            headers: {
+              "X-Caller-Id": payload.sub,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Respose foto: ");
+        console.log(response.data[0]._id);
+
+        if (response.status === 201) {
+          setEditValues({
+            ...editValues,
+            foto: response.data[0]._id,
+          });
         }
-      });
-      console.log(response);
-      if (response.status == 200) {
-        
-        Swal.fire({
-          title: "Asistente editado",
-          icon: "success",
-          confirmButtonText: "Ok",
-        });
-        useEffect();
+      }
+
+      // verifica si hay valores vacios en el formulario
+      const emptyValues = Object.values(editValues).some(
+        (value) => value === ""
+      );
+      console.log("emptyValues");
+      console.log(emptyValues);
+      if (emptyValues) {
+        // si hay valores vacios solo se envian los valores que no estan vacios
+        const filteredValues = Object.fromEntries(
+          Object.entries(editValues).filter(([key, value]) => value !== "")
+        );
+        console.log("filteredValues");
+        console.log(filteredValues);
+
+        const response = await axios.put(
+          `${process.env.API_URL}/asistente/update/${editValues.rut}`,
+          filteredValues,
+          {
+            headers: {
+              "X-Caller-Id": payload.sub,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response);
+        if (response.status === 200) {
+          alert("Asistente editado");
+          // useEffect();
+        } else {
+          alert("Error al editar asistente");
+        }
       } else {
-        Swal.fire({
-          title: "Error al editar asistente",
-          icon: "error",
-          confirmButtonText: "Ok",
-        });
+        // si no hay valores vacios se envian todos los valores
+        const response = await axios.put(
+          `${process.env.API_URL}/asistente/${editValues.rut}`,
+          editValues,
+          {
+            headers: {
+              "X-Caller-Id": payload.sub,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response);
+        if (response.status === 200) {
+          alert("Asistente editado");
+          // useEffect();
+        } else {
+          alert("Error al editar asistente");
+        }
       }
     } catch (error) {
-      Swal.fire({
-        title: "Error al editar asistente",
-        icon: "error",
-        confirmButtonText: "Ok",
-      });
+      alert("Error al editar asistente (comunicacion con el servidor");
     }
   };
 
@@ -215,7 +341,7 @@ export const Asistentes = () => {
           </div>
         </div>
         {/* formulario para crear un asistentente de parvulo */}
-        <div className="formContainer  flex flex-col flex-1  ml-2 mr-2 max-md:mt-4 max-md:ml-0">
+        <div className="formContainer flex flex-col flex-1   ml-2 mr-2 max-md:mt-4 max-md:ml-0">
           <div className="formBody p rounded-2xl shadow shadow-slate-900 bg-white">
             {/* titulo */}
             <div className="formHeader p-2 pb-0 flex flex-row ml-2">
@@ -286,6 +412,13 @@ export const Asistentes = () => {
                   name="telefono"
                   onChange={onChange}
                 />
+                <label htmlFor="">Foto de perfil</label>
+                <input
+                    type="file"
+                    name="foto"
+                    id="foto"
+                    onChange={onFileChangeCreateAsistente}
+                  />
                 <input
                   type="submit"
                   value="Enviar"
@@ -297,84 +430,90 @@ export const Asistentes = () => {
         </div>
 
         {/* ventana emergente para editar al asistente */}
-        {showForm && <div className="editPopUp" >
-          <div className="editPopUpContainer">
-            <div className="editPopUpHeader flex flex-row">
-              <h2 className="editPopUpTitle ml-2">Editar asistente</h2>
-              <button onClick={togglePopUp} className="editPopUpBtnClose mr-2 pl-4 pr-4 rounded-full" >X</button>
-            </div>
-            <div className="editPopUpBody">
-              <form
-                action=""
-                id="asistente"
-                onSubmit={sendEditForm}
-                className="editForm m-2 mt-0  flex flex-col "
-                autoComplete="on"
-              >
-                <label htmlFor="">Nombre</label>
-                <input
-                  type="text"
-                  id="nombre"
-                  name="nombre"
-                  onChange={onChangeEdit}
-                  placeholder="Nombre"
-                />
-                <label htmlFor="">Apellido</label>
-                <input
-                  type="text"
-                  id="apellido"
-                  name="apellido"
-                  onChange={onChangeEdit}
-                  placeholder="Apellido"
-                />
-                <label htmlFor="">Rut</label>
-                <input
-                  type="text"
-                  id="rut"
-                  name="rut"
-                  onChange={onChangeEdit}
-                  placeholder="XX.XXX.XXX-X"
-                  pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
-                />
-                <label htmlFor="">Mail</label>
-                <input
-                  type="text"
-                  id="mail"
-                  name="mail"
-                  onChange={onChangeEdit}
-                  placeholder="correo@mail.com"
-                  pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-                />
-                <label htmlFor="">Fecha de nacimiento</label>
-                <input
-                  type="date"
-                  name="fechaNa"
-                  id="fechaNa"
-                  onChange={onChangeEdit}
-                />
-                <label htmlFor="">Direccion</label>
-                <input
-                  type="text"
-                  id="domicilio"
-                  name="domicilio"
-                  onChange={onChangeEdit}
-                />
-                <label htmlFor="">Telefono</label>
-                <input
-                  type="number"
-                  id="telefono"
-                  name="telefono"
-                  onChange={onChangeEdit}
-                />
-                <input
-                  type="submit"
-                  value="Enviar"
-                  className="formBtnEnviar  m-2 p-2 pl-4 pr-4  justify-center content-center rounded-full shadow-md shadow-slate-900 "
-                />
-              </form>
+        {showForm && (
+          <div className="editPopUp">
+            <div className="editPopUpContainer">
+              <div className="editPopUpHeader flex flex-row">
+                <h2 className="editPopUpTitle ml-2">Editar asistente</h2>
+                <button
+                  onClick={togglePopUp}
+                  className="editPopUpBtnClose mr-2 pl-4 pr-4 rounded-full"
+                >
+                  X
+                </button>
+              </div>
+              <div className="editPopUpBody">
+                <form
+                  action=""
+                  id="asistente"
+                  onSubmit={sendEditForm}
+                  className="editForm m-2 mt-0  flex flex-col "
+                  autoComplete="on"
+                >
+                  <label htmlFor="">Nombre</label>
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    onChange={onChangeEdit}
+                    placeholder="Nombre"
+                  />
+                  <label htmlFor="">Apellido</label>
+                  <input
+                    type="text"
+                    id="apellido"
+                    name="apellido"
+                    onChange={onChangeEdit}
+                    placeholder="Apellido"
+                  />
+                  {getRutInput()}
+                  <label htmlFor="">Mail</label>
+                  <input
+                    type="text"
+                    id="mail"
+                    name="mail"
+                    onChange={onChangeEdit}
+                    placeholder="correo@mail.com"
+                    pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                  />
+                  <label htmlFor="">Fecha de nacimiento</label>
+                  <input
+                    type="date"
+                    name="fechaNa"
+                    id="fechaNa"
+                    onChange={onChangeEdit}
+                  />
+                  <label htmlFor="">Direccion</label>
+                  <input
+                    type="text"
+                    id="domicilio"
+                    name="domicilio"
+                    onChange={onChangeEdit}
+                  />
+                  <label htmlFor="">Telefono</label>
+                  <input
+                    type="number"
+                    id="telefono"
+                    name="telefono"
+                    onChange={onChangeEdit}
+                  />
+                  <label htmlFor="">Foto de perfil</label>
+                  <input
+                    type="file"
+                    name="foto"
+                    id="foto"
+                    onChange={onFileChange}
+                  />
+                  <input
+                    type="submit"
+                    value="Enviar"
+                    className="formBtnEnviar  m-2 p-2 pl-4 pr-4  justify-center content-center rounded-full shadow-md shadow-slate-900 "
+                  />
+                </form>
+              </div>
             </div>
           </div>
-        </div>}
+        )}
       </div>
     </div>
   );
