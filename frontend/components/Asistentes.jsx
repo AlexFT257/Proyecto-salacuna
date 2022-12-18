@@ -281,6 +281,7 @@ export const Asistentes = () => {
 
         console.log("Respose foto: ");
         console.log(response.data[0]._id);
+        console.log(response.status);
         // si el archivo se sube correctamente se guarda el id del archivo en el state
         if (response.status === 201) {
           setEditValues({
@@ -325,6 +326,10 @@ export const Asistentes = () => {
           });
           // usar el useEffect para actualizar la tabla de asistentes genera un error de dependencia infinita por lo que se comento la linea
           // useEffect();
+          // se actualiza la pagina para que se muestren los cambios pero se agrega un delay para que se muestre el mensaje de exito
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         } else {
           // si hay un error al editar el asistente se muestra un mensaje de error
           Swal.fire({
@@ -357,6 +362,11 @@ export const Asistentes = () => {
           });
           // usar el useEffect para actualizar la tabla de asistentes genera un error de dependencia infinita por lo que se comento la linea
           // useEffect();
+          // se actualiza la pagina para que se muestren los cambios pero se agrega un delay para que se muestre el mensaje de exito
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+          
         } else {
           // si hay un error al editar el asistente se muestra un mensaje de error
           Swal.fire({
@@ -376,6 +386,7 @@ export const Asistentes = () => {
         timer: 1500,
       });
     }
+    
   };
 
   return (
