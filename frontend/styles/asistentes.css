@@ -16,6 +16,7 @@
 }
 .asistentesTable {
   width: 100%;
+  border-collapse: collapse;
   overflow-x: auto;
   display: block;
   white-space: nowrap;
@@ -46,7 +47,9 @@
   transform: scale(1.25);
   transition: 0.3s ease-in-out;
 }
-
+.formContainer{
+ 
+}
 .formBody {
   border: #131515;
   border-width: 2px;
@@ -171,4 +174,8 @@
   font-size: large;
   font-weight: 500;
   color: #131515;
+}
+
+.asistenteFoto {
+  border: #131515 2px solid;
 }
