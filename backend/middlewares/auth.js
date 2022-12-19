@@ -9,13 +9,14 @@ const auth = (req, res, next) => {
         return res.status(403).send({ message: 'No posees autorizacion' });
     }
 
-    /*
+   
     if (!req.headers.X-Caller-Id) {
         return res.status(403).send({ message: 'No posees autorizacion' });
     }
 
     // no se si se puede usar el header asi o con las cookies
-    const token = req.headers.X-Caller-Id; */
+    //const token = req.headers.X-Caller-Id;
+    // */
     const token = cookies.token;
     const payload = jwt.decode(token, process.env.SECRET_KEY);
 
