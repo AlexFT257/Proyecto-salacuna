@@ -24,7 +24,6 @@ app.use('/api', userRoutes);
 app.use('/api', parvuloRoutes);
 app.use('/api', asistenciaRoutes);
 app.use('/api', actividadRoutes);
-app.use("/api",userRoutes);
 app.use("/api", fileRoutes);
 
 mongoose.set("useNewUrlParser", true);

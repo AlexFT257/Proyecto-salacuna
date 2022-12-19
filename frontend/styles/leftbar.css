@@ -1,0 +1,79 @@
+.leftBar {
+  background-color: aquamarine;
+}
+.LeftBar {
+  background-color: #2b2c28;
+  /* background-size: 400% 400%;
+  animation: leftBar-bg-anim 2.5s infinite ease-in-out; */
+  font-weight: 550;
+}
+/* @keyframes leftBar-bg-anim {
+  0%{
+    background-position: 0% 50%;
+  }
+  50%{
+    background-position: 100% 50%;
+  }
+  100%{
+    background-position: 0% 50%;
+  }
+} */
+
+.navHeader {
+  background-color: #fffafb;
+  /* background-image: url("../public/jardin_infantil_1024x576.jpg");
+  opacity: 40%;
+  background-repeat: no-repeat; */
+}
+/* animacio de cerrar  */
+#toggler {
+  display: none;
+}
+.burger {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+}
+.bun {
+  display: block;
+  background-color: #fffafb;
+  height: 3px;
+  width: 20px;
+  transition: translate 0.2s 0.25s, rotate 0.2s 0.25s;
+}
+#toggler:checked + .burger .bun {
+  transition: translate 0.2s, rotate 0.2s 0.25s;
+}
+#toggler:checked + .burger .bun--top {
+  rotate: 45deg;
+  translate: 0 5px;
+}
+#toggler:checked + .burger .bun--bottom {
+  rotate: -45deg;
+  translate: 0 -5px;
+}
+
+
+
+.navItem {
+  align-items: center;
+  background-color: #fffafb;
+  padding: 1rem;
+  text-transform: capitalize;
+  font-weight: 550;
+}
+.navItem:hover {
+  background-color: #7de2d1;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 0px 7px 1px #339989;
+}
+.navItem:active {
+  background-color: #339989;
+  transition: 0.1s ease-out;
+}

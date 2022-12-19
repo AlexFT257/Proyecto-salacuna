@@ -1,0 +1,9 @@
+.footerContainer {
+  background-color: #131515;
+}
+.footerItem {
+  color: #fffafb;
+}
+.footerItem:hover {
+  text-decoration: underline;
+}
