@@ -1,5 +1,6 @@
-export const ActividadesTable = () => {
-    return (
+
+export const ActividadesTable = ({props}) => {
+  return (
     <div className="w-screen ">
       {/* title */}
       <div className="flex m-4 p-2 ">
@@ -13,25 +14,38 @@ export const ActividadesTable = () => {
               {/* atributos de la tabla */}
               <thead className="">
                 <tr className="">
-                  <th className="">Foto</th>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Rut</th>
-                  <th>Mail</th>
+                  <th>Titulo</th>
+                  <th>Descripcion</th>
+                  <th>Fecha</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               {/* valores de la tabla */}
               <tbody className="tableBody">
-                //tabla de actividades 
-
+                {
+                  props.map((item) => {
+                    return (
+                      <tr key={item._id}>
+                        <td>{item.titulo}</td>
+                        <td>{item.descripcion}</td>
+                        <td>{item.fecha}</td>
+                        
+                        <td className="flex justify-evenly">
+                          <button className="delButton" onClick={() => props.deleteActividad(item._id)}>Eliminar</button>
+                          <button className="editButton" onClick={() => props.editActividad(item._id)}>Editar</button>
+                          <button className="showButton" onClick={() => props.showActividad(item._id)}>Ver</button>
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
               </tbody>
             </table>
           </div>
         </div>
     </div>
-    </div>
-    )  
-    }
+  </div>
+)  
+}
 
     export default ActividadesTable;

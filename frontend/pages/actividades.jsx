@@ -6,8 +6,9 @@ import cookie from "js-cookie";
 import { useEffect } from "react";
 import { checkToken } from "../data/user";
 import {ActividadesTable} from "../components/ActividadesTable"
+import axios from "axios";
 
-export const Actividades = ({ props }) => {
+export const Actividades = ({props}) => {
     const router = useRouter();
     
     useEffect(() => {
@@ -33,22 +34,14 @@ export const Actividades = ({ props }) => {
     );
 }
 
-const getServerSideProps = async () => {
-    try {
-        const res = await fetch(`${process.env.API_URL}/actividades`);
-        const data = await res.json();
-        return {
-            props: {
-                data: data,
-            },
-        };
-    } catch (error) {
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-};
+export async function getServerSideProps(context) {
+    const res = await axios.get(`${process.env.API_URL}/actividades`);
+    const data = await res.data;
+    return {
+        props: {
+            props: data,
+        },
+    };
+}
 
 export default Actividades;
