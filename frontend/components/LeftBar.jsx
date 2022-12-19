@@ -5,7 +5,6 @@ import React from "react";
 // import { logout } from "../data/user";
 
 export const LeftBar = () => {
-
   const router = useRouter();
 
   // segun el profe da error si se usa el logout de data/user
@@ -19,12 +18,12 @@ export const LeftBar = () => {
     <div className="LeftBar flex flex-col w-fit max-sm:flex-row max-sm:h-full max-sm:w-screen h-screen shadow-black shadow-2xl  ">
       {/* boton para mostrar el menu cuando la pantalla es muy chica */}
       <div className="hidden max-sm:flex flex-nowrap">
-          <input type="checkbox" id="toggler" />
-          <label for="toggler" class="burger">
-            <span class="bun bun--top"></span>
-            <span class="bun bun--bottom"></span>
-          </label>
-        </div>
+        <input type="checkbox" id="toggler" />
+        <label for="toggler" class="burger">
+          <span class="bun bun--top"></span>
+          <span class="bun bun--bottom"></span>
+        </label>
+      </div>
 
       {/* header */}
 
@@ -35,7 +34,6 @@ export const LeftBar = () => {
           className="w-10 h-10 "
         />
         <h1 className="m-2 max-sm:hidden">Salacuna 31 minutos</h1>
-        
       </div>
 
       <hr className="navDivider p-1 max-sm:hidden" />
@@ -43,55 +41,75 @@ export const LeftBar = () => {
       {/* items  */}
       <div className="navGroup max-sm:hidden justify-center flex flex-col  m-2 max-lg:content-center">
         <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <img
-            src="/dashboard_blank.png"
-            alt="icono de menu principal"
-            className="w-6 h-6 "
-          />
-          <h2 className="ml-2 max-lg:hidden">Home page</h2>
+          <button
+            onClick={() => {
+              router.push("/home");
+            }}
+            className="flex "
+          >
+            <img
+              src="/dashboard_blank.png"
+              alt="icono de menu principal"
+              className="w-6 h-6 "
+            />
+            <h2 className="ml-2 max-lg:hidden">Home page</h2>
+          </button>
         </div>
 
         <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <img
-            src="/checklist.png"
-            alt="icono de actividades"
-            className=" w-6 h-6"
-          />
-          <h2 className="ml-2 max-lg:hidden">Actividades</h2>
+          <button onClick={()=>{router.push("/actividades")}} className="flex">
+            <img
+              src="/checklist.png"
+              alt="icono de actividades"
+              className=" w-6 h-6"
+            />
+            <h2 className="ml-2 max-lg:hidden">Actividades</h2>
+          </button>
         </div>
 
         <div className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          <button onClick={()=>{router.push("/Parvularias")}} className="flex">
           <img
             src="/teacher_2.png"
             alt="icono de parvularias"
             className="w-6 h-6"
           />
           <h2 className="ml-2 max-lg:hidden">Parvularia</h2>
+          </button>
         </div>
 
         <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          <button onClick={()=>{router.push("/asistentesParvulo")}} className="flex">
           <img
             src="/teacher_2.png"
             alt="icono de asistentes de parvulo"
             className="w-6 h-6"
           />
-          <h2 className="ml-2 max-lg:hidden">Asistentes de parvulo</h2>
+          <h2 className="ml-2 max-lg:hidden" >Asistentes de parvulo</h2>
+          </button>
         </div>
 
         <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          <div onClick={()=>{router.push("/parvulos")}} className="flex">
           <img src="/teeter.png" alt="icono de parvulos" className="w-6 h-6" />
           <h2 className="ml-2 max-lg:hidden">Parvulos</h2>
+          </div>
         </div>
 
         <div className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          <button onClick={()=>{router.push("/registro")}} className="flex">
           <img src="/report.png" alt="icono de parvulos" className="w-6 h-6" />
           <h2 className="ml-2 max-lg:hidden">Registro de pagos</h2>
+          </button>
         </div>
       </div>
       {/* footer */}
-      <hr className="navDivider p-1 max-sm:hidden mb-2"  />
+      <hr className="navDivider p-1 max-sm:hidden mb-2" />
       <div className="navFooter  justify-center flex flex-col m-4 max-sm:hidden max-lg:content-center">
-        <button onClick={logingOut} className="navItem flex flex-row  shadow-xl  rounded-lg max-lg:content-center max-lg:justify-center">
+        <button
+          onClick={logingOut}
+          className="navItem flex flex-row  shadow-xl  rounded-lg max-lg:content-center max-lg:justify-center"
+        >
           <img src="/log-out.png" alt="logout" className="w-6 h-6" />
           <h2 className="ml-2 max-lg:hidden">Log Out</h2>
         </button>
