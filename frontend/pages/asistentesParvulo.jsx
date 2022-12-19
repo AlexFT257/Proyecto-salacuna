@@ -4,6 +4,8 @@ import { checkToken } from "../data/user";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 const jwt = require("jwt-simple");
+import { LeftBar } from "../components/LeftBar";
+import {Perfil} from "../components/Perfil";
 
 export const Asistentes = () => {
   const [asistentes, setAsistentes] = useState([]);
@@ -11,7 +13,7 @@ export const Asistentes = () => {
   // funcion que se ejecuta al cargar la pagina, para obtener los asistentes de la base de datos
   const getAsistentes = async () => {
     const token = Cookies.get("token");
-    const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
+    const decoded = jwt.decode(token, process.env.SECRET_KEY);
     const response = await axios.get(`${process.env.API_URL}/asistentes`, {
       headers: { "X-Caller-Id": decoded.sub },
     });
@@ -389,8 +391,10 @@ export const Asistentes = () => {
     
   };
 
-  return (
-    <div className="asistentesContainer w-screen ">
+  return (<div className="flex max-sm:flex-col  h-screen w-screen ">
+  <LeftBar/>
+  <Perfil/>
+  <div className="asistentesContainer w-screen ">
       {/* title */}
       <div className="asistentesTitle flex m-4 p-2 ">
         <h1>Asistentes de parvulo</h1>
@@ -595,7 +599,7 @@ export const Asistentes = () => {
         )}
       </div>
     </div>
-  );
+</div>  );
 };
 
 export default Asistentes;
