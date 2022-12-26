@@ -3,6 +3,7 @@ const fs = require('fs');
 
 const uploadNewFile = (req, res) => {
     const { files } = req
+    console.log("Subiendo archivos: " )
     let aux = files.map((file) => {
         const newFile = new fileModel({
             url: file.path,
@@ -14,6 +15,7 @@ const uploadNewFile = (req, res) => {
                 return res.status(400).send({ message: "Error al guardar el archivo" })
             }
         })
+        console.log("archivo: "+ file.path )
         return newFile
     })
     return res.status(201).send(aux)

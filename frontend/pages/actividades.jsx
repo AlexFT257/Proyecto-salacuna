@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import cookie from "js-cookie";
 import { useEffect } from "react";
 import { checkToken } from "../data/user";
-import {ActividadesTable} from "../components/ActividadesTable"
+import {ActividadesTable} from "../components/Actividades/ActividadesTable"
 import axios from "axios";
 
 export const Actividades = ({props}) => {
@@ -23,13 +23,12 @@ export const Actividades = ({props}) => {
     }
     
     return (
-        <div className="flex max-sm:flex-col  h-screen w-screen ">
+        <div className="flex max-sm:flex-col h-screen w-screen ">
         
             <LeftBar/>
             <ActividadesTable props={props}/>
             <Perfil/>
             
-            <Footer/>  
         </div>
     );
 }

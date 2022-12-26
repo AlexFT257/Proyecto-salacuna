@@ -25,6 +25,12 @@ const createAsistente = (req, res) => {
   });
   // obligando el rol de asistente
   newUser.role = "asistente";
+
+  // comparar que el usuario tenga foto 
+  if (!foto || foto === "null") {
+    newUser.foto = "639ea1b3a638230afce91add";
+  }
+  
   newUser.save((err, user) => {
     if (err) {
       return res.status(400).send({ message: "Error al crear el usuario" });
@@ -69,7 +75,7 @@ const getAsistente = (req, res) => {
 
 const updateAsistente = (req, res) => {
   const { rut } = req.params;
-  User.findOneAndUpdate(rut, req.body, (err, user) => {
+  User.findOneAndUpdate({rut:rut}, req.body, (err, user) => {
     if (err) {
       return res.status(400).send({ message: "Error al obtener el usuario" });
     }
@@ -83,6 +89,7 @@ const updateAsistente = (req, res) => {
         .status(400)
         .send({ message: "Error, el usuario no es asistente de parvulo" });
     }
+    console.log(user);
     return res
       .status(200)
       .send({ message: "Asistente modificado correctamente" });
