@@ -82,9 +82,7 @@ export const LeftBar = () => {
 
         <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
           <img src="/teeter.png" alt="icono de parvulos" className="w-6 h-6" />
-            <Link href="/Parvulos" >
-          <h2 className="ml-2 max-lg:hidden">Parvulos</h2>
-            </Link>
+          <Link href="/parvulos" ><h2 className="ml-2 max-lg:hidden">Parvulos</h2></Link>
         </div>
 
         <div className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">

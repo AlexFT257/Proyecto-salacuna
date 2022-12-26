@@ -39,7 +39,12 @@ const parvuloSchema=new Schema({
         type: Schema.ObjectId,
         ref: 'user',
         required: true
-    }
+    },
+    foto:{
+        type: Schema.Types.ObjectId,
+        ref: 'file',
+        required: false
+    },
 
 })
 
