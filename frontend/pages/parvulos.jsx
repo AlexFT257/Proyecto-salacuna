@@ -11,7 +11,6 @@ import { parvulos } from "../components/parvulos";
 
 export const Parvulos = ({props}) => {
     const router = useRouter();
-    
     useEffect(() => {
         const token = cookie.get("token");
         if (!token || token === "undefined") {
@@ -28,9 +27,7 @@ export const Parvulos = ({props}) => {
         
             <LeftBar/>
             <ListarParvulos props={props}/>
-           
             <Perfil/>
-            <Footer/>  
         </div>
     );
 }

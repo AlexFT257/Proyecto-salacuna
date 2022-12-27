@@ -24,19 +24,27 @@ const ListarParvulos = () => {
     }, []);
 
     return (
-        <div className="flex flex-col w-full h-full">
-            <div className="flex flex-row justify-between">
-                <h1 className="text-2xl font-bold">Parvulos</h1>
+        <div className="flex flex-col w-full h-full ">
+            <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
+                <div className="">
+                    <h1 className="flex m-4 p-2 text-5xl font-bold ">Parvulos</h1>
+                </div >
             </div>
-            <div className="parvuloTable">
-                <table className="tableContainer table-auto border-separate border-spacing-x-1 border-spacing-y-1 ">
+
+            <div className="m-4 h-fit">
+                <div className="flex justify-center my-2">
+                    <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300">
+                        Añadir Parvulo
+                    </button>
+                </div>
+            <div className="Parvulotable bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900 ">
+                <table className="w-full table-auto">
                     <thead className="">
-                        <tr className="">
+                        <tr className="text-left">
                             <th>Foto</th>
                             <th>Nombre</th>
                             <th>Rut </th>
-                            <th>Apoderado</th>
-                            <th>Fecha de nacimiento</th>
+                            <th>Fec. Nac</th>
                             <th>Telefono</th>
                             <th>Direccion</th>
                             <th>Condiciones Medicas</th>
@@ -49,8 +57,7 @@ const ListarParvulos = () => {
                                 <td><img src={parvulo.foto} alt="foto" width="100" height="100"/></td>
                                 <td>{parvulo.nombre}</td>
                                 <td>{parvulo.rut}</td>
-                                <td>{parvulo.apoderado}</td>
-                                <td>{parvulo.fechaNacimiento}</td>
+                                <td>{new Date(parvulo.fechaNacimiento).toLocaleDateString("es-ES")}</td>
                                 <td>{parvulo.telefonoEmergencia}</td>
                                 <td>{parvulo.direccion}</td>
                                 <td>{parvulo.condicionesMedicas}</td>
@@ -63,6 +70,7 @@ const ListarParvulos = () => {
                         ))}
                     </tbody>
                 </table>
+            </div>
             </div>
         </div>
     );
