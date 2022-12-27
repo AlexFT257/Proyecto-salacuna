@@ -4,7 +4,8 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
-const parvulos = () => {
+export const ModalAddParvulos = () => {
+    
     //MOELO PARVULO PARA EL FORMULARIO
     const [values, setValues] = useState({
         nombre: "",
