@@ -73,7 +73,20 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                 }
             );
             if(res.status === 201){
-                setActividades([...actividades, res.data]);
+                const responsable = asistentes.find((asistente) => asistente._id === newActividad.responsable);
+                const parvulosActividad = parvulos.filter((parvulo) => newActividad.parvulos.includes(parvulo._id));
+
+                setActividades([...actividades, 
+                    {
+                        _id: res.data._id,
+                        titulo: res.data.titulo,
+                        descripcion: res.data.descripcion,
+                        fecha: res.data.fecha,
+                        responsable: responsable,
+                        parvulos: parvulosActividad,
+                        foto: res.data.foto,
+                    }
+                ]);
                 setShowModalAdd(false);
                 Swal.fire({
                     title: "Actividad creada",
