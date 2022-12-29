@@ -11,10 +11,10 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
     descripcion: "",
     fecha: "",
     responsable: "",
-    parvulos: [],
+    parvulos: actividad.parvulos.map((parvulo) => parvulo._id),
     foto: "",
   });
-
+  
   const [parvulos, setParvulos] = useState([]);
   const [asistentes, setAsistentes] = useState([]);
 
@@ -57,10 +57,10 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
       }
 
       const emptyValues = Object.values(putActividad).some((x) => (x === null || x === ""));
-
-      if(emptyValues){
+      const emptyParvulos = putActividad.parvulos.length === 0;
+      if(emptyValues || emptyParvulos){
         const filteredPutActividad = Object.fromEntries(
-          Object.entries(putActividad).filter(([key, value]) => value !== null && value !== "")
+          Object.entries(putActividad).filter(([key, value]) => value !== null && value !== "" && value !== [])
         )
 
         const res = await axios.put(
@@ -82,14 +82,24 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
             showConfirmButton: false,
             timer: 1500,
           });
-          setShowModalAdd(false);
-          setActividades(actividades.map((actividad) => {
-            if(actividad._id === res.data._id){
-              return res.data;
-            }else{
-              return actividad;
-            }
-          }));
+          setShowModalUpdate(false);
+          setActividades(
+            actividades.map((actividad) => {
+              if(actividad._id === res.data._id){
+                if(filteredPutActividad.responsable)
+                {
+                  filteredPutActividad.responsable = asistentes.find((asistente) => filteredPutActividad.responsable === asistente._id);
+                }
+                if(filteredPutActividad.parvulos)
+                {
+                  filteredPutActividad.parvulos = parvulos.filter((parvulo) => filteredPutActividad.parvulos.includes(parvulo._id));
+                }
+                return {...actividad, ...filteredPutActividad};
+              }else{
+                return actividad;
+              }
+            })
+          );
         }
       }else{
         const res = await axios.put(
@@ -110,14 +120,16 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
             showConfirmButton: false,
             timer: 1500,
           });
-          setShowModalAdd(false);
-          setActividades(actividades.map((actividad) => {
-            if(actividad._id === res.data._id){
-              return res.data;
-            }else{
-              return actividad;
+          setShowModalUpdate(false);
+          setActividades(
+            actividades.map((actividad) => {
+              if(actividad._id === res.data._id){
+                return res.data;
+              }else{
+                return actividad;
+              }
             }
-          }));
+          ));
         }
       }
     }catch(err){
@@ -167,11 +179,12 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
             <div className="flex flex-col justify-center items-center m-5 space-y-3">
               <h1 className="text-2xl font-bold">Modificar Actividad</h1>
               <form className=" w-full flex flex-col space-y-3" onSubmit={updateActividad}>
+                <span className="font-semibold">Titulo</span>
                 <input
                   type="text"
                   placeholder="Titulo"
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
-                  value={actividad.titulo}
+                  value={(putActividad.titulo === null || putActividad.titulo === '') ? actividad.titulo : putActividad.titulo}
                   onChange={(e) =>
                     setPutActividad({
                       ...putActividad,
@@ -179,11 +192,12 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                     })
                   }
                 />
+                <span className="font-semibold">Descripcion</span>                
                 <input
                   type="text"
                   placeholder="Descripcion"
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
-                  value={actividad.descripcion}
+                  value={(putActividad.descripcion === null||putActividad.descripcion === '') ? actividad.descripcion : putActividad.descripcion}
                   onChange={(e) =>
                     setPutActividad({
                       ...putActividad,
@@ -191,11 +205,12 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                     })
                   }
                 />
+                <span className="font-semibold">Fecha</span>
                 <input
                   type="date"
                   placeholder="Fecha"
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
-                  value={actividad.fecha}
+                  value={(putActividad.fecha === null||putActividad.fecha === '') ? new Date(actividad.fecha).toISOString().slice(0, 10) : putActividad.fecha}
                   onChange={(e) =>
                     setPutActividad({
                       ...putActividad,
@@ -203,7 +218,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                     })
                   }
                 />
-                
+                <span className="font-semibold">Responsable</span>
                 <select
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
                   onChange={(e) =>
@@ -213,38 +228,46 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                     })
                   }
                 >
-                  <option value="" disabled selected>Responsable</option>
+                  
+                  <option value={(actividad.responsable) ? actividad.responsable._id : null} selected>{(actividad.responsable) ? actividad.responsable.nombre : 'Responsable'}</option>
                   {asistentes.map((asistente) => (
                     <option value={asistente._id}>{asistente.nombre}</option>
                   ))}
+
                 </select>
                 
                 <div className="flex flex-col space-y-3">
-                  <h1 className="text-xl font-bold">Parvulos</h1>
+                  <span className="font-semibold">Parvulos</span>
                   <div className="flex flex-col space-y-3">
+                    
                     {parvulos.map((parvulo) => (
                       <div className="flex flex-row items-center space-x-3">
                         <input 
                         className="w-5 h-5 default:ring-2"
                         type="checkbox" 
                         onChange={(e) => {
-                            if(e.target.checked)
-                            {
-                                setPutActividad({
-                                    ...putActividad,
-                                    parvulos: [...putActividad.parvulos, parvulo._id]
-                                })
-                            } else {
-                                setPutActividad({
-                                    ...putActividad,
-                                    parvulos: putActividad.parvulos.filter(parvuloId => parvuloId !== parvulo._id)
-                                })
-                            }
+                          
+                          if (e.target.checked) {
+                            setPutActividad({
+                              ...putActividad,
+                              parvulos: [...putActividad.parvulos, parvulo._id],
+                              });
+                          } else {
+                            setPutActividad({
+                              ...putActividad,
+                              parvulos: putActividad.parvulos.filter((parvuloActividad) => parvuloActividad !== parvulo._id),
+                            });
+                          }
                         }}
+
+                        checked=
+                        {
+                          putActividad.parvulos.some((parvuloActividad) => parvuloActividad === parvulo._id)
+                        }
                         />
                         <p>{parvulo.nombre}</p>
                       </div>
-                    ))}
+                    ))}                
                   </div>
                 </div>
                 <input
@@ -259,7 +282,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                     className="bg-emerald-600 text-white rounded-lg p-2"
                     onClick={updateActividad}
                   >
-                    Añadir
+                    Modificar
                   </button>
                   <button
                     type="button"

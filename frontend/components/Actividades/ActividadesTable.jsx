@@ -1,18 +1,30 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ModalDeleteActividad } from "./ModalDeleteActividad";
 import { ModalAddActividad } from "./ModalAddActividad";
 import { ModalUpdateActividad } from "./ModalUpdateActividad";
-export const ActividadesTable = ({props}) => {
+import axios from "axios";
+
+export const ActividadesTable = () => {
   const [showModalAdd, setShowModalAdd] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const [showModalView, setShowModalView] = useState(false);
 
   const [id, setId] = useState("");
-  const [actividades, setActividades] = useState(props);
+  const [actividades, setActividades] = useState([]);
   const [actividad, setActividad] = useState({});
+
+  const getActividades = async () => {
+    const res = await axios.get(`${process.env.API_URL}/actividades`);
+    const data = await res.data;
+    setActividades(data);
+  }
+
+  useEffect(() => {
+    getActividades();
+  }, []);
 
   const deleteModal = (id) => {
     setShowModalDelete(true);
@@ -52,7 +64,6 @@ export const ActividadesTable = ({props}) => {
               <tbody className="">
                 {
                   actividades.map((item) => {
-                    console.log(actividades)
                     const fecha = new Date(item.fecha).toLocaleDateString();
                     return (
                       <tr className="text-left" key={item._id}>

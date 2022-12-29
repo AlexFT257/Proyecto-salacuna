@@ -1,4 +1,5 @@
 const actividad = require("../models/actividad");
+const Actividad = require("../models/actividad");
 const User = require("../models/user");
 
 const createActividad = (req, res) => {
@@ -11,7 +12,7 @@ const createActividad = (req, res) => {
     let newActividad;
     //cambiar esto
     if (foto == ""){
-      newActividad = new actividad({
+      newActividad = new Actividad({
         fecha,    
         titulo,
         descripcion,
@@ -19,7 +20,7 @@ const createActividad = (req, res) => {
         parvulos,
       });
     } else {
-      newActividad = new actividad({
+      newActividad = new Actividad({
         fecha,    
         titulo,
         descripcion,
@@ -31,10 +32,10 @@ const createActividad = (req, res) => {
 
     newActividad.save((error, actividad) => {
       if (error) {
-          console.log(error);
-        return res
-          .status(400)
-          .send({ message: error, actividad: newActividad });
+        return res.status(400).send({ message: "No se pudo crear la actividad" });
+      }
+      if (!actividad) {
+        return res.status(400).send({ message: "No se ha podido crear la actividad" });
       }
       return res.status(201).send(actividad);
     });
@@ -44,7 +45,7 @@ const createActividad = (req, res) => {
 };
 
 const getActividades = (req, res) => {
-  actividad.find({})
+  Actividad.find({})
   .populate('responsable')
   .populate('parvulos')
   .exec((error, actividades) => {
@@ -64,7 +65,11 @@ const getActividades = (req, res) => {
 
 const updateActividad = (req, res) => {
   const { id } = req.params;
-  actividad.findByIdAndUpdate(id, req.body, (error, actividad) => {
+  Actividad.findByIdAndUpdate(id, req.body)
+  .populate('responsable')
+  .populate('parvulos')
+  .exec(
+   (error, actividad) => {
     if (error) {
       return res
         .status(400)
@@ -75,14 +80,14 @@ const updateActividad = (req, res) => {
         .status(400)
         .send({ message: "No se ha podido encontrar la actividad" });
     }
-    return res.status(200).send({ message: "Actividad modificada"});
+    return res.status(200).send(actividad);
   });
 };
 
 const deleteActividad = (req, res) => {
   const { id } = req.params;
 
-  actividad.findByIdAndDelete(id, (error, actividad) => {
+  Actividad.findByIdAndDelete(id, (error, actividad) => {
     if (error) {
       return res
         .status(400)
@@ -101,7 +106,7 @@ const deleteActividad = (req, res) => {
 
 const getActividad = (req, res) => {
     const { id } = req.params;
-    actividad.findById(id)
+    Actividad.findById(id)
     .populate('responsable')
     .populate('parvulos')
     .exec((error, actividad) => {
@@ -122,7 +127,7 @@ const getActividad = (req, res) => {
 
 const getActividadesByParvulo = (req, res) => {
     const { id } = req.params;
-    actividad.find({parvulos: id})
+    Actividad.find({parvulos: id})
     .populate('responsable')
     .populate('parvulos')
     .exec((error, actividades) => {
@@ -143,7 +148,7 @@ const getActividadesByParvulo = (req, res) => {
 
 const getActividadesByResponsable = (req, res) => {
     const { id } = req.params;
-    actividad.find({responsable: id})
+    Actividad.find({responsable: id})
     .populate('responsable')
     .populate('parvulos')
     .exec((error, actividades) => {
