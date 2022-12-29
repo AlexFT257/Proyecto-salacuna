@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}) => {
     const [newActividad, setNewActividad] = useState({
@@ -13,10 +14,13 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
         parvulos: [],
         foto: "",
     });
+    //cambios al objeto a mandar
+    const [parvulos, setParvulos] = useState([]);
+    const [asistentes, setAsistentes] = useState([]);
 
     const router = useRouter();
     const [selectedFile, setSelectedFile] = useState(null);
-    {/*cambiar aufera de la funcion*/}
+    
     useEffect(() => {
         const token = Cookies.get("token");
         if (!token || token === "undefined") {
@@ -28,7 +32,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
         e.preventDefault();
         try{
             const token = Cookies.get("token");
-            const decoded = jwt.decode(token, process.env.SECRET);
+            const decoded = jwt.decode(token, process.env.SECRET, true);
             if(selectedFile){
                 const formData = new FormData();
                 formData.append("file", selectedFile);
@@ -48,8 +52,16 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                         ...newActividad,
                         foto: res.data[0]._id,
                     });
+                }else{
+                    Swal.fire({
+                        title: "Error al subir imagen",
+                        icon: "error",
+                        position: "center",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
                 }
-            }
+            }          
             const res = await axios.post(
                 `${process.env.API_URL}/actividad`,
                 newActividad,
@@ -60,7 +72,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                     },
                 }
             );
-            if(res.status === 200){
+            if(res.status === 201){
                 setActividades([...actividades, res.data]);
                 setShowModalAdd(false);
                 Swal.fire({
@@ -72,7 +84,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                 });
             } else {
                 Swal.fire({
-                    title: "Error al crear actividad",
+                    title: "Error al crear actividad 1",
                     icon: "error",
                     position: "center",
                     showConfirmButton: false,
@@ -81,7 +93,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
             }
         } catch (error) {
             Swal.fire({
-                title: "Error al crear actividad",
+                title: error,
                 icon: "error",
                 position: "center",
                 showConfirmButton: false,
@@ -93,6 +105,37 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
     }
+
+    const getAsistentes = async () => {
+        const token = Cookies.get("token");
+        const decoded = jwt.decode(token, process.env.SECRET, true);
+        const res = await axios.get(`${process.env.API_URL}/asistentes`, {
+            headers: {
+                "X-Caller-Id": decoded.sub,
+            },
+        });
+        if (res.status === 200) {
+            setAsistentes(res.data);
+        }
+    };
+
+    const getParvulos = async () => {
+        const token = Cookies.get("token");
+        const decoded = jwt.decode(token, process.env.SECRET, true);
+        const res = await axios.get(`${process.env.API_URL}/parvulos`, {
+            headers: {
+                "X-Caller-Id": decoded.sub,
+            },
+        });
+        if (res.status === 200) {
+            setParvulos(res.data);
+        }
+    };
+
+    useEffect(() => {
+        getAsistentes();
+        getParvulos();
+    }, []);
 
     return (
       <>
@@ -134,9 +177,8 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                     })
                   }
                 />
-                <input
-                  type="text"
-                  placeholder="Responsable"
+                
+                <select
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
                   onChange={(e) =>
                     setNewActividad({
@@ -144,18 +186,41 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                       responsable: e.target.value,
                     })
                   }
-                />
-                <input
-                  type="text"
-                  placeholder="Parvulos"
-                  className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
-                  onChange={(e) =>
-                    setNewActividad({
-                      ...newActividad,
-                      parvulos: e.target.value,
-                    })
-                  }
-                />
+                >
+                  <option value="" disabled selected>Responsable</option>
+                  {asistentes.map((asistente) => (
+                    <option value={asistente._id}>{asistente.nombre}</option>
+                  ))}
+                </select>
+                
+                <div className="flex flex-col space-y-3">
+                  <h1 className="text-xl font-bold">Parvulos</h1>
+                  <div className="flex flex-col space-y-3">
+                    {parvulos.map((parvulo) => (
+                      <div className="flex flex-row items-center space-x-3">
+                        <input 
+                        className="w-5 h-5 default:ring-2"
+                        type="checkbox" 
+                        onChange={(e) => {
+                            if(e.target.checked)
+                            {
+                                setNewActividad({
+                                    ...newActividad,
+                                    parvulos: [...newActividad.parvulos, parvulo._id]
+                                })
+                            } else {
+                                setNewActividad({
+                                    ...newActividad,
+                                    parvulos: newActividad.parvulos.filter(parvuloId => parvuloId !== parvulo._id)
+                                })
+                            }
+                        }}
+                        />
+                        <p>{parvulo.nombre}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 <input
                   type="file"
                   placeholder="Foto"
