@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
-import { useState,useEffect} from "react";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
-import {Parvulos} from "../components/Parvulos";
+import { ModalAddParvulo } from "./addParvulo";
+import { useState, useEffect } from "react";
 
 //Listar los parvulos en una tabla
 
@@ -25,6 +25,73 @@ export const ListarParvulos = () => {
     }, []);
 
     return (
+        // retornar la tabla con los parvulos y el boton para agregar parvulos 
+        <>
+            <div className="flex flex-col w-full h-full ">
+                <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
+                    <div className="">
+                        <h1 className="flex m-4 p-2 text-5xl font-bold " onClick={() => setShowModalAddParvulo(true)} >Parvulos</h1>
+                    </div >
+                </div>
+
+                <div className="m-4 h-fit">
+                    <div className="flex justify-center my-2">
+                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300" onClick={() => setShowModalAddParvulo(true)}>
+                            Añadir Parvulo
+                        </button>
+                    </div>
+                <div className="Parvulotable bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900 ">
+                    <table className="w-full table-auto">
+                        <thead>
+                            <tr className="text-left">
+                                <th>Foto</th>
+                                <th>Nombre</th>
+                                <th>Rut </th>
+                                <th>Fec. Nac</th>
+                                <th>Telefono</th>
+                                <th>Direccion</th>
+                                <th>Condiciones Medicas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody className="tableBody">
+                            {parvulos.map((parvulo) =>
+                                (
+                                <tr key={parvulo._id}>
+                                    <td><img src={parvulo.foto} alt="foto" width="100" height="100"/></td>
+                                    <td>{parvulo.nombre}</td>
+                                    <td>{parvulo.rut}</td>
+                                    <td>{new Date(parvulo.fechaNacimiento).toLocaleDateString("es-ES")}</td>
+                                    <td>{parvulo.telefonoEmergencia}</td>
+                                    <td>{parvulo.direccion}</td>
+                                    <td>{parvulo.condicionesMedicas}</td>
+                                    <td>
+                                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300">
+                                            Editar
+                                        </button>
+                                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                                )
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+            {showModalAddParvulo && (
+                <ModalAddParvulo
+                    showModalAddParvulo={showModalAddParvulo}
+                    setShowModalAddParvulo={setShowModalAddParvulo}
+                />
+            )}
+            
+        </>
+
+
+        /*
     <>
 
         <div className="flex flex-col w-full h-full ">
@@ -78,12 +145,13 @@ export const ListarParvulos = () => {
         </div>
         {
         showModalAddParvulo &&
-        <Parvulos showModalAddParvulo={showModalAddParvulo}
+        <ModalAddParvulo showModalAddParvulo={showModalAddParvulo}
         setShowModalAddParvulo={setShowModalAddParvulo}
         parvulos={parvulos}
         setParvulos={setParvulos}/>
         };
     </>
+    */
     );
 };
 

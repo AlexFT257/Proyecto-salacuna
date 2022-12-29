@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
-import { useState } from "react";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 export const parvulos = ({setShowModalAddParvulo,parvulos,setParvulos}) => {
     //MOELO PARVULO PARA EL FORMULARIO
@@ -51,16 +51,6 @@ export const parvulos = ({setShowModalAddParvulo,parvulos,setParvulos}) => {
        const onChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
        };
-    
-
-       const [selectedFile, setSelectedFile] = useState(null);
-       const onFileChange = (e) => {
-         setSelectedFile(e.target.files[0]);
-        };
-
-        const onFileChangeCreateParvulo = (e) => {
-            setSelectFileCreateParvulo(e.target.files[0]);
-        };
 
     return (
       <>
@@ -155,4 +145,4 @@ export const parvulos = ({setShowModalAddParvulo,parvulos,setParvulos}) => {
 
     );
 }
-    export default parvulos;
+
