@@ -8,20 +8,33 @@ const createActividad = (req, res) => {
       return res.status(403).send({ message: "Usuario responsable no autorizado" });
     }
     const { fecha, titulo, descripcion, responsable, parvulos, foto } = req.body;
-    const newActividad = new actividad({
-      fecha,    
-      titulo,
-      descripcion,
-      responsable,
-      parvulos,
-      foto,
-    });
+    let newActividad;
+    //cambiar esto
+    if (foto == ""){
+      newActividad = new actividad({
+        fecha,    
+        titulo,
+        descripcion,
+        responsable,
+        parvulos,
+      });
+    } else {
+      newActividad = new actividad({
+        fecha,    
+        titulo,
+        descripcion,
+        responsable,
+        parvulos,
+        foto,
+      });
+    }
+
     newActividad.save((error, actividad) => {
       if (error) {
           console.log(error);
         return res
           .status(400)
-          .send({ message: "No se ha podido crear la actividad" });
+          .send({ message: error, actividad: newActividad });
       }
       return res.status(201).send(actividad);
     });

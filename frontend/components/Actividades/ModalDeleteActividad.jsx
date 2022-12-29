@@ -1,13 +1,50 @@
+import axios from "axios";
+import Cookies from "js-cookie";
+const jwt = require("jwt-simple");
+import Swal from "sweetalert2";
 
-export const ModalDeleteActividad = ({showModalDelete, setShowModalDelete, actividades, setActividades}) => {
+export const ModalDeleteActividad = ({id, setId, setShowModalDelete, actividades, setActividades}) => {
 
-    const deleteActividad = async (id) => {
-        const res = await axios.delete(`${process.env.API_URL}/actividades/${id}`);
-        const data = await res.data;
-        setActividades(actividades.filter((item) => item._id !== id));
-        setShowModalDelete(false);
-    };
-    
+    const deleteActividad = async () => {
+        try {
+            const token = Cookies.get("token");
+            const decoded = jwt.decode(token, process.env.SECRET, true);
+            const res = await axios.delete(`${process.env.API_URL}/actividad/delete/${id}`, {
+                headers: {
+                    "X-Caller-Id": decoded.sub,
+                    "Content-Type": "application/json",
+                },
+            });
+            if(res.status === 200){
+                setActividades(actividades.filter(actividad => actividad._id !== id));
+                setShowModalDelete(false);
+                Swal.fire({
+                    title: "Actividad eliminada",
+                    icon: "success",
+                    position: "center",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            } else {
+                Swal.fire({
+                    title: "Error al eliminar actividad",
+                    icon: "error",
+                    position: "center",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: error,
+                icon: "error",
+                position: "center",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+
     return (
         <>
         <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-50">
@@ -15,7 +52,7 @@ export const ModalDeleteActividad = ({showModalDelete, setShowModalDelete, activ
                 <div className="flex flex-col justify-center items-center m-5 space-y-3">
                 <h1 className="text-2xl font-bold">¿Estas seguro de eliminar esta actividad?</h1>
                 <div className="flex space-x-3 justify-evenly w-1/2">
-                    <button className="bg-red-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900" onClick={() => props.deleteActividad(id)}>Eliminar</button>
+                    <button className="bg-red-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900" onClick={deleteActividad} >Eliminar</button>
                     <button className="bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900" onClick={() => setShowModalDelete(false)}>Cancelar</button>
                 </div>
                 </div>
