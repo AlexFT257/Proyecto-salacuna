@@ -5,7 +5,7 @@ require('dotenv').config();
 // funcion para crear token modificada para usar el header X-Caller-Id
 const auth = (req, res, next) => {
     const cookies = req.cookies;
-    if (!cookies.token || !cookies.token === 'null') {
+    if (!cookies.token || !cookies.token == 'null') {
         return res.status(403).send({ message: 'No posees autorizacion' });
     }
 

@@ -7,7 +7,7 @@ import { checkToken } from "../data/user";
 import ListarParvulos from "../components/listarparvulos";
 
 
-export const Parvulos = ({props}) => {
+export const Parvulos = () => {
     const router = useRouter();
     useEffect(() => {
         const token = cookie.get("token");
@@ -20,9 +20,7 @@ export const Parvulos = ({props}) => {
     if(checkToken() === false){
         router.push("/login");
     }
-    
-    
-    
+
     return (
         <div className="flex max-sm:flex-col  h-screen w-screen ">
         

@@ -56,6 +56,7 @@ const getOneParvulo = (req,res)=>{
 
 
 // validar que exista un usurio por Schema.ObjectId ref user
+
 const createParvulo = (req,res)=>{
     const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,apoderado} = req.body;
     user.findById({_id:apoderado},(error,user)=>{
@@ -76,7 +77,8 @@ const createParvulo = (req,res)=>{
             direccion,
             telefonoEmergencia,
             condicionesMedicas,
-            apoderado
+            apoderado,
+            foto
         })
         newParvulo.save((error,parvulo)=>{
             if(error){
@@ -86,6 +88,12 @@ const createParvulo = (req,res)=>{
         })
     })
 }
+
+
+
+
+
+
 
 //obterner parvulos de un apoderado
 const getParvulosByApoderado = (req,res)=>{

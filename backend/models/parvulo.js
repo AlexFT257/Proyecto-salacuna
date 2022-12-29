@@ -12,7 +12,7 @@ const parvuloSchema=new Schema({
         type: String,
         required: true,
         minLenght: 1,
-        maxLenght: 11,
+        maxLenght: 15,
         unique: true
     },
     fechaNacimiento:{

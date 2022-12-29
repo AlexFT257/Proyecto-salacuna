@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
+import { checkToken } from "../data/user";
 
 export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) => {
     // modal para crear parvulo
@@ -19,19 +20,22 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
     
     const router = useRouter();
     const [selectedFile, setSelectedFile] = useState(null);
-    {/*cambiar aufera de la funcion*/}
     useEffect(() => {
         const token = Cookies.get("token");
         if (!token || token === "undefined") {
             router.push("/login");
         }
     }, []);
+    if(checkToken() === false){
+        router.push("/login");
+    }
 
     const addParvulo = (e) => {
         e.preventDefault();
         console.log(newParvulo);
         const token = Cookies.get("token");
         const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
+        console.log(decoded);
         try{
             if(selectedFile){
                 const formData = new FormData();
@@ -53,6 +57,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                         foto: res.data[0]._id,
                     });
                 }
+                console.log(res.data);
             }
             const res = axios.post(
                 `${process.env.API_URL}/parvulo`,
@@ -63,6 +68,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                     },
                 }
             );
+            console.log(res);
             if(res.status === 201){
                 setParvulo([...parvulos, res.data]);
                 setShowModalAddParvulo(false);
@@ -72,11 +78,13 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                     confirmButtonText: "Ok",
                 });
             }
+        
         }catch(err){
             Swal.fire({
                 title: "Error al crear parvulo",
                 icon: "error",
                 confirmButtonText: "Ok",
+                
             });
         }
     };
