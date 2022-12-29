@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const jwt = require("jwt-simple");
@@ -37,6 +38,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
         const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
         console.log(decoded);
         try{
+            /*
             if(selectedFile){
                 const formData = new FormData();
                 formData.append("file", selectedFile);
@@ -59,6 +61,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                 }
                 console.log(res.data);
             }
+            */
             const res = axios.post(
                 `${process.env.API_URL}/parvulo`,
                 newParvulo,
@@ -78,13 +81,13 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                     confirmButtonText: "Ok",
                 });
             }
-        
+        console.log(res);
         }catch(err){
+            console.log(err);
             Swal.fire({
                 title: "Error al crear parvulo",
                 icon: "error",
                 confirmButtonText: "Ok",
-                
             });
         }
     };
