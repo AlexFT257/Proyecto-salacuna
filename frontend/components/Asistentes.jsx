@@ -4,6 +4,9 @@ import { checkToken } from "../data/user";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 const jwt = require("jwt-simple");
+import { LeftBar } from "../components/LeftBar";
+import { Perfil } from "../components/Perfil";
+import { Auth } from "../middleware/auth";
 
 export const Asistentes = () => {
   const [asistentes, setAsistentes] = useState([]);
@@ -11,16 +14,19 @@ export const Asistentes = () => {
   // funcion que se ejecuta al cargar la pagina, para obtener los asistentes de la base de datos
   const getAsistentes = async () => {
     const token = Cookies.get("token");
-    const decoded = jwt.decode(token, process.env.SECRET_KEY);
-    const response = await axios.get(`${process.env.API_URL}/asistentes`, {
-      headers: { "X-Caller-Id": decoded.sub },
-    });
-    console.log(response);
-    setAsistentes(response.data);
+    if (token) {
+      const decoded = jwt.decode(token, process.env.SECRET_KEY);
+      const response = await axios.get(`${process.env.API_URL}/asistentes`, {
+        headers: { "X-Caller-Id": decoded.sub },
+      });
+      console.log(response);
+      setAsistentes(response.data);
+    }
   };
 
   // se ejecuta la funcion getAsistentes al cargar la pagina
   useEffect(() => {
+    Auth;
     getAsistentes();
   }, []);
 
@@ -48,7 +54,6 @@ export const Asistentes = () => {
   // funcion que se ejecuta al presionar el boton editar y edita el asistente de la base de datos
   const showAsistentes = () => {
     return asistentes.map((asistente) => {
-
       // si el asistente tiene foto, se muestra la foto, si no, se muestra la foto por defecto
       const profilePic = asistente.foto
         ? `${process.env.API_URL}/file/download/${asistente.foto}`
@@ -130,7 +135,8 @@ export const Asistentes = () => {
               "X-Caller-Id": decoded.sub,
               "Content-Type": "multipart/form-data",
             },
-          });
+          }
+        );
         console.log(response);
         if (response.status === 201) {
           // se guarda el id de la foto en la base de datos
@@ -171,7 +177,6 @@ export const Asistentes = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-
       }
     } catch (error) {
       // si el asistente no se crea correctamente, se muestra un mensaje de error
@@ -246,8 +251,9 @@ export const Asistentes = () => {
   };
 
   // valores para guardar la foto del asistente que se va a crear
-  const [selectFileCreateAsistente, setSelectFileCreateAsistente] = useState(null);
-  
+  const [selectFileCreateAsistente, setSelectFileCreateAsistente] =
+    useState(null);
+
   // funcion que se ejecuta al seleccionar una foto y guarda la foto en el state (formulario crear asistente)
   const onFileChangeCreateAsistente = (e) => {
     setSelectFileCreateAsistente(e.target.files[0]);
@@ -366,7 +372,6 @@ export const Asistentes = () => {
           setTimeout(() => {
             window.location.reload();
           }, 1500);
-          
         } else {
           // si hay un error al editar el asistente se muestra un mensaje de error
           Swal.fire({
@@ -386,147 +391,56 @@ export const Asistentes = () => {
         timer: 1500,
       });
     }
-    
   };
 
   return (
-    <div className="asistentesContainer w-screen ">
-      {/* title */}
-      <div className="asistentesTitle flex m-4 p-2 ">
-        <h1>Asistentes de parvulo</h1>
-      </div>
-      {/* body */}
-      <div className="asistentesBody m-4 flex flex-row max-md:flex-col h-fit">
-        <div className="tableContainer flex h-fit max-lg:overflow-x-auto ">
-          <div className="asistentesTable  border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900">
-            <table className="tableContainer table-auto border-separate border-spacing-x-1 border-spacing-y-1 ">
-              {/* atributos de la tabla */}
-              <thead className="headerTable ">
-                <tr className="headerTableItem">
-                  <th className="">Foto</th>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Rut</th>
-                  <th>Mail</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              {/* valores de la tabla */}
-              <tbody className="tableBody">
-                {/* items de la tabla */}
-                {showAsistentes()}
-              </tbody>
-            </table>
-          </div>
+    <div className="flex max-sm:flex-col  h-screen w-screen ">
+      <LeftBar />
+      <Perfil />
+      <div className="asistentesContainer w-screen ">
+        {/* title */}
+        <div className="asistentesTitle flex m-4 p-2 ">
+          <h1>Asistentes de parvulo</h1>
         </div>
-        {/* formulario para crear un asistentente de parvulo */}
-        <div className="formContainer flex flex-col flex-1   ml-2 mr-2 max-md:mt-4 max-md:ml-0">
-          <div className="formBody p rounded-2xl shadow shadow-slate-900 bg-white">
-            {/* titulo */}
-            <div className="formHeader p-2 pb-0 flex flex-row ml-2">
-              <h2 className="formTitle font-bold ">Crear asistente</h2>
-            </div>
-
-            {/* body */}
-            <div className="formItems flex flex-col ">
-              <form
-                action=""
-                id="asistente"
-                onSubmit={sendForm}
-                className="formAsistente m-2 mt-0  flex flex-col "
-                autoComplete="on"
-              >
-                <label htmlFor="">Nombre</label>
-                <input
-                  type="text"
-                  id="nombre"
-                  name="nombre"
-                  onChange={onChange}
-                  placeholder="Nombre"
-                />
-                <label htmlFor="">Apellido</label>
-                <input
-                  type="text"
-                  id="apellido"
-                  name="apellido"
-                  onChange={onChange}
-                  placeholder="Apellido"
-                />
-                <label htmlFor="">Rut</label>
-                <input
-                  type="text"
-                  id="rut"
-                  name="rut"
-                  onChange={onChange}
-                  placeholder="xx.xxx.xxx-x"
-                  pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
-                />
-                <label htmlFor="">Mail</label>
-                <input
-                  type="text"
-                  id="mail"
-                  name="mail"
-                  onChange={onChange}
-                  placeholder="correo@mail.com"
-                  pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-                />
-                <label htmlFor="">Fecha de nacimiento</label>
-                <input
-                  type="date"
-                  name="fechaNa"
-                  id="fechaNa"
-                  onChange={onChange}
-                />
-                <label htmlFor="">Direccion</label>
-                <input
-                  type="text"
-                  id="domicilio"
-                  name="domicilio"
-                  onChange={onChange}
-                />
-                <label htmlFor="">Telefono</label>
-                <input
-                  type="number"
-                  id="telefono"
-                  name="telefono"
-                  onChange={onChange}
-                />
-                <label htmlFor="">Foto de perfil</label>
-                <input
-                    type="file"
-                    name="foto"
-                    id="foto"
-                    onChange={onFileChangeCreateAsistente}
-                  />
-                <input
-                  type="submit"
-                  value="Enviar"
-                  className="formBtnEnviar  m-2 p-2 pl-4 pr-4  justify-center content-center rounded-full shadow-md shadow-slate-900 "
-                />
-              </form>
+        {/* body */}
+        <div className="asistentesBody m-4 flex flex-row max-md:flex-col h-fit">
+          <div className="tableContainer flex h-fit max-lg:overflow-x-auto ">
+            <div className="asistentesTable  border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900">
+              <table className="tableContainer table-auto border-separate border-spacing-x-1 border-spacing-y-1 ">
+                {/* atributos de la tabla */}
+                <thead className="headerTable ">
+                  <tr className="headerTableItem">
+                    <th className="">Foto</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Rut</th>
+                    <th>Mail</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                {/* valores de la tabla */}
+                <tbody className="tableBody">
+                  {/* items de la tabla */}
+                  {showAsistentes()}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-
-        {/* ventana emergente para editar al asistente */}
-        {showForm && (
-          <div className="editPopUp">
-            <div className="editPopUpContainer">
-              <div className="editPopUpHeader flex flex-row">
-                <h2 className="editPopUpTitle ml-2">Editar asistente</h2>
-                <button
-                  onClick={togglePopUp}
-                  className="editPopUpBtnClose mr-2 pl-4 pr-4 rounded-full"
-                >
-                  X
-                </button>
+          {/* formulario para crear un asistentente de parvulo */}
+          <div className="formContainer flex flex-col flex-1   ml-2 mr-2 max-md:mt-4 max-md:ml-0">
+            <div className="formBody p rounded-2xl shadow shadow-slate-900 bg-white">
+              {/* titulo */}
+              <div className="formHeader p-2 pb-0 flex flex-row ml-2">
+                <h2 className="formTitle font-bold ">Crear asistente</h2>
               </div>
-              <div className="editPopUpBody">
+
+              {/* body */}
+              <div className="formItems flex flex-col ">
                 <form
                   action=""
                   id="asistente"
-                  onSubmit={sendEditForm}
-                  className="editForm m-2 mt-0  flex flex-col "
+                  onSubmit={sendForm}
+                  className="formAsistente m-2 mt-0  flex flex-col "
                   autoComplete="on"
                 >
                   <label htmlFor="">Nombre</label>
@@ -534,7 +448,7 @@ export const Asistentes = () => {
                     type="text"
                     id="nombre"
                     name="nombre"
-                    onChange={onChangeEdit}
+                    onChange={onChange}
                     placeholder="Nombre"
                   />
                   <label htmlFor="">Apellido</label>
@@ -542,16 +456,24 @@ export const Asistentes = () => {
                     type="text"
                     id="apellido"
                     name="apellido"
-                    onChange={onChangeEdit}
+                    onChange={onChange}
                     placeholder="Apellido"
                   />
-                  {getRutInput()}
+                  <label htmlFor="">Rut</label>
+                  <input
+                    type="text"
+                    id="rut"
+                    name="rut"
+                    onChange={onChange}
+                    placeholder="xx.xxx.xxx-x"
+                    pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
+                  />
                   <label htmlFor="">Mail</label>
                   <input
                     type="text"
                     id="mail"
                     name="mail"
-                    onChange={onChangeEdit}
+                    onChange={onChange}
                     placeholder="correo@mail.com"
                     pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
                   />
@@ -560,28 +482,28 @@ export const Asistentes = () => {
                     type="date"
                     name="fechaNa"
                     id="fechaNa"
-                    onChange={onChangeEdit}
+                    onChange={onChange}
                   />
                   <label htmlFor="">Direccion</label>
                   <input
                     type="text"
                     id="domicilio"
                     name="domicilio"
-                    onChange={onChangeEdit}
+                    onChange={onChange}
                   />
                   <label htmlFor="">Telefono</label>
                   <input
                     type="number"
                     id="telefono"
                     name="telefono"
-                    onChange={onChangeEdit}
+                    onChange={onChange}
                   />
                   <label htmlFor="">Foto de perfil</label>
                   <input
                     type="file"
                     name="foto"
                     id="foto"
-                    onChange={onFileChange}
+                    onChange={onFileChangeCreateAsistente}
                   />
                   <input
                     type="submit"
@@ -592,7 +514,93 @@ export const Asistentes = () => {
               </div>
             </div>
           </div>
-        )}
+
+          {/* ventana emergente para editar al asistente */}
+          {showForm && (
+            <div className="editPopUp">
+              <div className="editPopUpContainer">
+                <div className="editPopUpHeader flex flex-row">
+                  <h2 className="editPopUpTitle ml-2">Editar asistente</h2>
+                  <button
+                    onClick={togglePopUp}
+                    className="editPopUpBtnClose mr-2 pl-4 pr-4 rounded-full"
+                  >
+                    X
+                  </button>
+                </div>
+                <div className="editPopUpBody">
+                  <form
+                    action=""
+                    id="asistente"
+                    onSubmit={sendEditForm}
+                    className="editForm m-2 mt-0  flex flex-col "
+                    autoComplete="on"
+                  >
+                    <label htmlFor="">Nombre</label>
+                    <input
+                      type="text"
+                      id="nombre"
+                      name="nombre"
+                      onChange={onChangeEdit}
+                      placeholder="Nombre"
+                    />
+                    <label htmlFor="">Apellido</label>
+                    <input
+                      type="text"
+                      id="apellido"
+                      name="apellido"
+                      onChange={onChangeEdit}
+                      placeholder="Apellido"
+                    />
+                    {getRutInput()}
+                    <label htmlFor="">Mail</label>
+                    <input
+                      type="text"
+                      id="mail"
+                      name="mail"
+                      onChange={onChangeEdit}
+                      placeholder="correo@mail.com"
+                      pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                    />
+                    <label htmlFor="">Fecha de nacimiento</label>
+                    <input
+                      type="date"
+                      name="fechaNa"
+                      id="fechaNa"
+                      onChange={onChangeEdit}
+                    />
+                    <label htmlFor="">Direccion</label>
+                    <input
+                      type="text"
+                      id="domicilio"
+                      name="domicilio"
+                      onChange={onChangeEdit}
+                    />
+                    <label htmlFor="">Telefono</label>
+                    <input
+                      type="number"
+                      id="telefono"
+                      name="telefono"
+                      onChange={onChangeEdit}
+                    />
+                    <label htmlFor="">Foto de perfil</label>
+                    <input
+                      type="file"
+                      name="foto"
+                      id="foto"
+                      onChange={onFileChange}
+                    />
+                    <input
+                      type="submit"
+                      value="Enviar"
+                      className="formBtnEnviar  m-2 p-2 pl-4 pr-4  justify-center content-center rounded-full shadow-md shadow-slate-900 "
+                    />
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

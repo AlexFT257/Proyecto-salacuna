@@ -4,6 +4,9 @@ import '../styles/asistentes.css'
 import '../styles/footer.css'
 import '../styles/perfil.css'
 import '../styles/login.css'
+import '../styles/Home.module.css'
+
+
 
 import axios from 'axios'
 

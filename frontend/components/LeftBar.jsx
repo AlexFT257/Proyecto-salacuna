@@ -40,60 +40,57 @@ export const LeftBar = () => {
 
       {/* items  */}
       <div className="navGroup max-sm:hidden justify-center flex flex-col  m-2 max-lg:content-center">
-        <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <button
-            onClick={() => {
+        <div onClick={() => {
               router.push("/home");
-            }}
-            className="flex "
-          >
+            }} className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          
             <img
               src="/dashboard_blank.png"
               alt="icono de menu principal"
               className="w-6 h-6 "
             />
             <h2 className="ml-2 max-lg:hidden">Home page</h2>
-          </button>
+          
         </div>
 
-        <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <button onClick={()=>{router.push("/actividades")}} className="flex">
+        <div onClick={()=>{router.push("/actividades")}} className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          
             <img
               src="/checklist.png"
               alt="icono de actividades"
               className=" w-6 h-6"
             />
             <h2 className="ml-2 max-lg:hidden">Actividades</h2>
-          </button>
+          
         </div>
 
-        <div className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <button onClick={()=>{router.push("/Parvularias")}} className="flex">
+        <div onClick={()=>{router.push("/Parvularias")}} className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          
           <img
             src="/teacher_2.png"
             alt="icono de parvularias"
             className="w-6 h-6"
           />
           <h2 className="ml-2 max-lg:hidden">Parvularia</h2>
-          </button>
+          
         </div>
 
-        <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <button onClick={()=>{router.push("/asistentesParvulo")}} className="flex">
+        <div onClick={()=>{router.push("/asistentesParvulo")}} className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          
           <img
             src="/teacher_2.png"
             alt="icono de asistentes de parvulo"
             className="w-6 h-6"
           />
           <h2 className="ml-2 max-lg:hidden" >Asistentes de parvulo</h2>
-          </button>
+          
         </div>
 
-        <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <div onClick={()=>{router.push("/parvulos")}} className="flex">
+        <div onClick={()=>{router.push("/parvulos")}} className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+          
           <img src="/teeter.png" alt="icono de parvulos" className="w-6 h-6" />
           <h2 className="ml-2 max-lg:hidden">Parvulos</h2>
-          </div>
+          
         </div>
 
         <div className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">

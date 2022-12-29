@@ -4,12 +4,15 @@ import { useEffect } from "react";
 import cookie from "js-cookie";
 import Swal from "sweetalert2";
 const jwt = require("jwt-simple");
+import { useRouter } from "next/router";
+import { Auth } from "../middleware/auth";
 
 export const Perfil = () => {
+  const router = useRouter();
   const [profileInfo, setProfileInfo] = React.useState({
     name: "Nombre",
     lastName: "Apellido",
-    foto: "/user.png",
+    foto: "",
   });
 
   const check = async () => {
@@ -18,38 +21,43 @@ export const Perfil = () => {
       router.push("/login");
     } else {
       const decoded = jwt.decode(token, process.env.SECRET_KEY);
-      try {
-        const response = await axios.get(`${process.env.API_URL}/userFoto`, {
-          headers: { "X-Caller-Id": decoded.sub },
+      const response = await axios.get(`${process.env.API_URL}/userFoto`, {
+        headers: { "X-Caller-Id": decoded.sub },
+      });
+
+      console.log("Response: ");
+      console.log(response);
+
+      if (response.status === 200) {
+        setProfileInfo({
+          name: response.data.name,
+          apellido: response.data.apellido,
+          foto: response.data.foto,
         });
-
-        console.log("Response: ");
-        console.log(response);
-
-        if (response.status === 200) {
-          setProfileInfo({
-            name: response.data.name,
-            apellido: response.data.apellido,
-            foto: response.data.foto,
-          });
-        }
-      } catch (error) {
+      } else {
+        setProfileInfo({
+          name: response.data.name,
+          apellido: response.data.apellido,
+          foto: "639ea1b3a638230afce91add",
+        });
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "No posees foto de perfil, por favor sube una foto de perfil",
         });
       }
+      
     }
   };
 
   useEffect(() => {
+    Auth;
     check();
   }, []);
 
   const profilePic = profileInfo.foto
     ? `${process.env.API_URL}/file/download/${profileInfo.foto}`
-    : "/user.png";
+    : `/user.png`;
 
   return (
     <div className="dropdownContainer">
