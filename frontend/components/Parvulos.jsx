@@ -4,8 +4,8 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
-export const ModalAddParvulos = () => {
-    
+
+export const parvulos = ({setShowModalAddParvulo,parvulos,setParvulos}) => {
     //MOELO PARVULO PARA EL FORMULARIO
     const [values, setValues] = useState({
         nombre: "",
@@ -32,6 +32,8 @@ export const ModalAddParvulos = () => {
         );
         console.log(response);
         if(response.status === 200) {
+          setParvulos([...parvulos, response.data]);
+          setShowModalAddParvulo(false);
             Swal.fire({
                 title: "Parvulo creado",
                 icon: "success",
@@ -61,7 +63,8 @@ export const ModalAddParvulos = () => {
         };
 
     return (
-        //VISTA FORMULARIO
+      <>
+        <div className="modalContainer flex flex-col flex-1 max-md:mt-4 max-md:ml-0">
         <div className="formContainer flex flex-col flex-1   ml-2 mr-2 max-md:mt-4 max-md:ml-0">
           <div className="formBody p rounded-2xl shadow shadow-slate-900 bg-white">
             {/* titulo */}
@@ -147,11 +150,9 @@ export const ModalAddParvulos = () => {
           </div>
         </div>
 
-
-
+      </div>
+      </>
 
     );
-
-
 }
     export default parvulos;

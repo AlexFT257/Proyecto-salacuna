@@ -3,15 +3,14 @@ import axios from "axios";
 import { useState,useEffect} from "react";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
-import Swal from "sweetalert2";
-import {getParvulos} from "../data/parvulos";
-
+import {Parvulos} from "../components/Parvulos";
 
 //Listar los parvulos en una tabla
 
-const ListarParvulos = () => {
-    const [showModalAdd, setShowModalAdd] = useState(false);
+export const ListarParvulos = () => {
+    const [showModalAddParvulo, setShowModalAddParvulo] = useState(false);
     const [parvulos, setParvulos] = useState([]);
+    
     const getParvulos = async () => {
         const token = Cookies.get("token");
         const payload = jwt.decode(token, process.env.SECRET_KEY,true);
@@ -26,10 +25,12 @@ const ListarParvulos = () => {
     }, []);
 
     return (
+    <>
+
         <div className="flex flex-col w-full h-full ">
             <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
                 <div className="">
-                    <h1 className="flex m-4 p-2 text-5xl font-bold " onClick={() => setShowModalAdd(true)} >Parvulos</h1>
+                    <h1 className="flex m-4 p-2 text-5xl font-bold " onClick={() => setShowModalAddParvulo(true)} >Parvulos</h1>
                 </div >
             </div>
 
@@ -54,7 +55,8 @@ const ListarParvulos = () => {
                         </tr>
                     </thead>
                     <tbody className="tableBody">
-                        {parvulos.map((parvulo) => (
+                        {parvulos.map((parvulo) => 
+                            (
                             <tr key={parvulo._id}>
                                 <td><img src={parvulo.foto} alt="foto" width="100" height="100"/></td>
                                 <td>{parvulo.nombre}</td>
@@ -63,7 +65,6 @@ const ListarParvulos = () => {
                                 <td>{parvulo.telefonoEmergencia}</td>
                                 <td>{parvulo.direccion}</td>
                                 <td>{parvulo.condicionesMedicas}</td>
-                    
                                 <td>
                                     <button className="btn btn-primary">Editar</button>
                                     <button className="btn btn-danger">Eliminar</button>
@@ -75,9 +76,16 @@ const ListarParvulos = () => {
             </div>
             </div>
         </div>
+        {
+        showModalAddParvulo &&
+        <Parvulos showModalAddParvulo={showModalAddParvulo}
+        setShowModalAddParvulo={setShowModalAddParvulo}
+        parvulos={parvulos}
+        setParvulos={setParvulos}/>
+        };
+    </>
     );
 };
 
 
 export default ListarParvulos;
- 

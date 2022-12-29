@@ -1,18 +1,17 @@
 import { LeftBar } from "../components/LeftBar";
 import {Perfil} from "../components/Perfil"
-import {Footer} from "../components/Footer"
 import { useRouter } from "next/router";
 import cookie from "js-cookie";
 import { useEffect } from "react";
 import { checkToken } from "../data/user";
-import axios from "axios";
 import ListarParvulos from "../components/listarparvulos";
-import { parvulos } from "../components/parvulos";
+
 
 export const Parvulos = ({props}) => {
     const router = useRouter();
     useEffect(() => {
         const token = cookie.get("token");
+        console.log(token);
         if (!token || token === "undefined") {
         router.push("/login");
         }
@@ -22,15 +21,17 @@ export const Parvulos = ({props}) => {
         router.push("/login");
     }
     
+    
+    
     return (
         <div className="flex max-sm:flex-col  h-screen w-screen ">
         
             <LeftBar/>
-            <ListarParvulos props={props}/>
+            <ListarParvulos/>
             <Perfil/>
         </div>
     );
-}
 
+};
 
 export default Parvulos;
