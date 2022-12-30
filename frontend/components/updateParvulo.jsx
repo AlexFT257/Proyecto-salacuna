@@ -1,51 +1,139 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
-import { useState } from "react";
+import { use, useState } from "react";
 
 
 export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo,rut,seRut,setParvulos,parvulos}) => {
     const [parvulo, setParvulo] = useState(
         parvulos.find((parvulo) => parvulo.rut === rut)
     );
+    const[putParvulo,setPutParvulo] = useState({
+        nombre:"",
+        apoderado:"",
+        rut:"",
+        fechaNacimiento:"",
+        direccion:"",
+        telefonoEmergencia:"",
+        foto:"",
 
+      
+    });
+
+    const token = Cookies.get("token");
+    const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
+
+    const updateParvulo = async (e) => {
+        e.preventDefault();
+        try{
+            const res = await axios.put(
+                `${process.env.API_URL}/parvulos/${parvulo._id}`,
+                newParvulo,
+                {
+                    headers: {
+                        "X-Caller-Id": decoded.sub,
+                    },
+                }
+            );
+            if(res.status === 200){
+                const newParvulos = parvulos.map((parvulo) => {
+                    if(parvulo._id === res.data._id){
+                        return res.data;
+                    }else{
+                        return parvulo;
+                    }
+                });
+                setParvulos(newParvulos);
+                setShowModalEditParvulo(false);
+            }
+        }catch(err){
+            console.log(err);
+        }
+    };
+   
+    
     return (
         <>
-        <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-50">
+        <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-50" >
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-fit bg-white rounded-2xl border-2 border-slate-900 shadow-lg shadow-slate-900">
-                <div className="flex flex-col justify-center items-center m-5 space-y-3">
-                        <h5 className="justify-center font-bold">Editar Parvulo</h5>
-                    <div className=" w-full  space-y-3">
-                        <form action="">
-                            <div className="justify-center">
-                               <label className="form-label mt-10">Rut</label>
-                                <input type="text" className="mb-5 form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600  " 
-                                placeholder={parvulo.rut} />
-                                <label className="form-label mt-10">Nombre</label>
-                                <input type="text" className="mb-5 form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                placeholder={parvulo.nombre} />
-                                <label className="form-label">Apoderado</label>
-                                <input type="text" className="mb-5 form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                placeholder={parvulo.apoderado} />
-                                <label className="form-label">Fecha de nacimiento</label>
-                                <input type="text" className="mb-5 form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                placeholder={parvulo.fechaNacimiento} />
-                                <label className="form-label">Direccion</label>
-                                <input type="text" className="mb-5 form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                placeholder={parvulo.direccion} />
-                                <label className="form-label">Telefono Emergencia</label>
-                                <input type="text" className="mb-5 form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                placeholder={parvulo.telefonoEmergencia} />
-                                <label className="form-label">Foto</label>
-                                <input type="text" className="mb-5 form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                placeholder={parvulo.foto} />
+                <div className="modal-content flex flex-col justify-center items-center m-5 space-y-3">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel justify-center font-bold">Editar parvulo</h5>
+                    </div>
+                    <div className=" w-full flex flex-col space-y-3">
+                        <form className="formAsistente m-2 mt-0  flex flex-col ">
 
+                                <label htmlFor="" className="">Nombre</label>
+                                <input type="text" 
+                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
+                                id="nombre" 
+                                value={(putParvulo.nombre === null || putParvulo.nombre === '') ? parvulo.nombre : putParvulo.nomnbre}
+                                onChange={(e) => setPutParvulo({...putParvulo,nombre:e.target.value})}
+
+                                />
+
+                                <label htmlFor="apoderado" className="form-label">Apoderado</label>
+                                <input type="text"
+                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
+                                id="apoderado" 
+                                value={(putParvulo.apoderado === null || putParvulo.apoderado === '') ? parvulo.apoderado : putParvulo.apoderado}
+                                onChange={(e) => setPutParvulo({...putParvulo,apoderado:e.target.value})}
+                                />
+
+                                <label htmlFor="rut" className="form-label">Rut</label>
+                                <tb type="text" 
+                                disabled>{parvulo.rut} </tb>
+
+                                
+
+                                <label htmlFor="direccion" className="form-label">Direccion</label>
+                                <input type="text"
+                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
+                                id="direccion"
+                                value={(putParvulo.direccion === null || putParvulo.direccion === '') ? parvulo.direccion : putParvulo.direccion}
+                                onChange={(e) => setPutParvulo({...putParvulo,direccion:e.target.value})}
+                                />
+
+
+                                <label htmlFor="telefonoEmergencia" className="form-label">Telefono Emergencia</label>
+                                <input type="text"
+                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
+                                id="telefonoEmergencia"
+                                value={(putParvulo.telefonoEmergencia === null || putParvulo.telefonoEmergencia === '') ? parvulo.telefonoEmergencia : putParvulo.telefonoEmergencia}
+                                onChange={(e) => setPutParvulo({...putParvulo,telefonoEmergencia:e.target.value})}
+                                />
+
+                                <label htmlFor="condiciones medicas">Condiciones Medicas</label>
+                                <input type="text"
+                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
+                                id="condicionesMedicas"
+                                value={(putParvulo.condicionesMedicas === null || putParvulo.condicionesMedicas === '') ? parvulo.condicionesMedicas : putParvulo.condicionesMedicas}
+                                onChange={(e) => setPutParvulo({...putParvulo,condicionesMedicas:e.target.value})}
+                                />
+
+                                <label htmlFor="foto" className="form-label">Foto</label>
+                                <input type="file"
+                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
+                                 id="foto" />
+
+
+                            <div className="modal footer">
+                                <button type="button" className="btn btn-secondary bg-red-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900" 
+                                data-bs-dismiss="modal" onClick={()=> setShowModalEditParvulo(false)} >Cerrar
+                                </button>
+                                <button type="submit" 
+                                className="btn btn-primary bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900"
+                                onClick={updateParvulo}>
+                                    Agregar
+                                    </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        </>
-    )
+    </>
+    )  
 }
+
