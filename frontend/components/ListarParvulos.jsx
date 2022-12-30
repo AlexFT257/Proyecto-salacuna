@@ -4,13 +4,14 @@ import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
 import { ModalAddParvulo } from "./addParvulo";
 import { ModalDeleteParvulo } from "./deleteParvulo";
+import { ModalUpdateParvulo } from "./updateParvulo";
 import { useState, useEffect } from "react";
 
 //Listar los parvulos en una tabla
 
 export const ListarParvulos = () => {
     const [showModalAddParvulo, setShowModalAddParvulo] = useState(false);
-   // const [showModalEditParvulo, setShowModalEditParvulo] = useState(false);
+    const [showModalEditParvulo, setShowModalEditParvulo] = useState(false);
     const [ShowModalDeleteParvulo,setShowModalDeleteParvulo] = useState(false);
     const [parvulos, setParvulos] = useState([]);
 
@@ -33,6 +34,12 @@ export const ListarParvulos = () => {
         setShowModalDeleteParvulo(true);
         setRut(rut);
     };
+
+    const modalEdit = (rut) => {
+        setShowModalEditParvulo(true);
+        setRut(rut);
+    };
+
     return (
         // retornar la tabla con los parvulos y el boton para agregar parvulos 
         <>
@@ -77,7 +84,8 @@ export const ListarParvulos = () => {
                                     <td>{parvulo.direccion}</td>
                                     <td>{parvulo.condicionesMedicas}</td>
                                     <td>
-                                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300">
+                                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300"
+                                        onClick={()=>modalEdit(parvulo.rut)}>
                                             Editar
                                         </button>
                                         <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300"
@@ -111,6 +119,18 @@ export const ListarParvulos = () => {
 
                 />
             )}
+            {showModalEditParvulo && (
+                <ModalUpdateParvulo
+                    showModalEditParvulo={showModalEditParvulo}
+                    setShowModalEditParvulo={setShowModalEditParvulo}
+                    rut={rut}
+                    setRut={setRut}
+                    setParvulos={setParvulos}
+                    parvulos={parvulos}
+
+                />
+            )}
+
 
         </>
     );

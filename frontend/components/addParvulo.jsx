@@ -38,7 +38,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
         const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
         console.log(decoded);
         try{
-            /*
+            
             if(selectedFile){
                 const formData = new FormData();
                 formData.append("file", selectedFile);
@@ -61,7 +61,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                 }
                 console.log(res.data);
             }
-            */
+            
             const res = axios.post(
                 `${process.env.API_URL}/parvulo`,
                 newParvulo,
@@ -155,8 +155,11 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
 
 
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={()=> setShowModalAddParvulo(false)} >Cerrar</button>
-                                    <button type="submit" className="btn btn-primary">Agregar</button>
+                                    <button type="button" className="btn btn-secondary bg-red-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900" 
+                                    data-bs-dismiss="modal" onClick={()=> setShowModalAddParvulo(false)} >Cerrar</button>
+                                    <button type="submit" 
+                                    className="btn btn-primary bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900">
+                                        Agregar</button>
                                 </div>
                             </form>
                         </div>
