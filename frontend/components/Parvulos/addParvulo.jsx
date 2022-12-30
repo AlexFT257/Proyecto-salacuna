@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
-import { checkToken } from "../data/user";
+import { checkToken } from "../../data/user";
 
 export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) => {
     // modal para crear parvulo

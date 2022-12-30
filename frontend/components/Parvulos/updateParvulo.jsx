@@ -5,7 +5,7 @@ import { use, useState } from "react";
 
 
 export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo,rut,seRut,setParvulos,parvulos}) => {
-    const [parvulo, setParvulo] = useState(
+    const [parvulo] = useState(
         parvulos.find((parvulo) => parvulo.rut === rut)
     );
     const[putParvulo,setPutParvulo] = useState({
@@ -19,16 +19,26 @@ export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo
 
       
     });
+    function getModifiedFields(original, current) {
+        return Object.keys(current).reduce((modified, key) => {
+          if (current[key] !== original[key]) {
+            modified[key] = current[key];
+          }
+          return modified;
+        }, {});
+      }
 
-    const token = Cookies.get("token");
-    const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
-
+    
     const updateParvulo = async (e) => {
         e.preventDefault();
+        const token = Cookies.get("token");
+        const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
+        const modifiedFields = getModifiedFields(parvulo, putParvulo);
+        console.log(modifiedFields);
         try{
             const res = await axios.put(
-                `${process.env.API_URL}/parvulos/${parvulo._id}`,
-                newParvulo,
+                `${process.env.API_URL}/parvulos/update/${parvulo.rut}`,
+                modifiedFields,
                 {
                     headers: {
                         "X-Caller-Id": decoded.sub,
@@ -61,14 +71,14 @@ export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo
                         <h5 className="modal-title" id="exampleModalLabel justify-center font-bold">Editar parvulo</h5>
                     </div>
                     <div className=" w-full flex flex-col space-y-3">
-                        <form className="formAsistente m-2 mt-0  flex flex-col ">
+                        <form className="formAsistente m-2 mt-0  flex flex-col" onSubmit={updateParvulo}>
 
                                 <label htmlFor="" className="">Nombre</label>
                                 <input type="text" 
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
                                 id="nombre" 
-                                value={(putParvulo.nombre === null || putParvulo.nombre === '') ? parvulo.nombre : putParvulo.nomnbre}
-                                onChange={(e) => setPutParvulo({...putParvulo,nombre:e.target.value})}
+                                placeholder={parvulo.nombre}
+                              
 
                                 />
 
@@ -76,22 +86,25 @@ export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo
                                 <input type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
                                 id="apoderado" 
-                                value={(putParvulo.apoderado === null || putParvulo.apoderado === '') ? parvulo.apoderado : putParvulo.apoderado}
-                                onChange={(e) => setPutParvulo({...putParvulo,apoderado:e.target.value})}
+                                placeholder={parvulo.apoderado}
                                 />
 
                                 <label htmlFor="rut" className="form-label">Rut</label>
                                 <tb type="text" 
                                 disabled>{parvulo.rut} </tb>
-
                                 
+                                <label htmlFor="fechaNacimiento" className="form-label">Fecha de Nacimiento :{new Date(parvulo.fechaNacimiento).toLocaleDateString("es-ES")}</label>
+                                <input type="date"
+                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
+                                id="fechaNacimiento"
+                                placeholder={parvulo.fechaNacimiento}
+                                />
 
                                 <label htmlFor="direccion" className="form-label">Direccion</label>
                                 <input type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
                                 id="direccion"
-                                value={(putParvulo.direccion === null || putParvulo.direccion === '') ? parvulo.direccion : putParvulo.direccion}
-                                onChange={(e) => setPutParvulo({...putParvulo,direccion:e.target.value})}
+                               placeholder={parvulo.direccion}
                                 />
 
 
@@ -99,16 +112,15 @@ export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo
                                 <input type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
                                 id="telefonoEmergencia"
-                                value={(putParvulo.telefonoEmergencia === null || putParvulo.telefonoEmergencia === '') ? parvulo.telefonoEmergencia : putParvulo.telefonoEmergencia}
-                                onChange={(e) => setPutParvulo({...putParvulo,telefonoEmergencia:e.target.value})}
+                               placeholder={parvulo.telefonoEmergencia}
                                 />
 
                                 <label htmlFor="condiciones medicas">Condiciones Medicas</label>
                                 <input type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
                                 id="condicionesMedicas"
-                                value={(putParvulo.condicionesMedicas === null || putParvulo.condicionesMedicas === '') ? parvulo.condicionesMedicas : putParvulo.condicionesMedicas}
-                                onChange={(e) => setPutParvulo({...putParvulo,condicionesMedicas:e.target.value})}
+                                placeholder={parvulo.condicionesMedicas}
+                               
                                 />
 
                                 <label htmlFor="foto" className="form-label">Foto</label>
@@ -124,7 +136,7 @@ export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo
                                 <button type="submit" 
                                 className="btn btn-primary bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900"
                                 onClick={updateParvulo}>
-                                    Agregar
+                                    Enviar
                                     </button>
                             </div>
 

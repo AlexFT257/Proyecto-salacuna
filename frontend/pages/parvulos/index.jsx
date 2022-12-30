@@ -1,10 +1,10 @@
-import { LeftBar } from "../components/LeftBar";
-import {Perfil} from "../components/Perfil"
+import { LeftBar } from "../../components/LeftBar";
+import {Perfil} from "../../components/Perfil"
 import { useRouter } from "next/router";
 import cookie from "js-cookie";
 import { useEffect } from "react";
-import { checkToken } from "../data/user";
-import ListarParvulos from "../components/listarparvulos";
+import { checkToken } from "../../data/user";
+import ListarParvulos from "../../components/Parvulos/ListarParvulos";
 
 
 export const Parvulos = () => {

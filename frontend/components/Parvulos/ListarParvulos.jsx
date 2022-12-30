@@ -3,8 +3,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
 import { ModalAddParvulo } from "./addParvulo";
-import { ModalDeleteParvulo } from "./deleteParvulo";
 import { ModalUpdateParvulo } from "./updateParvulo";
+import { ModalDeleteParvulo } from "./deleteParvulo";
+
+
 import { useState, useEffect } from "react";
 
 //Listar los parvulos en una tabla
