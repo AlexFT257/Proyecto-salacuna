@@ -7,22 +7,26 @@ import axios from 'axios';
 
 export default function Actividad() {
     const router = useRouter();
-
+    const [actividad, setActividad] = useState('');
     const [actividadData, setActividadData] = useState({});
     const [seccion, setSeccion] = useState('');
       
-    const getActividad = async () => {        
-        const res = await axios.get(`${process.env.API_URL}/actividad/search/${router.query.actividad}`);
-        const data = res.data;
-        if(res.status === 200)
-        {
-        setActividadData(data);
-        }
-    }
+    useEffect(() => {
+        setActividad(router.query.actividad);
+    }, [router.query.actividad]);
 
     useEffect(() => {
-        getActividad();
-    }, []);
+        const getActividad = async () => {
+            const res = await axios.get(`${process.env.API_URL}/actividad/search/${actividad}`);
+            const data = await res.data;
+            if(res.status === 200){
+                setActividadData(data);
+            }
+        };
+        if(actividad){
+            getActividad();
+        }
+    }, [actividad]);
 
     const picture = (id, type) => {
         const pic = id ? `${process.env.API_URL}/file/download/${id}` : "";
