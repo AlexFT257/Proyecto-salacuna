@@ -23,8 +23,6 @@ export const Perfil = () => {
           headers: { "X-Caller-Id": decoded.sub },
         });
 
-        console.log("Response: ");
-        console.log(response);
 
         if (response.status === 200) {
           setProfileInfo({

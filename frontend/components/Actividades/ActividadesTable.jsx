@@ -5,6 +5,7 @@ import { ModalDeleteActividad } from "./ModalDeleteActividad";
 import { ModalAddActividad } from "./ModalAddActividad";
 import { ModalUpdateActividad } from "./ModalUpdateActividad";
 import axios from "axios";
+import Link from "next/link";
 
 export const ActividadesTable = () => {
   const [showModalAdd, setShowModalAdd] = useState(false);
@@ -51,7 +52,7 @@ export const ActividadesTable = () => {
       
       <div className="m-4 h-fit">
           <div className="bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900">
-            <table className="w-full table-fix">
+            <table className="w-full table-fixed">
               <thead className="">
                 <tr className="text-left">
                   <th>Titulo</th>
@@ -76,7 +77,9 @@ export const ActividadesTable = () => {
                         <td className="flex justify-start space-x-2">
                           <button className="hover:text-red-600" onClick={() => deleteModal(item._id)}>Eliminar</button>
                           <button className="hover:text-emerald-600" onClick={() => updateModal(item)}>Editar</button>
-                          <button className="hover:text-emerald-600" onClick={() => props.showActividad(item._id)}>Ver</button>
+                          <Link href={`/actividades/${item._id}`}>
+                            <button className="hover:text-blue-600">Ver</button>
+                          </Link>
                         </td>
                       </tr>
                     )

@@ -57,8 +57,9 @@ export const LeftBar = () => {
           </button>
         </div>
 
+        <Link href="/actividades">
         <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <button onClick={()=>{router.push("/actividades")}} className="flex">
+          <button className="flex">
             <img
               src="/checklist.png"
               alt="icono de actividades"
@@ -67,6 +68,7 @@ export const LeftBar = () => {
             <h2 className="ml-2 max-lg:hidden">Actividades</h2>
           </button>
         </div>
+        </Link>
 
         <div className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
           <button onClick={()=>{router.push("/Parvularias")}} className="flex">
