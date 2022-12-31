@@ -20,6 +20,6 @@ const Home = () => {
       <Perfil />
     </div>
   );
-};
+}
 
 export default Home;

@@ -23,7 +23,7 @@ const updateParvulo = (req,res)=>{
         if(!parvulo){
             return res.status(404).send({message: "No se ha encontrado el parvulo"})
         }
-        return res.status(200).send({message: "Parvulo modificado"})
+        return res.status(200).send(parvulo)
     })
 } ;
 

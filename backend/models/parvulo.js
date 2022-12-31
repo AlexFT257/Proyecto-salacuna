@@ -12,7 +12,7 @@ const parvuloSchema=new Schema({
         type: String,
         required: true,
         minLenght: 1,
-        maxLenght: 11,
+        maxLenght: 15,
         unique: true
     },
     fechaNacimiento:{
@@ -39,7 +39,12 @@ const parvuloSchema=new Schema({
         type: Schema.ObjectId,
         ref: 'user',
         required: true
-    }
+    },
+    foto:{
+        type: Schema.Types.ObjectId,
+        ref: 'file',
+        required: false
+    },
 
 })
 
