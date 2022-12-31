@@ -10,7 +10,7 @@ import axios from "axios";
 
 export const Actividades = ({props}) => {
     const router = useRouter();
-    console.log(props.context);
+    
     useEffect(() => {
         const token = cookie.get("token");
         if (!token || token === "undefined") {

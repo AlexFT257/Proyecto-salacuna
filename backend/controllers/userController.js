@@ -43,6 +43,21 @@ const getUsers = (req, res) => {
   });
 };
 
+// obtener un usuario por id (para verificar su rol)
+const getUser = (req, res) => {
+  const id  = req.get("X-Caller-Id");
+  console.log("getting user: "+id);
+  User.findById(id, (err, user) => {
+    if (err) {
+      return res.status(400).send({ message: "Error al obtener el usuario" });
+    }
+    if (!user) {
+      return res.status(400).send({ message: "Error al obtener el usuario (usuario no existe)" });
+    }
+    return res.status(200).send(user);
+  });
+};
+
 // funciones de autentificacion de usuario
 
 const login = (req, res) => {
@@ -95,11 +110,11 @@ const getUserFoto = (req, res) => {
     }
     File.findById(user.foto, (err, file) => {
       if (err) {
-        return res.status(400).send({ message: "Error al obtener la foto",name:user.nombre, apellido:user.apellido });
+        return res.status(201).send({ message: "Error al obtener la foto",name:user.nombre, apellido:user.apellido });
       }
       if (!file) {
         return res
-          .status(400)
+          .status(201)
           .send({ message: "Error al obtener la foto (foto no existe)",name:user.nombre, apellido:user.apellido});
       }
       
@@ -112,6 +127,7 @@ const getUserFoto = (req, res) => {
 module.exports = {
   createUser,
   getUsers,
+  getUser,
   login,
   checkToken,
   logout,

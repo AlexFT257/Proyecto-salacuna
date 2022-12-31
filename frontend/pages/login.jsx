@@ -129,7 +129,7 @@ export const loginPage = () => {
                 type="text"
                 name="rut"
                 id="rut"
-                pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
+                pattern="^(\d{1,3}(?:\.\d{1,3}){2}-[\dkK])$"
                 placeholder="XX.XXX.XXX-X"
               />
               <input

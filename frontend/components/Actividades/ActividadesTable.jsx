@@ -11,7 +11,7 @@ export const ActividadesTable = () => {
   const [showModalAdd, setShowModalAdd] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
-  const [showModalView, setShowModalView] = useState(false);
+  
 
   const [id, setId] = useState("");
   const [actividades, setActividades] = useState([]);

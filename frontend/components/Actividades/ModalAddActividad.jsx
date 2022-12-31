@@ -14,7 +14,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
         parvulos: [],
         foto: "",
     });
-    //cambios al objeto a mandar
+    
     const [parvulos, setParvulos] = useState([]);
     const [asistentes, setAsistentes] = useState([]);
 
@@ -29,90 +29,133 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
     }, []);
 
     const addActividad = async (e) => {
-        e.preventDefault();
-        try{
-            const token = Cookies.get("token");
-            const decoded = jwt.decode(token, process.env.SECRET, true);
-            if(selectedFile){
-                const formData = new FormData();
-                formData.append("file", selectedFile);
-                formData.append("upload_preset", "actividades");
-                const res = await axios.post(
-                    `${process.env.API_URL}/file/upload/${selectedFile.name}`,
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            "X-Caller-Id": decoded.sub
-                        },
-                    }
-                );
-                if(res.status === 201){
-                    setNewActividad({
-                        ...newActividad,
-                        foto: res.data[0]._id,
-                    });
-                }else{
-                    Swal.fire({
-                        title: "Error al subir imagen",
-                        icon: "error",
-                        position: "center",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-                }
-            }          
-            const res = await axios.post(
-                `${process.env.API_URL}/actividad`,
-                newActividad,
-                {
-                    headers: {
-                        "X-Caller-Id": decoded.sub,
-                        "Content-Type": "application/json",	
-                    },
-                }
-            );
-            if(res.status === 201){
-                const responsable = asistentes.find((asistente) => asistente._id === newActividad.responsable);
-                const parvulosActividad = parvulos.filter((parvulo) => newActividad.parvulos.includes(parvulo._id));
-
-                setActividades([...actividades, 
-                    {
-                        _id: res.data._id,
-                        titulo: res.data.titulo,
-                        descripcion: res.data.descripcion,
-                        fecha: res.data.fecha,
-                        responsable: responsable,
-                        parvulos: parvulosActividad,
-                        foto: res.data.foto,
-                    }
-                ]);
-                setShowModalAdd(false);
-                Swal.fire({
-                    title: "Actividad creada",
-                    icon: "success",
-                    position: "center",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            } else {
-                Swal.fire({
-                    title: "Error al crear actividad 1",
-                    icon: "error",
-                    position: "center",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
+      e.preventDefault();
+      try {
+        const token = Cookies.get("token");
+        const decoded = jwt.decode(token, process.env.SECRET, true);
+        const formData = new FormData();
+        if(selectedFile){
+          formData.append("archivos", selectedFile);
+          const response = await axios.post(
+            `${process.env.API_URL}/file/${selectedFile.name}`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              }
             }
-        } catch (error) {
+          );
+          if (response.status !== 201){
             Swal.fire({
-                title: error,
-                icon: "error",
-                position: "center",
-                showConfirmButton: false,
-                timer: 1500,
+              icon: "error",
+              title: "Oops...",
+              text: "Error al subir foto",
+              timer: 1500,
             });
-        } 
+          }else{
+            const res = await axios.post(
+              `${process.env.API_URL}/actividad`,
+              {
+                titulo: newActividad.titulo,
+                descripcion: newActividad.descripcion,
+                fecha: newActividad.fecha,
+                responsable: newActividad.responsable,
+                parvulos: newActividad.parvulos,
+                foto: response.data[0]._id,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-Caller-Id": decoded.sub,
+                },
+              }
+            );
+            if (res.status !== 201) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al crear la actividad",
+                timer: 1500,
+              });
+            }else{
+              const responsable = asistentes.find((asistente) => asistente._id === newActividad.responsable);
+              const parvulosActividad = newActividad.parvulos.map((parvulo) => {
+                return asistentes.find((asistente) => asistente._id === parvulo);
+              });
+              const actividad = {
+                _id: res.data._id,
+                titulo: res.data.titulo,
+                descripcion: res.data.descripcion,
+                fecha: res.data.fecha,
+                responsable: responsable,
+                parvulos: parvulosActividad,
+                foto: res.data.foto,
+              };
+              setActividades([...actividades, actividad]);
+              setShowModalAdd(false);
+              Swal.fire({
+                icon: "success",
+                title: "Actividad creada",
+                text: "La actividad ha sido creada exitosamente",
+                timer: 1500,
+              });
+            }
+          }
+        }else{
+          const res = await axios.post(
+            `${process.env.API_URL}/actividad`,
+            {
+              titulo: newActividad.titulo,
+              descripcion: newActividad.descripcion,
+              fecha: newActividad.fecha,
+              responsable: newActividad.responsable,
+              parvulos: newActividad.parvulos,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-Caller-Id": decoded.sub,
+              },
+            }
+          );
+          if (res.status !== 201) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Error al crear la actividad",
+              timer: 1500,
+            });
+          }else{
+            const responsable = asistentes.find((asistente) => asistente._id === newActividad.responsable);
+            const parvulosActividad = parvulos.filter((parvulo) => newActividad.parvulos.includes(parvulo._id));
+            setActividades([...actividades, 
+              {
+                _id: res.data._id,
+                titulo: res.data.titulo,
+                descripcion: res.data.descripcion,
+                fecha: res.data.fecha,
+                responsable: responsable,
+                parvulos: parvulosActividad,
+                foto: res.data.foto,
+              }
+            ]);
+            setShowModalAdd(false);
+            Swal.fire({
+              icon: "success",
+              title: "Actividad creada",
+              text: "La actividad ha sido creada exitosamente",
+              timer: 1500,
+            });
+          }
+        }
+      } catch (error) {        
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Error al crear la actividad",
+          timer: 1500,
+        });        
+      }
     };
 
     const handleFileChange = (e) => {
@@ -157,6 +200,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
             <div className="flex flex-col justify-center items-center m-5 space-y-3">
               <h1 className="text-2xl font-bold">Añadir Actividad</h1>
               <form className=" w-full flex flex-col space-y-3" onSubmit={addActividad}>
+                <span className="font-semibold">Titulo</span>
                 <input
                   type="text"
                   placeholder="Titulo"
@@ -168,6 +212,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                     })
                   }
                 />
+                <span className="font-semibold">Descripcion</span>                
                 <input
                   type="text"
                   placeholder="Descripcion"
@@ -179,6 +224,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                     })
                   }
                 />
+                <span className="font-semibold">Fecha</span>
                 <input
                   type="date"
                   placeholder="Fecha"
@@ -190,7 +236,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                     })
                   }
                 />
-                
+                <span className="font-semibold">Responsable</span>
                 <select
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
                   onChange={(e) =>
@@ -207,7 +253,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                 </select>
                 
                 <div className="flex flex-col space-y-3">
-                  <h1 className="text-xl font-bold">Parvulos</h1>
+                  <span className="font-semibold">Parvulos</span>
                   <div className="flex flex-col space-y-3">
                     {parvulos.map((parvulo) => (
                       <div className="flex flex-row items-center space-x-3">
@@ -234,6 +280,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                     ))}
                   </div>
                 </div>
+                <span className="font-semibold">Foto</span>
                 <input
                   type="file"
                   placeholder="Foto"
