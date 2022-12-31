@@ -100,8 +100,8 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
     e.preventDefault();
     try{
       const token = Cookies.get("token");
-      const decoded = jwt.decode(token, process.env.SECRET, true);
-
+      const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
+      
       const change = !(objetosIguales(putActividad, auxActividad));
       console.log(change);
       if(change){

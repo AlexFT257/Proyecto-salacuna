@@ -2,60 +2,51 @@ import axios from "axios";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
 import { use, useState } from "react";
+import Swal from "sweetalert2";
 
 
-export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo,rut,seRut,setParvulos,parvulos}) => {
+export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parvulos}) => {
     const [parvulo] = useState(
         parvulos.find((parvulo) => parvulo.rut === rut)
     );
     const[putParvulo,setPutParvulo] = useState({
-        nombre:"",
-        apoderado:"",
-        rut:"",
-        fechaNacimiento:"",
-        direccion:"",
-        telefonoEmergencia:"",
-        foto:"",
-
-      
+        nombre:parvulo.nombre,
+        apoderado:parvulo.apoderado,
+        rut:parvulo.rut,
+        fechaNacimiento:parvulo.fechaNacimiento,
+        direccion:parvulo.direccion,
+        telefonoEmergencia:parvulo.telefonoEmergencia,
+        condicionesMedicas:parvulo.condicionesMedicas,
+        foto:parvulo.foto,
     });
-    function getModifiedFields(original, current) {
-        return Object.keys(current).reduce((modified, key) => {
-          if (current[key] !== original[key]) {
-            modified[key] = current[key];
-          }
-          return modified;
-        }, {});
-      }
 
-    
     const updateParvulo = async (e) => {
         e.preventDefault();
         const token = Cookies.get("token");
         const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
-        const modifiedFields = getModifiedFields(parvulo, putParvulo);
-        console.log(modifiedFields);
+        console.log(putParvulo);
         try{
             const res = await axios.put(
-                `${process.env.API_URL}/parvulos/update/${parvulo.rut}`,
-                modifiedFields,
+                `${process.env.API_URL}/parvulo/update/${parvulo.rut}`,
+                putParvulo,
                 {
                     headers: {
                         "X-Caller-Id": decoded.sub,
                     },
                 }
             );
+       
             if(res.status === 200){
-                const newParvulos = parvulos.map((parvulo) => {
-                    if(parvulo._id === res.data._id){
-                        return res.data;
-                    }else{
-                        return parvulo;
-                    }
-                });
-                setParvulos(newParvulos);
-                setShowModalEditParvulo(false);
+                Swal.fire({
+                    title: "Actividad actualizada",
+                    icon: "success",
+                    position: "center",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
             }
+            setShowModalEditParvulo(false);
+            setParvulos(parvulos.map((parvulo) => parvulo.rut === rut ? putParvulo : parvulo));
         }catch(err){
             console.log(err);
         }
@@ -77,56 +68,47 @@ export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo
                                 <input type="text" 
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
                                 id="nombre" 
-                                placeholder={parvulo.nombre}
-                              
-
+                                value={putParvulo.nombre}
+                                onChange={(e) => setPutParvulo({...putParvulo,nombre:e.target.value})}
                                 />
 
                                 <label htmlFor="apoderado" className="form-label">Apoderado</label>
                                 <input type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
                                 id="apoderado" 
-                                placeholder={parvulo.apoderado}
+                                value={putParvulo.apoderado}
+                                onChange={(e) => setPutParvulo({...putParvulo,apoderado:e.target.value})}
                                 />
 
                                 <label htmlFor="rut" className="form-label">Rut</label>
-                                <tb type="text" 
-                                disabled>{parvulo.rut} </tb>
-                                
-                                <label htmlFor="fechaNacimiento" className="form-label">Fecha de Nacimiento :{new Date(parvulo.fechaNacimiento).toLocaleDateString("es-ES")}</label>
-                                <input type="date"
-                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                id="fechaNacimiento"
-                                placeholder={parvulo.fechaNacimiento}
-                                />
-
+                                <input type="text"
+                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
+                                id="rut"
+                                value={putParvulo.rut}
+                                onChange={(e) => setPutParvulo({...putParvulo,rut:e.target.value})}
+                                /> 
                                 <label htmlFor="direccion" className="form-label">Direccion</label>
                                 <input type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
                                 id="direccion"
-                               placeholder={parvulo.direccion}
+                               value={putParvulo.direccion}
+                               onChange={(e) => setPutParvulo({...putParvulo,direccion:e.target.value})}
                                 />
-
-
                                 <label htmlFor="telefonoEmergencia" className="form-label">Telefono Emergencia</label>
                                 <input type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
                                 id="telefonoEmergencia"
-                               placeholder={parvulo.telefonoEmergencia}
+                               value={putParvulo.telefonoEmergencia}
+                               onChange={(e) => setPutParvulo({...putParvulo,telefonoEmergencia:e.target.value})}
                                 />
-
                                 <label htmlFor="condiciones medicas">Condiciones Medicas</label>
                                 <input type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
                                 id="condicionesMedicas"
-                                placeholder={parvulo.condicionesMedicas}
-                               
+                                value={putParvulo.condicionesMedicas}
+                                onChange={(e) => setPutParvulo({...putParvulo,condicionesMedicas:e.target.value})}
                                 />
 
-                                <label htmlFor="foto" className="form-label">Foto</label>
-                                <input type="file"
-                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                 id="foto" />
 
 
                             <div className="modal footer">
@@ -146,6 +128,6 @@ export const ModalUpdateParvulo = ({showModalEditParvulo,setShowModalEditParvulo
             </div>
         </div>
     </>
-    )  
+    )
 }
 
