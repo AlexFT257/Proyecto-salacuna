@@ -7,19 +7,25 @@ import axios from "axios";
 
 export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActividades, actividad}) => {
   const [putActividad, setPutActividad] = useState({
-    titulo: "",
-    descripcion: "",
-    fecha: "",
-    responsable: "",
-    parvulos: actividad.parvulos.map((parvulo) => parvulo._id),
-    foto: "",
+    titulo: actividad.titulo,
+    descripcion: actividad.descripcion,
+    fecha: actividad.fecha,
+    responsable: (actividad.responsable) ? actividad.responsable._id : '',
+    parvulos: (actividad.parvulos.length > 0) ? actividad.parvulos.map((parvulo) => parvulo._id) : [],
   });
   
+  const [auxActividad, setAuxActividad] = useState({
+    titulo: actividad.titulo,
+    descripcion: actividad.descripcion,
+    fecha: actividad.fecha,
+    responsable: (actividad.responsable) ? actividad.responsable._id : '',
+    parvulos: (actividad.parvulos.length > 0) ? actividad.parvulos.map((parvulo) => parvulo._id) : [],
+  });
+
   const [parvulos, setParvulos] = useState([]);
   const [asistentes, setAsistentes] = useState([]);
 
   const router = useRouter();
-  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -28,44 +34,81 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
     }
   }, []);
 
+  function objetosIguales(obj1, obj2) {
+    // Si los objetos no tienen la misma cantidad de propiedades, entonces son diferentes
+    if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+      return false;
+    }
+  
+    // Iteramos sobre cada propiedad del objeto
+    for (const prop in obj1) {
+      // Si el valor de la propiedad en obj1 es diferente al valor de la propiedad en obj2, entonces los objetos son diferentes
+      if (obj1[prop] !== obj2[prop]) {
+        // Si la propiedad es un arreglo, entonces verificamos si cada elemento del arreglo es igual en ambos objetos
+        if (Array.isArray(obj1[prop])) {
+          if (obj1[prop].length !== obj2[prop].length) {
+            return false;
+          }
+          for (let i = 0; i < obj1[prop].length; i++) {
+            if (obj1[prop][i] !== obj2[prop][i]) {
+              return false;
+            }
+          }
+        } else {
+          // Si la propiedad no es un arreglo, entonces los objetos son diferentes
+          return false;
+        }
+      }
+    }
+  
+    // Si llegamos hasta aquí, entonces todas las propiedades son iguales en ambos objetos
+    return true;
+  }
+  
+  function obtenerDiferencias(obj1, obj2) {
+    // Creamos un objeto para almacenar las propiedades diferentes
+    const diferencias = {};
+  
+    // Iteramos sobre cada propiedad del objeto
+    for (const prop in obj1) {
+      // Si el valor de la propiedad en obj1 es diferente al valor de la propiedad en obj2, entonces agregamos la propiedad al objeto de diferencias
+      if (obj1[prop] !== obj2[prop]) {
+        // Si la propiedad es un arreglo, entonces verificamos si cada elemento del arreglo es igual en ambos objetos
+        if (Array.isArray(obj1[prop])) {
+          if (obj1[prop].length !== obj2[prop].length) {
+            diferencias[prop] = obj1[prop];
+          } else {
+            for (let i = 0; i < obj1[prop].length; i++) {
+              if (obj1[prop][i] !== obj2[prop][i]) {
+                diferencias[prop] = obj1[prop];
+                break;
+              }
+            }
+          }
+        } else {
+          // Si la propiedad no es un arreglo, entonces agregamos la propiedad al objeto de diferencias
+          diferencias[prop] = obj1[prop];
+        }
+      }
+    }
+  
+    // Retornamos el objeto de diferencias
+    return diferencias;
+  }
+  
   const updateActividad = async (e) => {
     e.preventDefault();
     try{
       const token = Cookies.get("token");
       const decoded = jwt.decode(token, process.env.SECRET, true);
 
-      if(selectedFile){
-        const formData = new FormData();
-        formData.append("file", selectedFile);
-
-        const res = await axios.post(
-          `${process.env.API_URL}/file/${selectedFile.name}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              "X-Caller-Id": decoded.sub
-            },
-          }
-        );
-        if(res.status === 201){
-          setPutActividad({
-            ...putActividad,
-            foto: res.data[0]._id,
-          });
-        }
-      }
-
-      const emptyValues = Object.values(putActividad).some((x) => (x === null || x === ""));
-      const emptyParvulos = putActividad.parvulos.length === 0;
-      if(emptyValues || emptyParvulos){
-        const filteredPutActividad = Object.fromEntries(
-          Object.entries(putActividad).filter(([key, value]) => value !== null && value !== "" && value !== [])
-        )
-
+      const change = !(objetosIguales(putActividad, auxActividad));
+      console.log(change);
+      if(change){
+        const changeActividad = obtenerDiferencias(putActividad, auxActividad);
         const res = await axios.put(
           `${process.env.API_URL}/actividad/update/${actividad._id}`,
-          filteredPutActividad,
+          changeActividad,
           {
             headers: {
               "X-Caller-Id": decoded.sub,
@@ -73,28 +116,27 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
             }
           }
         );
-
         if(res.status === 200){
           Swal.fire({
             title: "Actividad actualizada",
             icon: "success",
             position: "center",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 1500
           });
           setShowModalUpdate(false);
           setActividades(
             actividades.map((actividad) => {
               if(actividad._id === res.data._id){
-                if(filteredPutActividad.responsable)
+                if(changeActividad.responsable)
                 {
-                  filteredPutActividad.responsable = asistentes.find((asistente) => filteredPutActividad.responsable === asistente._id);
+                  changeActividad.responsable = asistentes.find((asistente) => changeActividad.responsable === asistente._id);
                 }
-                if(filteredPutActividad.parvulos)
+                if(changeActividad.parvulos)
                 {
-                  filteredPutActividad.parvulos = parvulos.filter((parvulo) => filteredPutActividad.parvulos.includes(parvulo._id));
+                  changeActividad.parvulos = parvulos.filter((parvulo) => changeActividad.parvulos.includes(parvulo._id));
                 }
-                return {...actividad, ...filteredPutActividad};
+                return {...actividad, ...changeActividad};
               }else{
                 return actividad;
               }
@@ -102,38 +144,22 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
           );
         }
       }else{
-        const res = await axios.put(
-          `${process.env.API_URL}/actividad/update/${actividad._id}`,
-          putActividad,
-          {
-            headers: {
-              "X-Caller-Id": decoded.sub,
-              "Content-Type": "application/json"
-            },
-          }
-        );
-        if(res.status === 200){
-          Swal.fire({
-            title: "Actividad actualizada",
-            icon: "success",
-            position: "center",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          setShowModalUpdate(false);
-          setActividades(
-            actividades.map((actividad) => {
-              if(actividad._id === res.data._id){
-                return res.data;
-              }else{
-                return actividad;
-              }
-            }
-          ));
-        }
+        Swal.fire({
+          title: "No se han realizado cambios, no se actualizó la actividad",
+          icon: "info",
+          position: "center",
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
     }catch(err){
-      console.log(err);
+      Swal.fire({
+        title: err,
+        icon: "error",
+        position: "center",
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
   };
 
@@ -184,7 +210,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                   type="text"
                   placeholder="Titulo"
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
-                  value={(putActividad.titulo === null || putActividad.titulo === '') ? actividad.titulo : putActividad.titulo}
+                  value={putActividad.titulo}
                   onChange={(e) =>
                     setPutActividad({
                       ...putActividad,
@@ -197,7 +223,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                   type="text"
                   placeholder="Descripcion"
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
-                  value={(putActividad.descripcion === null||putActividad.descripcion === '') ? actividad.descripcion : putActividad.descripcion}
+                  value={putActividad.descripcion}
                   onChange={(e) =>
                     setPutActividad({
                       ...putActividad,
@@ -210,7 +236,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                   type="date"
                   placeholder="Fecha"
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
-                  value={(putActividad.fecha === null||putActividad.fecha === '') ? new Date(actividad.fecha).toISOString().slice(0, 10) : putActividad.fecha}
+                  value={putActividad.fecha.toString().substring(0, 10)}
                   onChange={(e) =>
                     setPutActividad({
                       ...putActividad,
@@ -270,12 +296,6 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                     ))}                
                   </div>
                 </div>
-                <input
-                  type="file"
-                  placeholder="Foto"
-                  className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
-                  onChange={handleFileChange}
-                />
                 <div className="flex flex-row justify-end items-center space-x-3">
                   <button
                     type="submit"
