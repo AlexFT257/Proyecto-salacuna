@@ -35,11 +35,7 @@ export const Perfil = () => {
           foto: response.data.foto,
         });
       } else {
-        setProfileInfo({
-          name: response.data.name,
-          apellido: response.data.apellido,
-          foto: "639ea1b3a638230afce91add",
-        });
+        
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -55,16 +51,15 @@ export const Perfil = () => {
     check();
   }, []);
 
-  const profilePic = profileInfo.foto
-    ? `${process.env.API_URL}/file/download/${profileInfo.foto}`
-    : `/user.png`;
+  
+    
 
   return (
     <div className="dropdownContainer">
       <div className="profileContainer fixed top-6 right-6 rounded-full p-2 shadow-lg shadow-slate-900 ">
         <div className="profileItems flex flex-row justify-center  ">
           <div className="profileImage w-10 h-10 rounded-full ">
-            <img src={profilePic} alt="Foto perfil" />
+            <img src={`${process.env.API_URL}/file/download/${profileInfo.foto}`} alt="Foto perfil" />
           </div>
 
           <h2 className="m-2 max-lg:hidden">

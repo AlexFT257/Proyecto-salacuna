@@ -118,7 +118,7 @@ const getSelectionAsistentes = (req, res) => {
 
 const deleteAsistente = (req, res) => {
   const { rut } = req.params;
-  User.findOneAndDelete(rut, (err, user) => {
+  User.findOneAndDelete({rut:rut}, (err, user) => {
     if (err) {
       return res.status(400).send({ message: "Error al obtener el usuario" });
     }
