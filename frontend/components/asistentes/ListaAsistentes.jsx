@@ -6,6 +6,7 @@ import jwt from "jwt-simple";
 import Cookies from "js-cookie";
 import { UserRole } from "../../middleware/userRole";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 
 // no borrar si no no se aplican los estilos (no se porque)
 export const ListaAsistentes = () => {
@@ -65,8 +66,16 @@ export const ListaAsistentes = () => {
       );
       console.log(response);
       if (response.status == 200) {
-        useEffect();
-        alert("Asistente eliminado");
+        // useEffect();
+        Swal.fire({
+          title: "Asistente eliminado",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       } else {
         alert("Error al eliminar el usuario");
       }
@@ -163,13 +172,16 @@ export const ListaAsistentes = () => {
         console.log("Respose foto: ");
         console.log(response.data[0]._id);
         console.log(response.status);
+        const idFoto = response.data[0]._id;
+        console.log(idFoto);
         // si el archivo se sube correctamente se guarda el id del archivo en el state
         if (response.status === 201) {
-          setEditValues({
+          await setEditValues({
             ...editValues,
-            foto: response.data[0]._id,
+            foto: idFoto,
           });
         }
+        console.log("foto post consulta: "+editValues.foto);
       }
       // verifica si hay valores vacios en el formulario
       const emptyValues = Object.values(editValues).some(
@@ -276,6 +288,7 @@ export const ListaAsistentes = () => {
       const profilePic = asistente.foto
         ? `${process.env.API_URL}/file/download/${asistente.foto}`
         : "/user.png";
+      const rut=asistente.rut;
 
       return (
         <tr key={asistente._id}>
@@ -296,7 +309,7 @@ export const ListaAsistentes = () => {
               <button
                 className="delButton"
                 onClick={() => {
-                  deleteAsistente(asistente.rut);
+                  deleteAsistente(rut);
                 }}
               >
                 <img src="/minus_key.png" alt="" className=" h-6 w-6" />

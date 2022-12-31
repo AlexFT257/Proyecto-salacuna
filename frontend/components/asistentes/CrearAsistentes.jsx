@@ -1,9 +1,10 @@
 import React from "react";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import {Auth} from "../../middleware/auth"
+import { Auth } from "../../middleware/auth";
 import jwt from "jwt-simple";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const CrearAsistentes = () => {
   useEffect(() => {
@@ -16,6 +17,8 @@ export const CrearAsistentes = () => {
 
   // funcion que se ejecuta al seleccionar una foto y guarda la foto en el state (formulario crear asistente)
   const onFileChangeCreateAsistente = (e) => {
+    console.log("onFileChangeCreateAsistente");
+    console.log(e.target.files[0]);
     setSelectFileCreateAsistente(e.target.files[0]);
   };
 
@@ -29,7 +32,7 @@ export const CrearAsistentes = () => {
     fechaNa: "",
     domicilio: "",
     telefono: "",
-    foto: "639ea1b3a638230afce91add",
+    foto: "",
   });
 
   // funcion que se ejecuta al escribir en el input y guarda el valor en el state
@@ -44,67 +47,105 @@ export const CrearAsistentes = () => {
   const sendForm = async (e) => {
     e.preventDefault();
     try {
-      // la siguiente seccion de codigo decodifica el token para obtener el id del usuario que esta creando el asistente
+      // se desencripta el token para obtener el id del usuario que esta creando el asistente
       const token = Cookies.get("token");
       const decoded = jwt.decode(token, process.env.SECRET_KEY);
-      // comprobar de que se selecciono una foto para el asistente
-      if (selectFileCreateAsistente) {
-        // si existe una foto, se sube la foto y se guarda el id de la foto en la base de datos
-        const formData = new FormData();
-        formData.append("archivos", selectFileCreateAsistente);
-        const response = await axios.post(
-          `${process.env.API_URL}/file/upload/${selectFileCreateAsistente.name}`,
-          formData,
-          {
-            headers: {
-              // se envia el id del usuario que esta creando el asistente (decoded.sub)
-              "X-Caller-Id": decoded.sub,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log(response);
-        if (response.status === 201) {
-          // se guarda el id de la foto en la base de datos
-          setValues({
-            ...values,
-            foto: response.data[0]._id,
-          });
-        }
-      }
-      // se crea el asistente en la base de datos con los datos del formulario
+
+      // primero se sube la foto al servidor
+      const formData = new FormData();
+      formData.append("archivos", selectFileCreateAsistente);
       const response = await axios.post(
+        `${process.env.API_URL}/file/${selectFileCreateAsistente.name}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      // si hay error al subir la foto se muestra un mensaje de error
+      if (response.status!==200) {
+        setTimeout(() => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error al subir foto",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }, 3000);
+      }
+      // se agrega el id de la foto al formulario de crear asistente
+      setValues({
+        ...values,
+        foto: response.data[0]._id,
+      });
+      // si la foto se sube correctamente se crea el asistente
+      const userRes = await axios.post(
         `${process.env.API_URL}/asistente`,
         values,
         {
           headers: {
-            "X-Caller-Id": decoded.sub,
             "Content-Type": "application/json",
+            "X-Caller-Id": decoded.sub,
           },
         }
       );
-      console.log(response);
-      // si el asistente se crea correctamente, se muestra un mensaje de exito y se recarga la pagina
-      if (response.status === 200) {
-        useEffect();
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Asistente creado con exito",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      } else {
-        // si el asistente no se crea correctamente, se muestra un mensaje de error
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Error al crear asistente",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+      // si hay error al crear el asistente se muestra un mensaje de error
+      if (userRes.status!==200) {
+        setTimeout(() => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error al crear asistente",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }, 3000);
       }
+      // si se crea el asistente correctamente se actualiza la foto del asistente
+      const fotoRes = await axios.put(
+        `${process.env.API_URL}/asistente/update/${userRes.data.rut}`,
+        {
+          foto: response.data[0]._id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-Caller-Id": decoded.sub,
+          },
+        }
+      );
+      // si hay error al actualizar la foto se muestra un mensaje de error
+      if (fotoRes.status!==200) {
+        setTimeout(() => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error al actualizar foto",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }, 3000);
+      }
+      // si se actualiza la foto correctamente se muestra un mensaje de exito
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Asistente creado correctamente",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      // se actualiza la pagina para mostrar el nuevo asistente
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+
+
+      // si la foto se sube correctamente, se crea el asistente
     } catch (error) {
+      console.log("linea 142");
+      console.log(error);
       // si el asistente no se crea correctamente, se muestra un mensaje de error
       Swal.fire({
         position: "center",
