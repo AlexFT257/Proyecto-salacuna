@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
+import Link from "next/link";
 import { ModalAddParvulo } from "./addParvulo";
 import { ModalUpdateParvulo } from "./updateParvulo";
 import { ModalDeleteParvulo } from "./deleteParvulo";
@@ -86,14 +87,17 @@ export const ListarParvulos = () => {
                                     <td>{parvulo.direccion}</td>
                                     <td>{parvulo.condicionesMedicas}</td>
                                     <td>
-                                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300"
+                                        <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
                                         onClick={()=>modalEdit(parvulo.rut)}>
                                             Editar
                                         </button>
-                                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300"
+                                        <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
                                         onClick={() => modalDelete(parvulo.rut)}>
                                             Eliminar
                                         </button>
+                                        <Link href={`/parvulos/${parvulo._id}` }>
+                                        <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"> ver</button>
+                                        </Link>
                                     </td>
                                 </tr>
                                 )
