@@ -42,8 +42,8 @@ const deleteParvulo = (req,res)=>{
 };
 //Obtener parvulo por rut
 const getOneParvulo = (req,res)=>{
-    const {rut}=req.params;
-    parvulo.findOne({rut},(error,parvulo)=>{
+    const {id}=req.params;
+    parvulo.findById(id,(error,parvulo)=>{
         if(error){
             return res.status(400).send({message: "No se ha podido obtener el parvulo" + error})
         }
@@ -76,7 +76,8 @@ const createParvulo = (req,res)=>{
             direccion,
             telefonoEmergencia,
             condicionesMedicas,
-            apoderado
+            apoderado,
+            foto
         })
         newParvulo.save((error,parvulo)=>{
             if(error){
