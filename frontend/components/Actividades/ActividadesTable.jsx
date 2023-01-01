@@ -42,7 +42,7 @@ export const ActividadesTable = () => {
     <div className="w-screen">
       {/* title */}
       <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
-        <div className="flex m-4 p-2 ">
+        <div className="flex p-2 ">
           <h1 className="text-5xl font-bold">Actividades</h1>
         </div>
         <div className="flex justify-end">
@@ -50,8 +50,8 @@ export const ActividadesTable = () => {
         </div>
       </div>
       
-      <div className="m-4 h-fit">
-          <div className="bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900">
+      <div className="h-fit">
+          <div className="bg-white border-black border-2 rounded-2xl p-6 shadow shadow-slate-900">
             <table className="w-full table-fixed">
               <thead className="">
                 <tr className="text-left">

@@ -103,7 +103,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
       const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
       
       const change = !(objetosIguales(putActividad, auxActividad));
-      console.log(change);
+      
       if(change){
         const changeActividad = obtenerDiferencias(putActividad, auxActividad);
         const res = await axios.put(
@@ -169,7 +169,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
 
   const getAsistentes = async () => {
     const token = Cookies.get("token");
-    const decoded = jwt.decode(token, process.env.SECRET, true);
+    const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
     const res = await axios.get(`${process.env.API_URL}/asistentes`, {
         headers: {
             "X-Caller-Id": decoded.sub,
@@ -182,7 +182,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
 
   const getParvulos = async () => {
     const token = Cookies.get("token");
-    const decoded = jwt.decode(token, process.env.SECRET, true);
+    const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
     const res = await axios.get(`${process.env.API_URL}/parvulos`, {
         headers: {
             "X-Caller-Id": decoded.sub,

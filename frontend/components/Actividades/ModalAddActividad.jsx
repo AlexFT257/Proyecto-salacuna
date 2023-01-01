@@ -32,7 +32,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
       e.preventDefault();
       try {
         const token = Cookies.get("token");
-        const decoded = jwt.decode(token, process.env.SECRET, true);
+        const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
         const formData = new FormData();
         if(selectedFile){
           formData.append("archivos", selectedFile);
@@ -164,7 +164,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
 
     const getAsistentes = async () => {
         const token = Cookies.get("token");
-        const decoded = jwt.decode(token, process.env.SECRET, true);
+        const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
         const res = await axios.get(`${process.env.API_URL}/asistentes`, {
             headers: {
                 "X-Caller-Id": decoded.sub,
@@ -177,7 +177,7 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
 
     const getParvulos = async () => {
         const token = Cookies.get("token");
-        const decoded = jwt.decode(token, process.env.SECRET, true);
+        const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
         const res = await axios.get(`${process.env.API_URL}/parvulos`, {
             headers: {
                 "X-Caller-Id": decoded.sub,
