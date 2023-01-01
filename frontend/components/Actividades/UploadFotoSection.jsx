@@ -8,8 +8,8 @@ import axios from "axios";
 export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActividadData}) => {
     
     const router = useRouter();
-    const oldFoto = actividad.foto;
-
+    const oldFoto = ((actividad.foto) ? actividad.foto : null)
+    
     const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
@@ -30,14 +30,14 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
         }
     }
 
-    const changeFoto = async () => {
+    const changeFoto = async (e) => {
         e.preventDefault();
         try {
             const token = Cookies.get("token");
-            const decoded = jwt.decode(token, process.env.SECRET_KEY, TRUE);
+            const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
             const formData = new FormData();
             if (selectedFile) {
-                formData.append("foto", selectedFile);
+                formData.append("archivos", selectedFile);
                 const response = await axios.post(
                     `${process.env.API_URL}/file/${selectedFile.name}`,
                     formData,
@@ -47,7 +47,7 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
                         },
                     }
                 );
-                if(response.status !== 200) {
+                if(response.status !== 201) {
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -56,7 +56,7 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
                     });
                 } else {
                     const res = await axios.put(
-                        `${process.env.API_URL}/actividad/update/${actividad.id}`,
+                        `${process.env.API_URL}/actividad/update/${actividad._id}`,
                         {
                             foto: response.data[0]._id,
                         },
@@ -79,7 +79,6 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
                             `${process.env.API_URL}/file/delete/${oldFoto}`,
                             {
                                 headers: {
-                                    "X-Caller-Id": decoded.sub,
                                     "Content-Type": "application/json",
                                 },
                             }
@@ -89,7 +88,6 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
                             title: "Foto actualizada",
                             timer: 2000,
                         });
-                        set
                         setShowUploadFotoSection(false);
                         setActividadData({
                             ...actividad,
@@ -116,14 +114,14 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
         }
     }
 
-    const addFoto = async () => {
+    const addFoto = async (e) => {
         e.preventDefault();
         try {
             const token = Cookies.get("token");
-            const decoded = jwt.decode(token, process.env.SECRET_KEY, TRUE);
+            const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
             const formData = new FormData();
             if (selectedFile) {
-                formData.append("foto", selectedFile);
+                formData.append("archivos", selectedFile);
                 const response = await axios.post(
                     `${process.env.API_URL}/file/${selectedFile.name}`,
                     formData,
@@ -133,7 +131,7 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
                         },
                     }
                 );
-                if(response.status !== 200) {
+                if(response.status !== 201) {
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",
@@ -142,7 +140,7 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
                     });
                 } else {
                     const res = await axios.put(
-                        `${process.env.API_URL}/actividad/update/${actividad.id}`,
+                        `${process.env.API_URL}/actividad/update/${actividad._id}`,
                         {
                             foto: response.data[0]._id,
                         },
@@ -199,14 +197,20 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
                 <input
                     type="file"
                     placeholder="Foto"
-                    className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
+                    className="rounded-xl animate-pulse bg-emerald-300 p-2"
                     onChange={handleFileChange}
                 />
                 <button
-                    className="bg-slate-900 text-white rounded-lg p-2"
+                    className="bg-blue-600 text-white rounded-lg p-2"
                     onClick={upload}
                 >
                     Guardar
+                </button>
+                <button 
+                    className="bg-red-600 text-white rounded-lg p-2"
+                    onClick={() => setShowUploadFotoSection(false)}
+                >
+                    Cancelar
                 </button>
             </div>
         </>

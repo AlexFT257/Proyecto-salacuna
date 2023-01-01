@@ -243,8 +243,12 @@ export default function Actividad() {
                                 <div  className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
                                     <div className="flex flex-row justify-center space-x-6 py-4"> 
                                         <p> Fotografia de la Actividad: </p>
-                                        <button className="text-black hover:text-blue-600">Cambiar foto</button>
+                                        <button className="text-black hover:text-blue-600" onClick={() => setShowUploadFotoSection(true)}>Cambiar foto</button>
                                     </div>
+                                    {
+                                        showUploadFotoSection &&
+                                        <UploadFotoSection setShowUploadFotoSection={setShowUploadFotoSection} setActividadData={setActividadData} actividad={actividadData}/>
+                                    }
                                 </div>
                             </div> 
                             :
