@@ -1,8 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
-import { use, useState } from "react";
+import {useEffect, useState } from "react";
 import Swal from "sweetalert2";
+
 
 
 export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parvulos}) => {
@@ -19,7 +20,7 @@ export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parv
         condicionesMedicas:parvulo.condicionesMedicas,
         foto:parvulo.foto,
     });
-
+    
     const updateParvulo = async (e) => {
         e.preventDefault();
         const token = Cookies.get("token");

@@ -1,4 +1,4 @@
-import React from "react";
+
 import axios from "axios";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
@@ -31,6 +31,7 @@ export const ListarParvulos = () => {
     };
     useEffect(() => {
         getParvulos();
+
     }, []);
 
     const modalDelete = (rut) => {
@@ -49,7 +50,7 @@ export const ListarParvulos = () => {
             <div className="flex flex-col w-full h-full ">
                 <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
                     <div className="">
-                        <h1 className="flex m-4 p-2 text-5xl font-bold " onClick={() => setShowModalAddParvulo(true)} >Parvulos</h1>
+                        <h1 className="flex m-4 p-2 text-5xl font-bold ">Parvulos</h1>
                     </div >
                 </div>
 
