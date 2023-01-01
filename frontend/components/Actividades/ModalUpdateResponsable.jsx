@@ -104,7 +104,7 @@ export const ModalUpdateResponsable = ({ actividad, setActividadData, setShowMod
       <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-50">
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-fit bg-white rounded-2xl border-2 border-slate-900 shadow-lg shadow-slate-900">
             <div className="flex flex-col justify-center items-center m-5 space-y-3">
-              <h1 className="text-2xl font-bold">Modificar Actividad</h1>
+              <h1 className="text-2xl font-bold">Modificar responsable de la Actividad</h1>
               <form className=" w-full flex flex-col space-y-3" onSubmit={updateResponsable}>
                 <span className="font-semibold">Responsable</span>
                 <select
@@ -129,14 +129,14 @@ export const ModalUpdateResponsable = ({ actividad, setActividadData, setShowMod
                 <div className="flex flex-row justify-end items-center space-x-3">
                   <button
                     type="submit"
-                    className="bg-emerald-600 text-white rounded-lg p-2"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg p-2"
                     onClick={updateResponsable}
                   >
                     Modificar
                   </button>
                   <button
                     type="button"
-                    className="bg-red-600 text-white rounded-lg p-2"
+                    className="bg-red-600 hover:bg-red-700 text-white rounded-lg p-2"
                     onClick={() => setShowModalUpdateResponsable(false)}
                   >
                     Cancelar

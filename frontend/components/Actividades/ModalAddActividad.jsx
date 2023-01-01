@@ -290,14 +290,14 @@ export const ModalAddActividad = ({setShowModalAdd, actividades, setActividades}
                 <div className="flex flex-row justify-end items-center space-x-3">
                   <button
                     type="submit"
-                    className="bg-emerald-600 text-white rounded-lg p-2"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg p-2"
                     onClick={addActividad}
                   >
                     Añadir
                   </button>
                   <button
                     type="button"
-                    className="bg-red-600 text-white rounded-lg p-2"
+                    className="bg-red-600 hover:bg-red-700 text-white rounded-lg p-2"
                     onClick={() => setShowModalAdd(false)}
                   >
                     Cancelar

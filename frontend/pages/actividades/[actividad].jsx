@@ -8,12 +8,12 @@ import { ModalUpdateInfo } from '../../components/Actividades/ModalUpdateInfo';
 import { ModalUpdateParvulos } from '../../components/Actividades/ModalUpdateParvulos';
 import { ModalUpdateResponsable } from '../../components/Actividades/ModalUpdateResponsable';
 import { UploadFotoSection } from '../../components/Actividades/UploadFotoSection';
-
+import Head from 'next/head';
 export default function Actividad() {
     const router = useRouter();
     const [actividad, setActividad] = useState('');
     const [actividadData, setActividadData] = useState({});
-    const [seccion, setSeccion] = useState('');
+    const [seccion, setSeccion] = useState('info');
     
     const [showModalUpdateInfo, setShowModalUpdateInfo] = useState(false);
     const [showModalUpdateParvulos, setShowModalUpdateParvulos] = useState(false);
@@ -87,23 +87,28 @@ export default function Actividad() {
                     </div>
                 );
             case 'parvulos':
-                if (!actividadData.parvulos || actividadData.parvulos.length === 0) {
+                if (!(actividadData.parvulos) || actividadData.parvulos.length === 0) {
                     return (
+                        <div className="bg-white border-black border-2 rounded-2xl p-4 shadow-md shadow-slate-900 h-full">
                         <div className="flex flex-col">
-                            <div className="flex flex-row">
+                            <div className="flex flex-row justify-between">
                                 <h1 className="text-3xl font-bold">Parvulos</h1>
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateParvulos(true)}>
+                                    Editar
+                                </button>
                             </div>
                             <div className="flex flex-row">
-                                <p className="text-xl">No hay parvulos registrados en esta actividad</p>
+                                <p className="text-xl">No hay parvulos inscritos</p>
                             </div>
                         </div>
+                    </div>
                     );
                 }
 
                 return (
                     <div className="bg-white border-black border-2 rounded-2xl p-4 shadow-md shadow-slate-900 h-full">
                         <div className="flex flex-col">
-                            <div className="flex flex-row">
+                            <div className="flex flex-row justify-between">
                                 <h1 className="text-3xl font-bold">Parvulos</h1>
                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateParvulos(true)}>
                                     Editar
@@ -120,18 +125,17 @@ export default function Actividad() {
                                 </thead>
                                 <tbody>
                                     {
-                                        actividadData.parvulos.map((parvulo) => {
-                                        
-                                        const edad = new Date().getFullYear() - new Date(parvulo.fechaNacimiento).getFullYear();
-                                        return (
-                                        <tr>
-                                            <td> {picture(parvulo.foto, 'parvulo')} </td>
-                                            <td>{parvulo.nombre}</td>
-                                            <td>{parvulo.rut}</td>
-                                            <td>{edad}</td>
-                                        </tr>
-                                        )
-                                    })
+                                        actividadData.parvulos.map((parvulo) => {                    
+                                            const edad = new Date().getFullYear() - new Date(parvulo.fechaNacimiento).getFullYear();
+                                            return (
+                                            <tr>
+                                                <td> {picture(parvulo.foto, 'parvulo')} </td>
+                                                <td>{parvulo.nombre}</td>
+                                                <td>{parvulo.rut}</td>
+                                                <td>{edad}</td>
+                                            </tr>
+                                            )
+                                        })
                                     }
 
                                 </tbody>
@@ -144,7 +148,7 @@ export default function Actividad() {
                 if(!actividadData.responsable){
                     return (
                         <div className="flex flex-col">
-                            <div className="flex flex-row">
+                            <div className="flex flex-row justify-between">
                                 <h1 className="text-3xl font-bold">Responsable</h1>
                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateResponsable(true)}>
                                     Editar
@@ -169,8 +173,11 @@ export default function Actividad() {
                             <div className="flex-1">
                                 <div className="flex flex-row">
                                     <div className="flex flex-col">                                
-                                        <p className="text-xl">Nombre: {actividadData.responsable.nombre}</p>
+                                        <p className="text-xl">Nombre: {actividadData.responsable.nombre+' '+actividadData.responsable.apellido}</p>
                                         <p className="text-xl">Rut: {actividadData.responsable.rut}</p>
+                                        <p className="text-xl">Telefono: {actividadData.responsable.telefono}</p>
+                                        <p className="text-xl">Correo: {actividadData.responsable.mail}</p>
+                                        <p className='text-xl'>Rol: { (actividadData.responsable.role === 'asistente') ? 'Asistente de Parvulo' : 'Parvularia' }</p>                                        
                                     </div>
                                 </div>
                             </div>
@@ -199,35 +206,34 @@ export default function Actividad() {
         }
     }
 
-    useEffect(() => {
-        setActividadData(actividadData);
-    }, [actividadData]);
-
-
     return (
         <>
-        <div className="flex max-sm:flex-col h-full w-full ">
-            
+        <div className="flex max-sm:flex-col h-screen w-screen ">
+            <Head>
+                <title>{actividadData.titulo} </title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
             <LeftBar/>
             <div className="w-full">
                 {/* title */}
-                <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
-                    <div className="flex p-2 ">
-                        <h1 className="text-5xl font-bold">Actividad: {actividadData.titulo}</h1>
-                    </div>
-                    <div className="flex justify-end">
-                        <Link href="/actividades">
-                            <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300">Regresar Actividades</button>
-                        </Link>
-                    </div>
+                <div className="bg-white border-black border-b-2 p-4 shadow shadow-slate-900">
+                    <h1 className="text-5xl font-bold my-4">Actividad: {actividadData.titulo}</h1>
                 </div>
                {/*Left tab bar with thre buttons(Info, Parvulos, Responsable) and the right side is the content of the button selected use the switchRender function to render the content*/}
                 <div className="w-full xl:w-3/4 xl:mx-auto">
+                    <Link href="/actividades">
+                        <div className="flex justify-end mx-4 mt-6">
+                            <button 
+                                className="bg-white border-black border-2 rounded-xl p-3 shadow shadow-black hover:bg-teal-200 hover:shadow-md hover:shadow-black">
+                                    Regresar Actividades
+                            </button>
+                        </div>
+                    </Link>
                     <div className="flex flex-row space-x-4 mx-4">
                         <div className="flex flex-col w-1/4 space-y-4 my-4">
-                            <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300" onClick={() => setSeccion('info')}>Informacion</button>
-                            <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300" onClick={() => setSeccion('parvulos')}>Parvulos</button>
-                            <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300" onClick={() => setSeccion('responsable')}>Responsable</button>
+                            <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-teal-200 hover:shadow-md hover:shadow-black" onClick={() => setSeccion('info')}>Informacion</button>
+                            <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-teal-200 hover:shadow-md hover:shadow-black" onClick={() => setSeccion('parvulos')}>Parvulos</button>
+                            <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-teal-200 hover:shadow-md hover:shadow-black" onClick={() => setSeccion('responsable')}>Responsable</button>
                         </div>                        
                         <div className="flex flex-col w-3/4 my-4">
                             {switchRender(seccion)}
