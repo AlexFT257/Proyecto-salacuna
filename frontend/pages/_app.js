@@ -5,7 +5,7 @@ import '../styles/footer.css'
 import '../styles/perfil.css'
 import '../styles/login.css'
 import '../styles/Home.module.css'
-
+import { UserProvider } from '../contexts/userContext'
 
 
 import axios from 'axios'
@@ -15,7 +15,11 @@ function MyApp({ Component, pageProps }) {
   // axios.defaults.withCredentials = true;
   
   return (
-      <><Component {...pageProps}/></>
+      <>
+      <UserProvider>
+        <Component {...pageProps} />
+      </UserProvider>
+      </>
   )
 }
 
