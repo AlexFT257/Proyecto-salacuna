@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
                 setActividades(data);
                 console.log(data[0].descripcion);
             }else{
+              console.log(response.status);
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",

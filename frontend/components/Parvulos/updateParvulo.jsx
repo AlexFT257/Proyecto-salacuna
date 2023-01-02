@@ -39,7 +39,7 @@ export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parv
        
             if(res.status === 200){
                 Swal.fire({
-                    title: "Actividad actualizada",
+                    title: "Parvulo actualizado",
                     icon: "success",
                     position: "center",
                     showConfirmButton: false,
@@ -49,7 +49,14 @@ export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parv
             setShowModalEditParvulo(false);
             setParvulos(parvulos.map((parvulo) => parvulo.rut === rut ? putParvulo : parvulo));
         }catch(err){
-            console.log(err);
+            Swal.fire({
+                title: "Error al actualizar parvulo",
+                icon: "error",
+                position: "center",
+                showConfirmButton: false,
+                timer: 1500
+                });
+                
         }
     };
    

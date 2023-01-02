@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ModalAddParvulo } from "./addParvulo";
 import { ModalUpdateParvulo } from "./updateParvulo";
 import { ModalDeleteParvulo } from "./deleteParvulo";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 
 import { useState, useEffect } from "react";

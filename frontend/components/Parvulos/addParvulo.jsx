@@ -79,7 +79,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                     console.log(response);
                     if(response.status !== 201){
                         Swal.fire({
-                            title: "Error al crear parvulo if",
+                            title: "Error al crear parvulo ",
                             icon: "error",
                             confirmButtonText: "Ok",
                         });
@@ -103,7 +103,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                 console.log(response);
                 if(response.status !== 201){
                     Swal.fire({
-                        title: "Error al crear parvulo else",
+                        title: "Error al crear parvulo ",
                         icon: "error",
                         confirmButtonText: "Ok",
                     });
@@ -118,7 +118,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
         }catch(err){
             console.log(err);
             Swal.fire({
-                title: "Error al crear parvulo catch",
+                title: "Error al crear parvulo ",
                 icon: "error",
                 confirmButtonText: "Ok",
             });
