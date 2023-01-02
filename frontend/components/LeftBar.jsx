@@ -43,9 +43,9 @@ export const LeftBar = () => {
         >
           <div className=" hidden max-sm:flex ">
             <input type="checkbox" id="toggler" />
-            <label for="toggler" class="burger">
-              <span class="bun bun--top"></span>
-              <span class="bun bun--bottom"></span>
+            <label htmlFor="toggler" className="burger">
+              <span className="bun bun--top"></span>
+              <span className="bun bun--bottom"></span>
             </label>
           </div>
         </button>
