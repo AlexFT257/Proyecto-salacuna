@@ -6,13 +6,16 @@ import { ModalAddActividad } from "./ModalAddActividad";
 import { ModalUpdateActividad } from "./ModalUpdateActividad";
 import axios from "axios";
 import Link from "next/link";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/userContext";
 
 export const ActividadesTable = () => {
+  const { user } = useContext(UserContext);
+  console.log(user);
   const [showModalAdd, setShowModalAdd] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   
-
   const [id, setId] = useState("");
   const [actividades, setActividades] = useState([]);
   const [actividad, setActividad] = useState({});
@@ -40,6 +43,9 @@ export const ActividadesTable = () => {
   return (
   <>
     <div className="w-full xl:w-3/4 xl:mx-auto">
+        
+      {
+        user.role !== "apoderado" && 
         <div className="flex justify-end mx-4 mt-6">
           <button 
               className="rounded-xl p-3 bg-white border-2 border-black shadow shadow-black hover:bg-teal-200 hover:shadow-md hover:shadow-black" 
@@ -47,6 +53,8 @@ export const ActividadesTable = () => {
                   Agregar Actividad
           </button>
         </div>
+      }
+        
         
         <div className="bg-white border-black border-2 rounded-2xl p-6 mx-4 mt-4 shadow shadow-black"> 
           <table className="w-full table-fixed">
@@ -72,8 +80,13 @@ export const ActividadesTable = () => {
                         (item.responsable != null) ? item.responsable.nombre : "Sin responsable"
                       }</td>
                       <td className="flex max-md:flex-col justify-items-center space-x-2 max-md:space-x-0">
-                        <button className="hover:text-red-600" onClick={() => deleteModal(item._id)}>Eliminar</button>
-                        <button className="hover:text-emerald-600" onClick={() => updateModal(item)}>Editar</button>
+                        { user.role !== "apoderado" &&
+                          <>
+                          <button className="hover:text-red-600" onClick={() => deleteModal(item._id)}>Eliminar</button>
+                          <button className="hover:text-emerald-600" onClick={() => updateModal(item)}>Editar</button>
+                          </>
+                        }
+                        
                         <Link href={`/actividades/${item._id}`}>
                           <button className="hover:text-blue-600">Ver</button>
                         </Link>

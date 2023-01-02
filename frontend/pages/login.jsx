@@ -3,10 +3,14 @@ import { login } from "../data/user";
 import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 import cookie from "js-cookie";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { UserContext } from "../contexts/userContext";
+const jwt = require("jwt-simple");
+
 
 export const loginPage = () => {
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
 
   const [rut, setRut] = useState("");
 
@@ -34,6 +38,8 @@ export const loginPage = () => {
     } else {
       if (response.status === 200) {
         cookie.set("token", response.data.token, { expires: 1 });
+        cookie.set("user", JSON.stringify(response.data.user), { expires: 1 });
+        setUser(response.data.user);
         Swal.fire({
           title: "Login exitoso",
           text: "Bienvenido a la Salacula 31 minutos",

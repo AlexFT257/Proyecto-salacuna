@@ -81,7 +81,7 @@ const login = (req, res) => {
       .send({
         message: "Inicio sesion correctamente",
         token: token,
-        user: user.nombre,
+        user: user,
       });
   });
 };

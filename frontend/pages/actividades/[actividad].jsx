@@ -9,6 +9,9 @@ import { ModalUpdateParvulos } from '../../components/Actividades/ModalUpdatePar
 import { ModalUpdateResponsable } from '../../components/Actividades/ModalUpdateResponsable';
 import { UploadFotoSection } from '../../components/Actividades/UploadFotoSection';
 import Head from 'next/head';
+import { UserContext } from '../../contexts/userContext';
+import { useContext } from 'react';
+
 export default function Actividad() {
     const router = useRouter();
     const [actividad, setActividad] = useState('');
@@ -19,6 +22,8 @@ export default function Actividad() {
     const [showModalUpdateParvulos, setShowModalUpdateParvulos] = useState(false);
     const [showModalUpdateResponsable, setShowModalUpdateResponsable] = useState(false);
     const [showUploadFotoSection, setShowUploadFotoSection] = useState(false);
+
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         setActividad(router.query.actividad);
@@ -71,9 +76,12 @@ export default function Actividad() {
                     <div className="bg-white border-black border-2 rounded-2xl p-4 shadow-md shadow-slate-900 h-full">
                         <div className="flex flex-row justify-between">
                             <h1 className="text-3xl font-bold">Informacion</h1>
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateInfo(true)}>
-                            Editar
-                            </button>  
+                            {
+                                user.role !== "apoderado" &&
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateInfo(true)}>
+                                    Editar
+                                </button> 
+                            }
                         </div>
                         <div className="flex flex-row">
                             <p className="text-xl">Titulo: {actividadData.titulo}</p>
@@ -93,9 +101,12 @@ export default function Actividad() {
                         <div className="flex flex-col">
                             <div className="flex flex-row justify-between">
                                 <h1 className="text-3xl font-bold">Parvulos</h1>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateParvulos(true)}>
-                                    Editar
-                                </button>
+                                {
+                                    user.role !== "apoderado" &&
+                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateParvulos(true)}>
+                                        Editar
+                                    </button>
+                                }
                             </div>
                             <div className="flex flex-row">
                                 <p className="text-xl">No hay parvulos inscritos</p>
@@ -110,9 +121,12 @@ export default function Actividad() {
                         <div className="flex flex-col">
                             <div className="flex flex-row justify-between">
                                 <h1 className="text-3xl font-bold">Parvulos</h1>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateParvulos(true)}>
-                                    Editar
-                                </button>
+                                {
+                                    user.role !== "apoderado" &&
+                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateParvulos(true)}>
+                                        Editar
+                                    </button>
+                                }
                             </div>
                             <table className="w-full table-auto">
                                 <thead>
@@ -150,9 +164,12 @@ export default function Actividad() {
                         <div className="flex flex-col">
                             <div className="flex flex-row justify-between">
                                 <h1 className="text-3xl font-bold">Responsable</h1>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateResponsable(true)}>
-                                    Editar
-                                </button>
+                                {
+                                    user.role !== "apoderado" &&
+                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateResponsable(true)}>
+                                        Editar
+                                    </button>
+                                }
                             </div>
                             <div className="flex flex-row">
                                 <p className="text-xl">No hay responsable asignado</p>
@@ -165,9 +182,12 @@ export default function Actividad() {
                     <div className="bg-white border-black border-2 rounded-2xl p-4 shadow-md shadow-slate-900 h-full">
                         <div className="flex flex-row justify-between">
                             <h1 className="text-3xl font-bold">Responsable</h1>
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateResponsable(true)}>
-                                Editar
-                            </button>
+                            {
+                                user.role !== "apoderado" &&
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowModalUpdateResponsable(true)}>
+                                    Editar
+                                </button>
+                            }
                         </div>
                         <div className="flex flex-row max-md:flex-col">
                             <div className="flex-1">
@@ -208,7 +228,7 @@ export default function Actividad() {
 
     return (
         <>
-        <div className="flex max-sm:flex-col h-full w-full ">
+        <div className="flex max-sm:flex-col h-screen w-screen ">
             <Head>
                 <title>{actividadData.titulo} </title>
                 <link rel="icon" href="/favicon.ico" />
@@ -243,7 +263,9 @@ export default function Actividad() {
                         {(actividadData.foto) 
                             ? 
                             <div className="w-full space-y-4 mb-4">         
-                                <div  className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
+                                {
+                                    user.role !== 'apoderado' &&
+                                    <div  className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
                                     <div className="flex flex-row justify-center space-x-6 py-4">                                        
                                         <button className="text-black hover:text-blue-600" onClick={() => 
                                             setShowUploadFotoSection(true)}>Cambiar foto</button>
@@ -252,7 +274,8 @@ export default function Actividad() {
                                         showUploadFotoSection &&
                                         <UploadFotoSection setShowUploadFotoSection={setShowUploadFotoSection} setActividadData={setActividadData} actividad={actividadData}/>
                                     }
-                                </div>
+                                    </div>
+                                }
                                 <div className="flex flex-row justify-center">                                    
                                     {picture(actividadData.foto, 'actividad')}
                                 </div>
@@ -262,7 +285,10 @@ export default function Actividad() {
                             <div  className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
                                 <div className="flex flex-row justify-center space-x-6 py-4"> 
                                     <p >No se ha añadido foto de esta actividad :(</p>
-                                    <button className="text-black hover:text-blue-600" onClick={() => setShowUploadFotoSection(true)}>Agregar foto :)</button>
+                                    {
+                                        user.role !== "apoderado" &&
+                                        <button className="text-black hover:text-blue-600" onClick={() => setShowUploadFotoSection(true)}>Agregar foto :)</button>
+                                    }
                                 </div>
                                 {
                                     showUploadFotoSection &&
