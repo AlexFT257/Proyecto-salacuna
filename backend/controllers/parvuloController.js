@@ -57,8 +57,8 @@ const getOneParvulo = (req,res)=>{
 
 // validar que exista un usurio por Schema.ObjectId ref user
 const createParvulo = (req,res)=>{
-    const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,apoderado} = req.body;
-    user.findById({_id:apoderado},(error,user)=>{
+    const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,apoderado,foto} = req.body;
+    user.findOne({rut:apoderado},(error,user)=>{
         if(error){
             return res.status(400).send({message: "error al validar el aopoderado"})
         }
@@ -113,6 +113,5 @@ module.exports = {
         updateParvulo,
         deleteParvulo,
         getOneParvulo,
-        createParvulo,
         getParvulosByApoderado
     }

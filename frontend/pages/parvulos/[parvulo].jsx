@@ -7,6 +7,7 @@ import { Perfil } from '../../components/Perfil';
 import Link from 'next/link';
 import axios from 'axios';
 import {ModalViewActividad} from '../../components/Parvulos/viewActividad';
+import{ModalViewApoderado} from '../../components/Parvulos/viewApoderado';
 
 
 
@@ -15,6 +16,7 @@ export default function Parvulo() {
     const [parvulo, setParvulo] = useState("");
     const[dataParvulo,setDataParvulo] = useState({})
     const [showModalViewActividad,setShowModalViewActividad] = useState(false);
+    const [showModalViewApoderado,setShowModalViewApoderado] = useState(false);
 
 
     useEffect(() => {
@@ -100,6 +102,12 @@ export default function Parvulo() {
                                     <button  onClick={()=>setShowModalViewActividad(true)}
                                     className="btn btn-primary bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900">
                                     Ver acticvidades</button>
+
+                                    <button 
+                                    className="btn btn-primary bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900"
+                                    onClick={()=>setShowModalViewApoderado(true) }>
+                                    Ver apoderado
+                                    </button>
                                 </div>
                           
                         </div>
@@ -108,11 +116,8 @@ export default function Parvulo() {
                 <LeftBar/>
                 <Perfil/>
             </div>
-            {showModalViewActividad && <ModalViewActividad parvulo={parvulo} setShowModalViewActividad={setShowModalViewActividad} dataParvulo={dataParvulo}/>
-            }
-
-
-    
+            {showModalViewActividad && <ModalViewActividad parvulo={parvulo} setShowModalViewActividad={setShowModalViewActividad} dataParvulo={dataParvulo}/>}
+            {showModalViewApoderado && <ModalViewApoderado dataParvulo={dataParvulo} setShowModalViewApoderado={setShowModalViewApoderado}/>}
         </>
     )
 

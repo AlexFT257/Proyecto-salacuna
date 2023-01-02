@@ -16,7 +16,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
         direccion: "",
         telefonoEmergencia: "",
         condicionesMedicas: "",
-        foto: "639ea1b3a638230afce91add",
+        foto: "",
     });
     
     const router = useRouter();
@@ -31,7 +31,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
         router.push("/login");
     }
 
-    const addParvulo = (e) => {
+    const addParvulo = async (e) => {
         e.preventDefault();
         console.log(newParvulo);
         const token = Cookies.get("token");
@@ -43,7 +43,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                 const formData = new FormData();
                 formData.append("file", selectedFile);
                 formData.append("upload_preset", "parvulos");
-                const res = axios.post(
+                const res = await axios.post(
                     `${process.env.API_URL}/file/upload/${selectedFile.name}`,
                     formData,
                     {
@@ -58,11 +58,15 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                         ...newParvulo,
                         foto: res.data[0]._id,
                     });
+                }else{
+                    Swal.fire({
+                        title: "Error al subir imagen",
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                    });
                 }
-                console.log(res.data);
             }
-            
-            const res = axios.post(
+            const response = await axios.post(
                 `${process.env.API_URL}/parvulo`,
                 newParvulo,
                 {
@@ -71,8 +75,8 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                     },
                 }
             );
-            console.log(res);
-            if(res.status === 201){
+            console.log(response);
+            if(response.status === 201){
                 setParvulo([...parvulos, res.data]);
                 setShowModalAddParvulo(false);
                 Swal.fire({
@@ -80,8 +84,15 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                     icon: "success",
                     confirmButtonText: "Ok",
                 });
+            }else{
+                Swal.fire({
+                    title: "Se produjo un error, datos no enviados",
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                });
             }
-        console.log(res);
+        
+
         }catch(err){
             console.log(err);
             Swal.fire({

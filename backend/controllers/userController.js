@@ -121,8 +121,25 @@ const getUserFoto = (req, res) => {
       return res.status(200).send({name:user.nombre, apellido:user.apellido, foto:file._id});
     });
   });
+
+
+  
 };
 
+const getUserByRut = (req, res) => {
+  const rut = req.params.rut;
+  console.log("getting user by rut: "+rut);
+  User.findOne({rut: rut,}, (err, user) => {
+    if (err) {
+      return res.status(400).send({ message: "Error al obtener el usuario" });
+    }
+    if (!user) {
+      return res.status(400).send({ message: "Error al obtener el usuario (usuario no existe)" });
+    }
+    return res.status(200).send(user);
+  });
+
+};
 
 module.exports = {
   createUser,
@@ -132,4 +149,5 @@ module.exports = {
   checkToken,
   logout,
   getUserFoto,
+  getUserByRut,
 };
