@@ -70,19 +70,7 @@ export const LeftBar = () => {
               {/* items  */}
 
               <div className="navGroup  justify-center flex flex-col  m-2 content-center">
-                <div
-                  onClick={() => {
-                    router.push("/home");
-                  }}
-                  className="navItem flex flex-row   m-2 rounded-lg "
-                >
-                  <img
-                    src="/dashboard_blank.png"
-                    alt="icono de menu principal"
-                    className="w-6 h-6 "
-                  />
-                  <h2 className="ml-2 ">Home page</h2>
-                </div>
+                
 
                 <div
                   onClick={() => {
@@ -100,7 +88,7 @@ export const LeftBar = () => {
 
                 <div
                   onClick={() => {
-                    router.push("/Parvularias");
+                    router.push("/parvularias");
                   }}
                   className="navItem flex flex-row  m-2 rounded-lg "
                 >
@@ -140,19 +128,7 @@ export const LeftBar = () => {
                   <h2 className="ml-2 ">Parvulos</h2>
                 </div>
 
-                <div
-                  onClick={() => {
-                    router.push("/registro");
-                  }}
-                  className="navItem flex flex-row m-2 rounded-lg "
-                >
-                  <img
-                    src="/report.png"
-                    alt="icono de parvulos"
-                    className="w-6 h-6"
-                  />
-                  <h2 className="ml-2 ">Registro de pagos</h2>
-                </div>
+                
                 <hr className="navDivider " />
                 <div
                   onClick={logingOut}
@@ -186,19 +162,7 @@ export const LeftBar = () => {
             {/* items  */}
             <div>
               <div className="navGroup max-sm:hidden justify-center flex flex-col  m-2 max-lg:content-center">
-                <div
-                  onClick={() => {
-                    router.push("/home");
-                  }}
-                  className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center"
-                >
-                  <img
-                    src="/dashboard_blank.png"
-                    alt="icono de menu principal"
-                    className="w-6 h-6 "
-                  />
-                  <h2 className="ml-2 max-lg:hidden">Home page</h2>
-                </div>
+                
 
                 <Link href="/actividades">
                 <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
@@ -215,7 +179,7 @@ export const LeftBar = () => {
 
                 <div
                   onClick={() => {
-                    router.push("/Parvularias");
+                    router.push("/parvularias");
                   }}
                   className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center"
                 >
@@ -255,19 +219,7 @@ export const LeftBar = () => {
                   <h2 className="ml-2 max-lg:hidden">Parvulos</h2>
                 </div>
 
-                <div
-                  onClick={() => {
-                    router.push("/registro");
-                  }}
-                  className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center"
-                >
-                  <img
-                    src="/report.png"
-                    alt="icono de parvulos"
-                    className="w-6 h-6"
-                  />
-                  <h2 className="ml-2 max-lg:hidden">Registro de pagos</h2>
-                </div>
+                
               </div>
               {/* footer */}
               <hr className="navDivider p-1 max-sm:hidden mb-2" />
