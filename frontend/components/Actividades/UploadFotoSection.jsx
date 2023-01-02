@@ -192,7 +192,7 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
 
     return (
         <>
-            <div className="flex flex-row items-center justify-center space-x-5 mb-5">
+            <div className="flex flex-row max-md:flex-col max-md:space-y-4 items-center justify-center space-x-5 mb-5">
                 <span className="font-bold">Foto</span>
                 <input
                     type="file"
@@ -200,18 +200,20 @@ export const UploadFotoSection = ({ setShowUploadFotoSection, actividad, setActi
                     className="rounded-xl animate-pulse bg-emerald-300 p-2"
                     onChange={handleFileChange}
                 />
-                <button
-                    className="bg-blue-600 text-white rounded-lg p-2"
-                    onClick={upload}
-                >
-                    Guardar
-                </button>
-                <button 
-                    className="bg-red-600 text-white rounded-lg p-2"
-                    onClick={() => setShowUploadFotoSection(false)}
-                >
-                    Cancelar
-                </button>
+                <div className="flex flex-row space-x-2">
+                    <button
+                        className="bg-blue-600 text-white rounded-lg p-2"
+                        onClick={upload}
+                    >
+                        Guardar
+                    </button>
+                    <button 
+                        className="bg-red-600 text-white rounded-lg p-2"
+                        onClick={() => setShowUploadFotoSection(false)}
+                    >
+                        Cancelar
+                    </button>
+                </div>
             </div>
         </>
     );

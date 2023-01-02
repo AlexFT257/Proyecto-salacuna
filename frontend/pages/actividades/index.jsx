@@ -24,7 +24,7 @@ export const Actividades = ({props}) => {
     }
     
     return (
-        <div className="flex max-sm:flex-col h-screen w-screen ">
+        <div className="flex max-sm:flex-col h-full w-full ">
             <Head>
                 <title>Actividades</title>
                 <link rel="icon" href="/favicon.ico" />

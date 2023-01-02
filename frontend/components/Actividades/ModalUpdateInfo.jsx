@@ -94,7 +94,7 @@ export const ModalUpdateInfo = ({ actividad, setShowModalUpdateInfo, setActivida
     return (
         <> 
       <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-50">
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-fit bg-white rounded-2xl border-2 border-slate-900 shadow-lg shadow-slate-900">
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 max-md:w-11/12 h-fit bg-white rounded-2xl border-2 border-slate-900 shadow-lg shadow-slate-900">
             <div className="flex flex-col justify-center items-center m-5 space-y-3">
               <h1 className="text-2xl font-bold">Modificar Actividad</h1>
               <form className=" w-full flex flex-col space-y-3" onSubmit={updateInfo}>

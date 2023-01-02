@@ -50,7 +50,7 @@ export default function Actividad() {
         {
             return (
                 <img src={pic} alt="
-                Foto Actividad" className='text-xs rounded-2xl border-2 border-black shadow-md shadow-slate-900 max-w-xl h-auto' />
+                Foto Actividad" className='text-xs rounded-2xl border-2 border-black shadow-md shadow-slate-900 max-h-max w-auto' />
             );
         }else if(type==='responsable')
         {
@@ -169,7 +169,7 @@ export default function Actividad() {
                                 Editar
                             </button>
                         </div>
-                        <div className="flex flex-row">
+                        <div className="flex flex-row max-md:flex-col">
                             <div className="flex-1">
                                 <div className="flex flex-row">
                                     <div className="flex flex-col">                                
@@ -208,7 +208,7 @@ export default function Actividad() {
 
     return (
         <>
-        <div className="flex max-sm:flex-col h-screen w-screen ">
+        <div className="flex max-sm:flex-col h-full w-full ">
             <Head>
                 <title>{actividadData.titulo} </title>
                 <link rel="icon" href="/favicon.ico" />
@@ -229,33 +229,34 @@ export default function Actividad() {
                             </button>
                         </div>
                     </Link>
-                    <div className="flex flex-row space-x-4 mx-4">
-                        <div className="flex flex-col w-1/4 space-y-4 my-4">
+                    <div className="flex flex-row max-md:flex-col space-x-4 max-md:space-y-4 max-md:space-x-0 mx-4 max-md:my-4">
+                        <div className="flex flex-col max-md:flex-row w-1/4 max-md:w-full space-y-4 max-md:space-y-0 max-md:space-x-4 max-md:justify-center my-4 max-md:my-0">
                             <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-teal-200 hover:shadow-md hover:shadow-black" onClick={() => setSeccion('info')}>Informacion</button>
                             <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-teal-200 hover:shadow-md hover:shadow-black" onClick={() => setSeccion('parvulos')}>Parvulos</button>
                             <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-teal-200 hover:shadow-md hover:shadow-black" onClick={() => setSeccion('responsable')}>Responsable</button>
                         </div>                        
-                        <div className="flex flex-col w-3/4 my-4">
+                        <div className="flex flex-col w-3/4 max-md:w-full my-4">
                             {switchRender(seccion)}
                         </div>
                     </div>
                     <div className="flex flex-row mx-4 h-auto">
                         {(actividadData.foto) 
                             ? 
-                            <div className="w-full space-y-4">         
-                                <div className="flex flex-row justify-center">                                    
-                                    {picture(actividadData.foto, 'actividad')}
-                                </div>
+                            <div className="w-full space-y-4 mb-4">         
                                 <div  className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
-                                    <div className="flex flex-row justify-center space-x-6 py-4"> 
-                                        <p> Fotografia de la Actividad: </p>
-                                        <button className="text-black hover:text-blue-600" onClick={() => setShowUploadFotoSection(true)}>Cambiar foto</button>
+                                    <div className="flex flex-row justify-center space-x-6 py-4">                                        
+                                        <button className="text-black hover:text-blue-600" onClick={() => 
+                                            setShowUploadFotoSection(true)}>Cambiar foto</button>
                                     </div>
                                     {
                                         showUploadFotoSection &&
                                         <UploadFotoSection setShowUploadFotoSection={setShowUploadFotoSection} setActividadData={setActividadData} actividad={actividadData}/>
                                     }
                                 </div>
+                                <div className="flex flex-row justify-center">                                    
+                                    {picture(actividadData.foto, 'actividad')}
+                                </div>
+                                
                             </div> 
                             :
                             <div  className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
