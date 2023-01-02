@@ -8,7 +8,7 @@ import { UserRole } from "../../middleware/userRole";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 
-// no borrar si no no se aplican los estilos (no se porque)
+
 export const ListaAsistentes = () => {
   const router = useRouter();
   // useStates almacenar el rol del usuario logeado

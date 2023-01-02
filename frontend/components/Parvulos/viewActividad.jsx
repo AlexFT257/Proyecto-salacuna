@@ -39,13 +39,13 @@ import Swal from "sweetalert2";
                 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-fit bg-white rounded-2xl border-2 border-slate-900 shadow-lg shadow-slate-900">
                     <div className="modal-content flex flex-col justify-center items-center m-5 space-y-3">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel justify-center font-bold">Parvulo : {dataParvulo.nombre}</h5>
+                            <h5 className="modal-title text-2xl font-bold my-4" id="exampleModalLabel">Parvulo : {dataParvulo.nombre}</h5>
                         </div>
                         <div className=" w-full flex flex-col space-y-3">
                             <table className="w-full -table-fixed">
                                 <thead className="">
                                     <tr className="text-left">
-                                        <th> tiulo</th>
+                                        <th>Titulo</th>
                                         <th>Descripcion</th>    
                                         <th>Fecha</th>
                                         <th>Responsable</th>

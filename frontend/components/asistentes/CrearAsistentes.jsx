@@ -64,7 +64,7 @@ export const CrearAsistentes = () => {
         }
       );
       // si hay error al subir la foto se muestra un mensaje de error
-      if (response.status!==200) {
+      if (response.status !== 200) {
         setTimeout(() => {
           Swal.fire({
             position: "center",
@@ -92,7 +92,7 @@ export const CrearAsistentes = () => {
         }
       );
       // si hay error al crear el asistente se muestra un mensaje de error
-      if (userRes.status!==200) {
+      if (userRes.status !== 200) {
         setTimeout(() => {
           Swal.fire({
             position: "center",
@@ -117,7 +117,7 @@ export const CrearAsistentes = () => {
         }
       );
       // si hay error al actualizar la foto se muestra un mensaje de error
-      if (fotoRes.status!==200) {
+      if (fotoRes.status !== 200) {
         setTimeout(() => {
           Swal.fire({
             position: "center",
@@ -141,7 +141,6 @@ export const CrearAsistentes = () => {
         window.location.reload();
       }, 1500);
 
-
       // si la foto se sube correctamente, se crea el asistente
     } catch (error) {
       console.log("linea 142");
@@ -160,15 +159,15 @@ export const CrearAsistentes = () => {
   return (
     <>
       {/* formulario para crear un asistentente de parvulo */}
-      <div className="formContainer flex flex-col flex-1   ml-2 mr-2 max-md:mt-4 max-md:ml-0">
+      <div className="formContainer flex flex-col w-full h-fit   ml-2 mr-2 max-md:mt-4 max-md:ml-0">
         <div className="formBody p rounded-2xl shadow shadow-slate-900 bg-white">
           {/* titulo */}
-          <div className="formHeader p-2 pb-0 flex flex-row ml-2">
-            <h2 className="formTitle font-bold ">Crear asistente</h2>
+          <div className="formHeader pl-2 pb-0 flex flex-row ml-2">
+            <h2 className="text-4xl font-bold mt-2 ">Crear asistente</h2>
           </div>
 
           {/* body */}
-          <div className="formItems flex flex-col ">
+          <div className="formItems flex flex-col w-full ">
             <form
               action=""
               id="asistente"
@@ -176,72 +175,110 @@ export const CrearAsistentes = () => {
               className="formAsistente m-2 mt-0  flex flex-col "
               autoComplete="on"
             >
-              <label htmlFor="">Nombre</label>
-              <input
-                type="text"
-                id="nombre"
-                name="nombre"
-                onChange={onChange}
-                placeholder="Nombre"
-              />
-              <label htmlFor="">Apellido</label>
-              <input
-                type="text"
-                id="apellido"
-                name="apellido"
-                onChange={onChange}
-                placeholder="Apellido"
-              />
-              <label htmlFor="">Rut</label>
-              <input
-                type="text"
-                id="rut"
-                name="rut"
-                onChange={onChange}
-                placeholder="xx.xxx.xxx-x"
-                pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
-              />
-              <label htmlFor="">Mail</label>
-              <input
-                type="text"
-                id="mail"
-                name="mail"
-                onChange={onChange}
-                placeholder="correo@mail.com"
-                pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-              />
-              <label htmlFor="">Fecha de nacimiento</label>
-              <input
-                type="date"
-                name="fechaNa"
-                id="fechaNa"
-                onChange={onChange}
-              />
-              <label htmlFor="">Direccion</label>
-              <input
-                type="text"
-                id="domicilio"
-                name="domicilio"
-                onChange={onChange}
-              />
-              <label htmlFor="">Telefono</label>
-              <input
-                type="number"
-                id="telefono"
-                name="telefono"
-                onChange={onChange}
-              />
-              <label htmlFor="">Foto de perfil</label>
-              <input
-                type="file"
-                name="foto"
-                id="foto"
-                onChange={onFileChangeCreateAsistente}
-              />
+              <div className="flex flex-row flex-grow w-full ">
+                <label className="p-2 m-2" htmlFor="">
+                  Nombre:
+                </label>
+                <input
+                  type="text"
+                  id="nombre"
+                  name="nombre"
+                  onChange={onChange}
+                  placeholder="Nombre"
+                  className="flex-grow"
+                  required= "true"
+                />
+              </div>
+              <div className="flex flex-row flex-grow">
+                <label className="p-2 m-2" htmlFor="">
+                  Apellido:
+                </label>
+                <input
+                  type="text"
+                  id="apellido"
+                  name="apellido"
+                  onChange={onChange}
+                  placeholder="Apellido"
+                  className="flex-grow"
+                  required= "true"
+                />
+              </div>
+              <div className="flex flex-row flex-grow">
+                <label className="p-2 m-2" htmlFor="">Rut:</label>
+                <input
+                  type="text"
+                  id="rut"
+                  name="rut"
+                  onChange={onChange}
+                  placeholder="xx.xxx.xxx-x"
+                  pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
+                  className="flex-grow"
+                  required= "true"
+                />
+              </div>
+              <div className="flex flex-row flex-grow"> 
+                <label className="p-2 m-2" htmlFor="">Mail:</label>
+                <input
+                  type="text"
+                  id="mail"
+                  name="mail"
+                  onChange={onChange}
+                  placeholder="correo@mail.com"
+                  className="flex-grow"
+                  required= "true"
+                  pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+                />
+              </div>
+              <div className="flex flex-row flex-grow">
+                <label className="p-2 m-2" htmlFor="">Fecha de nacimiento:</label>
+                <input
+                  type="date"
+                  name="fechaNa"
+                  id="fechaNa"
+                  onChange={onChange}
+                  className="flex-grow"
+                  required= "true"
+                />
+              </div>
+              <div className="flex flex-row flex-grow">
+                <label className="p-2 m-2" htmlFor="">Direccion:</label>
+                <input
+                  type="text"
+                  id="domicilio"
+                  name="domicilio"
+                  onChange={onChange}
+                  className="flex-grow"
+                  placeholder="Calle numero, comuna"
+                  required= "true"
+                />
+              </div>
+              <div className="flex flex-row flex-grow"> 
+                <label className="p-2 m-2" htmlFor="">Telefono:</label>
+                <input
+                  type="tel"
+                  id="telefono"
+                  name="telefono"
+                  onChange={onChange}
+                  placeholder="+569xxxxxxxx"
+                  className="flex-grow"
+                  required= "true"
+                />
+              </div>
+              <div className="flex flex-row flex-grow">
+                <label className="p-2 m-2" htmlFor="">Foto de perfil:</label>
+                <input
+                  type="file"
+                  name="foto"
+                  id="foto"
+                  onChange={onFileChangeCreateAsistente}
+                  className="flex-grow"
+                  required= "true"
+                />
+              </div>
               <input
                 type="submit"
                 value="Enviar"
-                className="formBtnEnviar  m-2 p-2 pl-4 pr-4  justify-center content-center rounded-full shadow-md shadow-slate-900 "
+                className="formBtnEnviar   pl-4 pr-4  justify-center content-center rounded-full shadow-md shadow-slate-900 "
               />
             </form>
           </div>

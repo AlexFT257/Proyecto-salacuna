@@ -63,8 +63,8 @@ export const ListarParvulos = () => {
         // retornar la tabla con los parvulos y el boton para agregar parvulos 
         <>
             <div className="flex flex-col w-full h-full ">
-                <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
-                    <div className="">
+                <div className="flex justify-center">
+                    <div className="bg-white lg:w-1/2 justify-center flex border-black border-2 rounded-2xl p-2 mx-4 mt-4 shadow shadow-black">
                         <h1 className="flex m-4 p-2 text-5xl font-bold ">Parvulos</h1>
                     </div >
                 </div>
@@ -75,7 +75,7 @@ export const ListarParvulos = () => {
                             Añadir Parvulo
                         </button>
                     </div>
-                <div className="Parvulotable bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900 ">
+                <div className="Parvulotable overflow-auto bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900 ">
                     <table className="w-full table-auto">
                         <thead>
                             <tr className="text-left">
@@ -102,7 +102,7 @@ export const ListarParvulos = () => {
                                     <td>{parvulo.telefonoEmergencia}</td>
                                     <td>{parvulo.direccion}</td>
                                     <td>{parvulo.condicionesMedicas}</td>
-                                    <td>
+                                    <td className="flex flex-row mt-2 justify-evenly">
                                         <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
                                         onClick={()=>modalEdit(parvulo.rut)}>
                                             Editar

@@ -42,7 +42,7 @@ export const ActividadesTable = () => {
 
   return (
   <>
-    <div className="w-full xl:w-3/4 xl:mx-auto">
+    <div className="w-full xl:w-3/4 xl:mx-auto ">
         
       {
         user.role !== "apoderado" && 
@@ -56,8 +56,8 @@ export const ActividadesTable = () => {
       }
         
         
-        <div className="bg-white border-black border-2 rounded-2xl p-6 mx-4 mt-4 shadow shadow-black"> 
-          <table className="w-full table-fixed">
+        <div className="  bg-white border-black border-2 rounded-2xl p-6 mx-4 mt-4 shadow shadow-black"> 
+          <table className="w-full table-fixed ">
             <thead className="">
               <tr className="text-left">
                 <th>Titulo</th>

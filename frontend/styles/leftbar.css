@@ -1,29 +1,14 @@
-.leftBar {
-  background-color: aquamarine;
-}
+
 .LeftBar {
   background-color: #2b2c28;
   /* background-size: 400% 400%;
   animation: leftBar-bg-anim 2.5s infinite ease-in-out; */
   font-weight: 550;
 }
-/* @keyframes leftBar-bg-anim {
-  0%{
-    background-position: 0% 50%;
-  }
-  50%{
-    background-position: 100% 50%;
-  }
-  100%{
-    background-position: 0% 50%;
-  }
-} */
 
 .navHeader {
   background-color: #fffafb;
-  /* background-image: url("../public/jardin_infantil_1024x576.jpg");
-  opacity: 40%;
-  background-repeat: no-repeat; */
+
 }
 /* animacio de cerrar  */
 #toggler {
@@ -57,8 +42,6 @@
   rotate: -45deg;
   translate: 0 -5px;
 }
-
-
 
 .navItem {
   align-items: center;
