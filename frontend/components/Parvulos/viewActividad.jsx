@@ -25,7 +25,7 @@ import Swal from "sweetalert2";
               console.log(response.status);
                 Swal.fire({
                     icon: "error",
-                    title: "Oops...",
+                    title: "Error",
                     text: "Algo salio mal!",
                 });
             }
