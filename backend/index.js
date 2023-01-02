@@ -19,7 +19,7 @@ const actividadRoutes = require("./routes/actividadRoutes");
 // TODO: reemplazar el origin por la ruta de la app en el server
 app.use(cookieParser());
 app.options("*", cors());
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({credentials: true, origin: process.env.FRONTEND_URL}));
 
 app.use(express.json());
 
