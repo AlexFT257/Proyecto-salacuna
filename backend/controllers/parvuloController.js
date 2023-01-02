@@ -68,17 +68,33 @@ const createParvulo = (req,res)=>{
         if(user.role != "apoderado"){
             return res.status(400).send({message: "El USUARIO NO ES APODERADO, INGRESE UN USUARIO CON ROL DE APODERADO"})
         }
-        const newParvulo = new parvulo({
-            nombre,
-            rut,
-            fechaNacimiento,
-            edad,
-            direccion,
-            telefonoEmergencia,
-            condicionesMedicas,
-            apoderado,
-            foto
-        })
+        let newParvulo;
+        if(foto==""){
+            newParvulo = new parvulo({
+                nombre,
+                rut,
+                fechaNacimiento,
+                edad,
+                direccion,
+                telefonoEmergencia,
+                condicionesMedicas,
+                apoderado
+            });
+
+        }else{
+            newParvulo = new parvulo({
+                nombre,
+                rut,
+                fechaNacimiento,
+                edad,
+                direccion,
+                telefonoEmergencia,
+                condicionesMedicas,
+                apoderado,
+                foto
+            });
+        }
+
         newParvulo.save((error,parvulo)=>{
             if(error){
                 return res.status(400).send({message: "No se ha podido crear el parvulo"+error})
@@ -113,5 +129,6 @@ module.exports = {
         updateParvulo,
         deleteParvulo,
         getOneParvulo,
+        createParvulo,
         getParvulosByApoderado
     }

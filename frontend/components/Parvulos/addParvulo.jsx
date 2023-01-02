@@ -6,17 +6,17 @@ const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
 import { checkToken } from "../../data/user";
 
-export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) => {
+export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) => {
     // modal para crear parvulo
     const [newParvulo, setNewParvulo] = useState({
-        nombre: "",
-        apoderado: "",
-        rut: "",
-        fechaNacimiento: "",
-        direccion: "",
-        telefonoEmergencia: "",
-        condicionesMedicas: "",
-        foto: "",
+        nombre:"",
+        apoderado:"",
+        rut:"",
+        fechaNacimiento:"",
+        direccion:"",
+        telefonoEmergencia:"",
+        condicionesMedicas:"",
+        foto:"",
     });
     
     const router = useRouter();
@@ -30,73 +30,95 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
     if(checkToken() === false){
         router.push("/login");
     }
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
 
     const addParvulo = async (e) => {
         e.preventDefault();
-        console.log(newParvulo);
+        
         const token = Cookies.get("token");
         const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
-        console.log(decoded);
+       
         try{
-            
+
             if(selectedFile){
                 const formData = new FormData();
-                formData.append("file", selectedFile);
-                formData.append("upload_preset", "parvulos");
+                formData.append("archivos", selectedFile);
                 const res = await axios.post(
-                    `${process.env.API_URL}/file/upload/${selectedFile.name}`,
+                    `${process.env.API_URL}/file/${selectedFile.name}`,
                     formData,
                     {
                         headers: {
                             "Content-Type": "multipart/form-data",
-                            "X-Caller-Id": decoded.sub
                         },
                     }
                 );
-                if(res.status === 201){
-                    setNewParvulo({
-                        ...newParvulo,
-                        foto: res.data[0]._id,
-                    });
-                }else{
+                console.log(res);
+                if(res.status !== 201){
                     Swal.fire({
                         title: "Error al subir imagen",
                         icon: "error",
                         confirmButtonText: "Ok",
                     });
+                }else{
+                    setNewParvulo({
+                        ...newParvulo,
+                        foto: res.data[0]._id,
+                    });
+                    const response = await axios.post(
+                        `${process.env.API_URL}/parvulo`,
+                        newParvulo,
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-Caller-Id": decoded.sub,
+                            },
+                        }
+                    );
+                    console.log(response);
+                    if(response.status !== 201){
+                        Swal.fire({
+                            title: "Error al crear parvulo if",
+                            icon: "error",
+                            confirmButtonText: "Ok",
+                        });
+                    }else{
+                        setParvulos([...parvulo, response.data]);
+                        setShowModalAddParvulo(false);
+                    }
+                   
                 }
-            }
-            const response = await axios.post(
-                `${process.env.API_URL}/parvulo`,
-                newParvulo,
-                {
-                    headers: {
-                        "X-Caller-Id": decoded.sub,
-                    },
-                }
-            );
-            console.log(response);
-            if(response.status === 201){
-                setParvulo([...parvulos, res.data]);
-                setShowModalAddParvulo(false);
-                Swal.fire({
-                    title: "Parvulo creado",
-                    icon: "success",
-                    confirmButtonText: "Ok",
-                });
             }else{
-                Swal.fire({
-                    title: "Se produjo un error, datos no enviados",
-                    icon: "error",
-                    confirmButtonText: "Ok",
-                });
+                const response = await axios.post(
+                    `${process.env.API_URL}/parvulo`,
+                    newParvulo,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Caller-Id": decoded.sub,
+                        },
+                    }
+                );
+                console.log(response);
+                if(response.status !== 201){
+                    Swal.fire({
+                        title: "Error al crear parvulo else",
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                    });
+                }else{
+                    setParvulos([...parvulos, response.data]);
+                    setShowModalAddParvulo(false);
+                }
+
             }
         
 
         }catch(err){
             console.log(err);
             Swal.fire({
-                title: "Error al crear parvulo",
+                title: "Error al crear parvulo catch",
                 icon: "error",
                 confirmButtonText: "Ok",
             });
@@ -113,7 +135,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                             <h5 className="modal-title" id="exampleModalLabel justify-center font-bold">Agregar Parvulo</h5>
                         </div>
                         <div className=" w-full flex flex-col space-y-3">
-                            <form className="formAsistente m-2 mt-0  flex flex-col " onSubmit={addParvulo}>
+                            <form className="formAsistente m-2 mt-0  flex flex-col" onSubmit={addParvulo}>
                                 
                                     <label htmlFor="" className="">Nombre</label>
                                     <input type="text" 
@@ -162,14 +184,15 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulo}) =
                                     <label htmlFor="foto" className="form-label">Foto</label>
                                     <input type="file"
                                      className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                     id="foto" onChange={(e) => setSelectedFile(e.target.files[0])} />
+                                     id="foto" onChange={handleFileChange} />
 
 
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary bg-red-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900" 
                                     data-bs-dismiss="modal" onClick={()=> setShowModalAddParvulo(false)} >Cerrar</button>
                                     <button type="submit" 
-                                    className="btn btn-primary bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900">
+                                    className="btn btn-primary bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900"
+                                    onClick={addParvulo}>
                                         Agregar</button>
                                 </div>
                             </form>

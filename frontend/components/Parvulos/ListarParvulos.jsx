@@ -43,6 +43,12 @@ export const ListarParvulos = () => {
         setShowModalEditParvulo(true);
         setRut(rut);
     };
+    // obtener la foto del parvulo
+    const getFoto = async (id) => {
+        const pic = id ? `${process.env.API_URL}/file/download/${id}` : "";
+        return pic;
+    };
+
 
     return (
         // retornar la tabla con los parvulos y el boton para agregar parvulos 
@@ -111,8 +117,9 @@ export const ListarParvulos = () => {
             </div>
             {showModalAddParvulo && (
                 <ModalAddParvulo
-                    showModalAddParvulo={showModalAddParvulo}
                     setShowModalAddParvulo={setShowModalAddParvulo}
+                    parvulos={parvulos}
+                    setParvulos={setParvulos}
                 />
             )}
             {ShowModalDeleteParvulo && (
