@@ -42,8 +42,8 @@ const deleteParvulo = (req,res)=>{
 };
 //Obtener parvulo por rut
 const getOneParvulo = (req,res)=>{
-    const {rut}=req.params;
-    parvulo.findOne({rut},(error,parvulo)=>{
+    const {id}=req.params;
+    parvulo.findById(id,(error,parvulo)=>{
         if(error){
             return res.status(400).send({message: "No se ha podido obtener el parvulo" + error})
         }
@@ -57,8 +57,8 @@ const getOneParvulo = (req,res)=>{
 
 // validar que exista un usurio por Schema.ObjectId ref user
 const createParvulo = (req,res)=>{
-    const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,apoderado} = req.body;
-    user.findById({_id:apoderado},(error,user)=>{
+    const{nombre,rut, fechaNacimiento,edad,direccion,telefonoEmergencia,condicionesMedicas,apoderado,foto} = req.body;
+    user.findOne({rut:apoderado},(error,user)=>{
         if(error){
             return res.status(400).send({message: "error al validar el aopoderado"})
         }
@@ -76,7 +76,8 @@ const createParvulo = (req,res)=>{
             direccion,
             telefonoEmergencia,
             condicionesMedicas,
-            apoderado
+            apoderado,
+            foto
         })
         newParvulo.save((error,parvulo)=>{
             if(error){
@@ -112,6 +113,5 @@ module.exports = {
         updateParvulo,
         deleteParvulo,
         getOneParvulo,
-        createParvulo,
         getParvulosByApoderado
     }

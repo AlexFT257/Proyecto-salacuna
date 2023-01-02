@@ -7,6 +7,7 @@ api.post("/user", userController.createUser);
 api.get("/users", userController.getUsers);
 api.get("/userFoto", userController.getUserFoto);
 api.get("/getUser",userController.getUser);
+api.get("/user/search/:rut", userController.getUserByRut);
 
 // rutas de autentificacion de usuario
 api.post("/login", userController.login);

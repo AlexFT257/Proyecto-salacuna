@@ -1,7 +1,8 @@
-import React from "react";
+
 import axios from "axios";
 import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
+import Link from "next/link";
 import { ModalAddParvulo } from "./addParvulo";
 import { ModalUpdateParvulo } from "./updateParvulo";
 import { ModalDeleteParvulo } from "./deleteParvulo";
@@ -30,6 +31,7 @@ export const ListarParvulos = () => {
     };
     useEffect(() => {
         getParvulos();
+
     }, []);
 
     const modalDelete = (rut) => {
@@ -48,7 +50,7 @@ export const ListarParvulos = () => {
             <div className="flex flex-col w-full h-full ">
                 <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
                     <div className="">
-                        <h1 className="flex m-4 p-2 text-5xl font-bold " onClick={() => setShowModalAddParvulo(true)} >Parvulos</h1>
+                        <h1 className="flex m-4 p-2 text-5xl font-bold ">Parvulos</h1>
                     </div >
                 </div>
 
@@ -86,14 +88,17 @@ export const ListarParvulos = () => {
                                     <td>{parvulo.direccion}</td>
                                     <td>{parvulo.condicionesMedicas}</td>
                                     <td>
-                                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300"
+                                        <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
                                         onClick={()=>modalEdit(parvulo.rut)}>
                                             Editar
                                         </button>
-                                        <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300"
+                                        <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
                                         onClick={() => modalDelete(parvulo.rut)}>
                                             Eliminar
                                         </button>
+                                        <Link href={`/parvulos/${parvulo._id}` }>
+                                        <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"> ver</button>
+                                        </Link>
                                     </td>
                                 </tr>
                                 )
