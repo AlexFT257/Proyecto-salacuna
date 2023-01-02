@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { checkToken } from "../../data/user";
 import {ActividadesTable} from "../../components/Actividades/ActividadesTable"
 import axios from "axios";
+import Head from "next/head";
 
 export const Actividades = ({props}) => {
     const router = useRouter();
@@ -23,10 +24,20 @@ export const Actividades = ({props}) => {
     }
     
     return (
-        <div className="flex max-sm:flex-col h-screen w-screen ">
-        
+        <div className="flex max-sm:flex-col h-full w-full ">
+            <Head>
+                <title>Actividades</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
             <LeftBar/>
-            <ActividadesTable props={props}/>
+            <div className="w-full">
+                {/* title */}
+                <div className="bg-white border-black border-b-2 p-4 shadow shadow-slate-900">
+                    <h1 className="text-5xl font-bold my-4">Actividades</h1>
+                </div>
+                <ActividadesTable props={props}/>
+            </div>
             <Perfil/>
             
         </div>

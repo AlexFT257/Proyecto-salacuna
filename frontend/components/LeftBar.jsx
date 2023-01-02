@@ -32,7 +32,7 @@ export const LeftBar = () => {
   };
 
   return (
-    <div className="LeftBar flex flex-col w-fit   max-sm:h-full max-sm:w-screen h-screen shadow-black shadow-2xl  ">
+    <div className="LeftBar flex flex-col w-fit  max-sm:w-full shadow-black shadow-2xl  ">
       {/* boton para mostrar el menu cuando la pantalla es muy chica */}
       <div className="flex">
         <button
@@ -169,7 +169,7 @@ export const LeftBar = () => {
 
       {/* menu cuando la pantalla es grande */}
       {!menu && (
-        <div className="flex flex-col w-fit max-sm:flex- max-sm:h-full max-sm:w-screen h-screen shadow-black shadow-2xl ">
+        <div className="flex flex-col w-fit max-sm:flex max-sm:h-full max-sm:w-full h-full shadow-black shadow-2xl ">
           {/* header */}
           <div>
             <div className="navHeader flex flex-row p-8 justify-center  w-fit  max-sm:hidden">
@@ -200,18 +200,18 @@ export const LeftBar = () => {
                   <h2 className="ml-2 max-lg:hidden">Home page</h2>
                 </div>
 
-        <Link href="/actividades">
-        <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
-          <button className="flex">
-            <img
-              src="/checklist.png"
-              alt="icono de actividades"
-              className=" w-6 h-6"
-            />
-            <h2 className="ml-2 max-lg:hidden">Actividades</h2>
-          </button>
-        </div>
-        </Link>
+                <Link href="/actividades">
+                <div className="navItem flex flex-row  shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center">
+                  <button className="flex">
+                    <img
+                      src="/checklist.png"
+                      alt="icono de actividades"
+                      className=" w-6 h-6"
+                    />
+                    <h2 className="ml-2 max-lg:hidden">Actividades</h2>
+                  </button>
+                </div>
+                </Link>
 
                 <div
                   onClick={() => {

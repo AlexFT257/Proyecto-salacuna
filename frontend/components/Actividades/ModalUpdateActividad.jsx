@@ -103,7 +103,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
       const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
       
       const change = !(objetosIguales(putActividad, auxActividad));
-      console.log(change);
+      
       if(change){
         const changeActividad = obtenerDiferencias(putActividad, auxActividad);
         const res = await axios.put(
@@ -169,7 +169,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
 
   const getAsistentes = async () => {
     const token = Cookies.get("token");
-    const decoded = jwt.decode(token, process.env.SECRET, true);
+    const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
     const res = await axios.get(`${process.env.API_URL}/asistentes`, {
         headers: {
             "X-Caller-Id": decoded.sub,
@@ -182,7 +182,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
 
   const getParvulos = async () => {
     const token = Cookies.get("token");
-    const decoded = jwt.decode(token, process.env.SECRET, true);
+    const decoded = jwt.decode(token, process.env.SECRET_KEY, true);
     const res = await axios.get(`${process.env.API_URL}/parvulos`, {
         headers: {
             "X-Caller-Id": decoded.sub,
@@ -201,7 +201,7 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
   return (
     <> 
       <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-50">
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/2 h-fit bg-white rounded-2xl border-2 border-slate-900 shadow-lg shadow-slate-900">
+          <div className="absolute inset-0 mx-auto my-auto w-1/2 max-md:w-11/12 h-5/6  max-md:h-full overflow-y-auto bg-white rounded-2xl border-2 border-slate-900 shadow-lg shadow-slate-900">
             <div className="flex flex-col justify-center items-center m-5 space-y-3">
               <h1 className="text-2xl font-bold">Modificar Actividad</h1>
               <form className=" w-full flex flex-col space-y-3" onSubmit={updateActividad}>
@@ -299,14 +299,14 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                 <div className="flex flex-row justify-end items-center space-x-3">
                   <button
                     type="submit"
-                    className="bg-emerald-600 text-white rounded-lg p-2"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg p-2"
                     onClick={updateActividad}
                   >
                     Modificar
                   </button>
                   <button
                     type="button"
-                    className="bg-red-600 text-white rounded-lg p-2"
+                    className="bg-red-600 hover:bg-red-700 text-white rounded-lg p-2"
                     onClick={() => setShowModalUpdate(false)}
                   >
                     Cancelar

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
 
-export const ModalDeleteActividad = ({id, setId, setShowModalDelete, actividades, setActividades}) => {
+export const ModalDeleteActividad = ({id, setShowModalDelete, actividades, setActividades}) => {
 
     const deleteActividad = async () => {
         try {
@@ -48,13 +48,13 @@ export const ModalDeleteActividad = ({id, setId, setShowModalDelete, actividades
     return (
         <>
         <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-50">
-            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/3 h-fit bg-white rounded-2xl border-2 border-black shadow shadow-slate-900">
-                <div className="flex flex-col justify-center items-center m-5 space-y-3">
-                <h1 className="text-2xl font-bold">¿Estas seguro de eliminar esta actividad?</h1>
-                <div className="flex space-x-3 justify-evenly w-1/2">
-                    <button className="bg-red-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900" onClick={deleteActividad} >Eliminar</button>
-                    <button className="bg-green-500 rounded-2xl p-3 text-white border-2 border-white hover:text-slate-900 hover:border-slate-900" onClick={() => setShowModalDelete(false)}>Cancelar</button>
-                </div>
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/3 max-md:w-11/12 h-fit bg-white rounded-2xl border-2 border-black shadow shadow-slate-900">
+                <div className="flex flex-col justify-center items-center m-5 space-y-5">
+                    <h1 className="text-2xl text-center font-bold">¿Estas seguro de eliminar esta actividad?</h1>
+                    <div className="flex flex-col md:flex-row w-max space-x-3 justify-evenly lg:w-1/2">
+                        <button className="bg-red-600 rounded-lg p-2 text-white border-white hover:bg-red-700" onClick={deleteActividad} >Eliminar</button>
+                        <button className="bg-emerald-600 rounded-lg p-2 text-white border-white hover:bg-emerald-700" onClick={() => setShowModalDelete(false)}>Cancelar</button>
+                    </div>
                 </div>
             </div>
         </div>

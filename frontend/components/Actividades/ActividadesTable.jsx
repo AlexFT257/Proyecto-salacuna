@@ -39,57 +39,53 @@ export const ActividadesTable = () => {
 
   return (
   <>
-    <div className="w-screen">
-      {/* title */}
-      <div className="bg-white border-black border-b-2 p-6 shadow shadow-slate-900">
-        <div className="flex m-4 p-2 ">
-          <h1 className="text-5xl font-bold">Actividades</h1>
+    <div className="w-full xl:w-3/4 xl:mx-auto">
+        <div className="flex justify-end mx-4 mt-6">
+          <button 
+              className="rounded-xl p-3 bg-white border-2 border-black shadow shadow-black hover:bg-teal-200 hover:shadow-md hover:shadow-black" 
+              onClick={() => setShowModalAdd(true)}>
+                  Agregar Actividad
+          </button>
         </div>
-        <div className="flex justify-end">
-          <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300" onClick={() => setShowModalAdd(true)}>Agregar Actividad</button>
+        
+        <div className="bg-white border-black border-2 rounded-2xl p-6 mx-4 mt-4 shadow shadow-black"> 
+          <table className="w-full table-fixed">
+            <thead className="">
+              <tr className="text-left">
+                <th>Titulo</th>
+                <th className="max-md:hidden">Descripcion</th>
+                <th>Fecha</th>
+                <th>Resposable</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="">
+              {
+                actividades.map((item) => {
+                  const fecha = new Date(item.fecha).toLocaleDateString();
+                  return (
+                    <tr className="text-left align-top" key={item._id}>
+                      <td>{item.titulo}</td>
+                      <td className="max-md:hidden">{item.descripcion}</td>
+                      <td>{fecha}</td>
+                      <td>{
+                        (item.responsable != null) ? item.responsable.nombre : "Sin responsable"
+                      }</td>
+                      <td className="flex max-md:flex-col justify-items-center space-x-2 max-md:space-x-0">
+                        <button className="hover:text-red-600" onClick={() => deleteModal(item._id)}>Eliminar</button>
+                        <button className="hover:text-emerald-600" onClick={() => updateModal(item)}>Editar</button>
+                        <Link href={`/actividades/${item._id}`}>
+                          <button className="hover:text-blue-600">Ver</button>
+                        </Link>
+                      </td>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
         </div>
-      </div>
-      
-      <div className="m-4 h-fit">
-          <div className="bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900">
-            <table className="w-full table-fixed">
-              <thead className="">
-                <tr className="text-left">
-                  <th>Titulo</th>
-                  <th>Descripcion</th>
-                  <th>Fecha</th>
-                  <th>Resposable</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody className="">
-                {
-                  actividades.map((item) => {
-                    const fecha = new Date(item.fecha).toLocaleDateString();
-                    return (
-                      <tr className="text-left" key={item._id}>
-                        <td>{item.titulo}</td>
-                        <td>{item.descripcion}</td>
-                        <td>{fecha}</td>
-                        <td>{
-                          (item.responsable != null) ? item.responsable.nombre : "Sin responsable"
-                        }</td>
-                        <td className="flex justify-start space-x-2">
-                          <button className="hover:text-red-600" onClick={() => deleteModal(item._id)}>Eliminar</button>
-                          <button className="hover:text-emerald-600" onClick={() => updateModal(item)}>Editar</button>
-                          <Link href={`/actividades/${item._id}`}>
-                            <button className="hover:text-blue-600">Ver</button>
-                          </Link>
-                        </td>
-                      </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </table>
-          </div>
     </div>
-  </div>
   { showModalDelete && 
     <ModalDeleteActividad id={id} setId={setId} setShowModalDelete={setShowModalDelete} actividades={actividades} setActividades={setActividades}/>
   }
