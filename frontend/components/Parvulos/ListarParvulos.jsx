@@ -44,9 +44,18 @@ export const ListarParvulos = () => {
         setRut(rut);
     };
     // obtener la foto del parvulo
-    const getFoto = async (id) => {
+    const getFoto =(id) => {
         const pic = id ? `${process.env.API_URL}/file/download/${id}` : "";
-        return pic;
+        return (
+            <img
+                src={pic}
+                alt="foto"
+                className="rounded-circle"
+                width="50"
+                height="50"
+            />
+
+        );
     };
 
 
@@ -86,7 +95,7 @@ export const ListarParvulos = () => {
                             console.log(parvulos) 
                                 return(
                                 <tr key={parvulo.rut}>
-                                    <td><img src={parvulo.foto} alt="foto" width="100" height="100"/></td>
+                                    <td>{getFoto(parvulo.foto)}</td>
                                     <td>{parvulo.nombre}</td>
                                     <td>{parvulo.rut}</td>
                                     <td>{new Date(parvulo.fechaNacimiento).toLocaleDateString("es-ES")}</td>

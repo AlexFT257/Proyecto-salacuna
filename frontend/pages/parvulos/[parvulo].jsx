@@ -45,6 +45,20 @@ export default function Parvulo() {
     
     },[parvulo]);
     
+    const getFoto =(id) => {
+        const pic = id ? `${process.env.API_URL}/file/download/${id}` : "";
+        return (
+            <img
+                src={pic}
+                alt="foto"
+                className="rounded-circle"
+                width="50"
+                height="50"
+            />
+
+        );
+    };
+
 
     return (
         <>
@@ -60,6 +74,10 @@ export default function Parvulo() {
                             <h5 className="modal-title" id="exampleModalLabel justify-center font-bold">Parvulo : {dataParvulo.nombre}</h5>
                         </div>
                         <div className=" w-full flex flex-col space-y-3">
+                            <div className="flex flex-row justify-center items-center space-x-3">
+                                <td>{getFoto(dataParvulo.foto)}</td>
+                            </div>
+
                             <table className="formAsistente m-2 mt-0  flex flex-col " >
                                 <label className="">Nombre</label>
                                 <td type="text" 

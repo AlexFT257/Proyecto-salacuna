@@ -84,7 +84,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                             confirmButtonText: "Ok",
                         });
                     }else{
-                        setParvulos([...parvulo, response.data]);
+                        setParvulos([...parvulos, response.data]);
                         setShowModalAddParvulo(false);
                     }
                    
