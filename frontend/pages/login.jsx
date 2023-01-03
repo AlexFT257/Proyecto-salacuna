@@ -81,21 +81,24 @@ export const loginPage = () => {
   return (
     <>
       <div className=" h-screen w-screen flex justify-center">
-        <div className="justify-center bg-white shadow-2xl  rounded-2xl align-middle m-auto  w-1/2 h-1/2 flex flex-col  ">
-          <div className="w-full h-full flex sm:flex-row justify-evenly flex-col">
+        <div className="justify-center bg-white shadow-2xl  rounded-2xl align-middle m-auto  w-auto h-auto flex flex-col shadow-black ">
+          <div className="w-full h-full flex sm:flex-row justify-evenly flex-col py-6">
             <div className=" flex flex-col justify-center m-auto max-sm:ml-6">
-              <h1 className="text-5xl font-bold my-4 italic">
-                Iniciar sesión:
+              <h1 className="text-center text-5xl font-bold italic">
+                Hola!
+              </h1>
+              <h1 className="text-center text-5xl font-bold italic">
+                Inicia sesión
               </h1>
             </div>
-            <div className="w-1/2 h-1/2 flex justify-center m-auto ">
+            <div className="w-1/2 h-1/2 flex justify-left m-auto ">
               <form
                 action=""
                 onSubmit={loggin}
-                className="flex flex-col justify-center "
+                className="flex flex-col justify-center space-y-2 "
               >
-                <label htmlFor="" className="text-xl font-medium mb-2 ">
-                  Rut :
+                <label htmlFor="" className="text-xl font-medium">
+                  Rut:
                 </label>
                 <input
                   required={true}
@@ -105,10 +108,10 @@ export const loginPage = () => {
                   id="rut"
                   pattern="^(\d{1,3}(?:\.\d{1,3}){2}-[\dkK])$"
                   placeholder="XX.XXX.XXX-X"
-                  className="flex max-lg:w-40 border-2 border-gray-300 focus:border-black bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                  className="flex max-lg:w-40 border-b-2 border-gray-300 focus:border-black bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                 />
                 <input
-                  className=" flex rounded-xl cursor-pointer bg-teal-500 hover:bg-teal-700 text-white  py-2 px-2 m-2"
+                  className=" flex rounded-xl cursor-pointer bg-teal-500 hover:bg-teal-700 text-white py-2"
                   type="submit"
                   value={"Iniciar Sesion"}
                 />
