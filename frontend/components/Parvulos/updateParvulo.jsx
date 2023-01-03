@@ -10,6 +10,7 @@ export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parv
     const [parvulo] = useState(
         parvulos.find((parvulo) => parvulo.rut === rut)
     );
+    const [selectedFile, setSelectedFile] = useState(null);
     const[putParvulo,setPutParvulo] = useState({
         nombre:parvulo.nombre,
         apoderado:parvulo.apoderado,
@@ -20,34 +21,117 @@ export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parv
         condicionesMedicas:parvulo.condicionesMedicas,
         foto:parvulo.foto,
     });
-    
+    const oldFoto = ((parvulo.foto) ? parvulo.foto : null);
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    }
+
     const updateParvulo = async (e) => {
         e.preventDefault();
         const token = Cookies.get("token");
         const decoded = jwt.decode(token, process.env.SECRET_KEY,true);
         console.log(putParvulo);
         try{
-            const res = await axios.put(
-                `${process.env.API_URL}/parvulo/update/${parvulo.rut}`,
-                putParvulo,
-                {
-                    headers: {
-                        "X-Caller-Id": decoded.sub,
-                    },
+            const formData = new FormData();
+            if(selectedFile){
+                formData.append("archivos",selectedFile);
+                const response = await axios.post(
+                    `${process.env.API_URL}/file/${selectedFile.name}`,
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                );
+                if(response.status !== 201){
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Algo salió mal!",
+                        timer: 2000,
+                      });
+                }else{
+                    console.log("response foto nueva");
+                    console.log(response.data[0]._id);
+                    console.log("old foto");
+                    console.log(oldFoto);
+                    const res = await axios.put(
+                        `${process.env.API_URL}/parvulo/update/${parvulo.rut}`,
+                        {
+                            nombre:putParvulo.nombre,
+                            apoderado:putParvulo.apoderado,
+                            rut:putParvulo.rut,
+                            fechaNacimiento:putParvulo.fechaNacimiento,
+                            direccion:putParvulo.direccion,
+                            telefonoEmergencia:putParvulo.telefonoEmergencia,
+                            condicionesMedicas:putParvulo.condicionesMedicas,
+                            foto:response.data[0]._id,
+                        },
+                        {
+                            headers: {
+                                "X-Caller-Id": decoded.sub,
+                            },
+                        }
+                    );
+                    if(res.status === 200){
+                        if(oldFoto !== null){
+                            const deleteFoto = await axios.delete(
+                                `${process.env.API_URL}/file/delete/${oldFoto}`,
+                                {
+                                    headers: {
+                                        "X-Caller-Id": decoded.sub,
+                                    },
+                                }
+                            );
+                            if(deleteFoto.status === 200){
+                                console.log("Foto antigua  eliminada");
+                            }else{
+                                console.log("Error al eliminar foto antigua");
+                            }
+                        }
+                        else{
+                            Swal.fire({
+                                title: "Parvulo actualizado",
+                                icon: "success",
+                                position: "center",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                        }
+
+                    }
+                    setShowModalEditParvulo(false);
+                    setParvulos(parvulos.map((parvulo) => parvulo.rut === rut ? putParvulo : parvulo));
                 }
-            );
-       
-            if(res.status === 200){
-                Swal.fire({
-                    title: "Parvulo actualizado",
-                    icon: "success",
-                    position: "center",
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
+            
+
+            }else{
+                const res = await axios.put(
+                    `${process.env.API_URL}/parvulo/update/${parvulo.rut}`,
+                    putParvulo,
+                    {
+                        headers: {
+                            "X-Caller-Id": decoded.sub,
+                        },
+                    }
+                );
+           
+                if(res.status === 200){
+                    Swal.fire({
+                        title: "Parvulo actualizado",
+                        icon: "success",
+                        position: "center",
+                        showConfirmButton: false,
+                        timer: 1500
+                      });
+                }
+                setShowModalEditParvulo(false);
+                setParvulos(parvulos.map((parvulo) => parvulo.rut === rut ? putParvulo : parvulo));
+
             }
-            setShowModalEditParvulo(false);
-            setParvulos(parvulos.map((parvulo) => parvulo.rut === rut ? putParvulo : parvulo));
+            
         }catch(err){
             Swal.fire({
                 title: "Error al actualizar parvulo",
@@ -116,7 +200,10 @@ export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parv
                                 value={putParvulo.condicionesMedicas}
                                 onChange={(e) => setPutParvulo({...putParvulo,condicionesMedicas:e.target.value})}
                                 />
-
+                                 <label htmlFor="foto" className="form-label">Foto</label>
+                                <input type="file"
+                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
+                                 id="foto" onChange={handleFileChange} />
 
 
                             <div className="modal footer">
