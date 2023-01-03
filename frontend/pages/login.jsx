@@ -7,7 +7,6 @@ import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../contexts/userContext";
 const jwt = require("jwt-simple");
 
-
 export const loginPage = () => {
   const router = useRouter();
   const { user, setUser } = useContext(UserContext);
@@ -48,7 +47,7 @@ export const loginPage = () => {
           confirmButtonText: "Aceptar",
         }).then((result) => {
           if (result.isConfirmed) {
-            router.push("/");
+            router.push("/actividades");
           }
         });
         console.log("login exitoso");
@@ -56,96 +55,66 @@ export const loginPage = () => {
     }
   };
 
-  const setUserParvularia = async () => {
-    const response = await login("639d37cb61f491428cec23cf");
-    if (response.status === 200) {
-      cookie.set("token", response.data.token, { expires: 1 });
-      Swal.fire({
-        title: "Login exitoso",
-        text: "Bienvenido a la Salacula 31 minutos (Conectado como parvularia)",
-        icon: "success",
-        showConfirmButton: true,
-        confirmButtonText: "Aceptar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          router.push("/");
-        }
-      });
+  <form action="" onSubmit={loggin}>
+    <label htmlFor="" className="">
+      Rut :
+    </label>
+    <input
+      onChange={onChange}
+      type="text"
+      name="rut"
+      id="rut"
+      pattern="^(\d{1,3}(?:\.\d{1,3}){2}-[\dkK])$"
+      placeholder="XX.XXX.XXX-X"
+    />
+    <input className="loginSubmit" type="submit" value={"Iniciar Sesion"} />
+  </form>;
 
-      console.log("login exitoso");
-    } else {
-      console.log("login fallido");
-    }
-  };
-  const setUserAsistente = async () => {
-    const response = await login("639d32fa3c32614a985bd3c2");
-    if (response.status === 200) {
-      cookie.set("token", response.data.token, { expires: 1 });
-      Swal.fire({
-        title: "Login exitoso",
-        text: "Bienvenido a la Salacula 31 minutos (Conectado como Asistente de parvulo)",
-        icon: "success",
-        showConfirmButton: true,
-        confirmButtonText: "Aceptar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          router.push("/");
-        }
-      });
-      console.log("login exitoso");
-    } else {
-      console.log("login fallido");
-    }
-  };
-  const setUserApoderado = async () => {
-    const response = await login("639d37f361f491428cec23d0");
-    if (response.status === 200) {
-      cookie.set("token", response.data.token, { expires: 1 });
-      Swal.fire({
-        title: "Login exitoso",
-        text: "Bienvenido a la Salacula 31 minutos (Conectado como parvularia)",
-        icon: "success",
-        showConfirmButton: true,
-        confirmButtonText: "Aceptar",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          router.push("/");
-        }
-      });
-      console.log("login exitoso");
-    } else {
-      console.log("login fallido");
-    }
-  };
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // margin: auto;
+  // border-radius: 50px;
+  // background-color: #fffafb;
+  // box-shadow: 0 0 10px #131515;
 
   return (
     <>
-      <div className="loginContainer h-screen w-screen flex justify-center">
-        <div className="loginBody  w-1/2 h-1/2 flex flex-col  ">
-          <div className="loginTitle flex justify-center">
-            <h1>Login</h1>
+      <div className=" h-screen w-screen flex justify-center">
+        <div className="justify-center bg-white shadow-2xl  rounded-2xl align-middle m-auto  w-1/2 h-1/2 flex flex-col  ">
+          <div className="w-full h-full flex sm:flex-row justify-evenly flex-col">
+            <div className=" flex flex-col justify-center m-auto max-sm:ml-6">
+              <h1 className="text-5xl font-bold my-4 italic">
+                Iniciar sesión:
+              </h1>
+            </div>
+            <div className="w-1/2 h-1/2 flex justify-center m-auto ">
+              <form
+                action=""
+                onSubmit={loggin}
+                className="flex flex-col justify-center "
+              >
+                <label htmlFor="" className="text-xl font-medium mb-2 ">
+                  Rut :
+                </label>
+                <input
+                  required={true}
+                  onChange={onChange}
+                  type="text"
+                  name="rut"
+                  id="rut"
+                  pattern="^(\d{1,3}(?:\.\d{1,3}){2}-[\dkK])$"
+                  placeholder="XX.XXX.XXX-X"
+                  className="flex max-lg:w-40 border-2 border-gray-300 focus:border-black bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                />
+                <input
+                  className=" flex rounded-xl cursor-pointer bg-teal-500 hover:bg-teal-700 text-white  py-2 px-2 m-2"
+                  type="submit"
+                  value={"Iniciar Sesion"}
+                />
+              </form>
+            </div>
           </div>
-          <div className="loginForm flex flex-col justify-center">
-            <form action="" onSubmit={loggin}>
-              <label htmlFor="" className="">
-                Rut :
-              </label>
-              <input
-                onChange={onChange}
-                type="text"
-                name="rut"
-                id="rut"
-                pattern="^(\d{1,3}(?:\.\d{1,3}){2}-[\dkK])$"
-                placeholder="XX.XXX.XXX-X"
-              />
-              <input
-                className="loginSubmit"
-                type="submit"
-                value={"Iniciar Sesion"}
-              />
-            </form>
-          </div>
-          <div></div>
         </div>
       </div>
     </>
