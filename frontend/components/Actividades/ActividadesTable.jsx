@@ -58,7 +58,7 @@ export const ActividadesTable = () => {
         
         <div className="  bg-white border-black border-2 rounded-2xl p-6 mx-4 mt-4 shadow shadow-black"> 
           <table className="w-full table-fixed ">
-            <thead className="">
+            <thead className="table-header-group">
               <tr className="text-left">
                 <th>Titulo</th>
                 <th className="max-md:hidden">Descripcion</th>
@@ -87,7 +87,7 @@ export const ActividadesTable = () => {
                           </>
                         }
                         
-                        <Link href={`/actividades/${item._id}`}>
+                        <Link href={`/actividades/${item._id}`} className="flex justify-center">
                           <button className="hover:text-blue-600">Ver</button>
                         </Link>
                       </td>

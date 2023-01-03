@@ -33,8 +33,8 @@ export const Actividades = ({ props }) => {
       <LeftBar />
       <div className="w-fit ">
         {/* title */}
-        <div className="flex justify-center">
-          <div className="bg-white lg:w-1/2 justify-center flex border-black border-2 rounded-2xl p-2 mx-4 mt-4 shadow shadow-black">
+        <div className="w-full xl:w-3/4 xl:mx-auto ">
+          <div className="bg-white justify-center flex border-black border-2 rounded-2xl p-2 mx-4 mt-4 shadow shadow-black">
             <h1 className="text-5xl font-bold my-4">Actividades</h1>
           </div>
         </div>

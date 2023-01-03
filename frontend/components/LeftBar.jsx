@@ -32,7 +32,7 @@ export const LeftBar = () => {
   };
 
   return (
-    <div className="LeftBar flex flex-col w-fit  max-sm:w-full shadow-black shadow-2xl  ">
+    <div className="LeftBar flex flex-col w-max max-lg:w-fit  max-sm:w-full shadow-black shadow-2xl  ">
       {/* boton para mostrar el menu cuando la pantalla es muy chica */}
       <div className="flex">
         <button
@@ -57,13 +57,13 @@ export const LeftBar = () => {
         <div className={dropdownStyle}>
           <div className=" flex-col h-fit m-2  ">
 
-          <div className="navHeader flex flex-row p-8 justify-center  w-fit  max-sm:hidden">
+          <div className="navHeader flex flex-row p-8 justify-center  w-max max-lg:w-fit max-sm:hidden">
               <img
                 src="/kindergarten.png"
                 alt="icono salacuna"
                 className="w-10 h-10 "
               />
-              <h1 className="m-2 max-sm:hidden">Salacuna 31 minutos</h1>
+              <h1 className="m-2 max-sm:hidden max-lg:hidden">Salacuna 31 minutos</h1>
             </div>
             
             <div className="">
@@ -145,16 +145,16 @@ export const LeftBar = () => {
 
       {/* menu cuando la pantalla es grande */}
       {!menu && (
-        <div className="flex flex-col w-fit max-sm:flex max-sm:h-full max-sm:w-full h-full shadow-black shadow-2xl ">
+        <div className="flex flex-col w-max max-lg:w-fit max-sm:flex max-sm:h-full max-sm:w-full h-full shadow-black shadow-2xl ">
           {/* header */}
           <div>
-            <div className="navHeader flex flex-row p-8 justify-center  w-fit  max-sm:hidden">
+            <div className="navHeader flex flex-row p-8 justify-center  w-max max-lg:w-fit max-sm:hidden">
               <img
                 src="/kindergarten.png"
                 alt="icono salacuna"
                 className="w-10 h-10 "
               />
-              <h1 className="m-2 max-sm:hidden">Salacuna 31 minutos</h1>
+              <h1 className="m-2 max-sm:hidden max-lg:hidden">Salacuna 31 minutos</h1>
             </div>
 
             <hr className="navDivider p-1 max-sm:hidden" />

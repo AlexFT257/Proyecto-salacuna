@@ -61,7 +61,7 @@ export default function Actividad() {
           src={pic}
           alt="
                 Foto Actividad"
-          className="text-xs rounded-2xl border-2 border-black shadow-md shadow-slate-900 max-h-max w-auto"
+          className="text-xs rounded-2xl border-2 border-black shadow-md shadow-slate-900 h-96 content"
         />
       );
     } else if (type === "responsable") {
@@ -268,11 +268,11 @@ export default function Actividad() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <LeftBar />
-        <div className="w-full">
+        <div className="w-full h-full">
           {/* title */}
-          <div className="flex justify-center">
-            <div className="bg-white lg:w-1/2 justify-center flex border-black border-2 rounded-2xl p-2 mx-4 mt-4 shadow shadow-black">
-              <h1 className="text-5xl font-bold my-4">
+          <div className="flex justify-center xl:mx-4">
+            <div className="bg-white w-full xl:w-3/4 xl:mx-auto justify-center flex border-black border-2 rounded-2xl p-2 mx-4 mt-4 shadow shadow-black">
+              <h1 className="text-5xl text-center font-bold my-4">
                 Actividad: {actividadData.titulo}
               </h1>
             </div>
@@ -311,9 +311,9 @@ export default function Actividad() {
                 {switchRender(seccion)}
               </div>
             </div>
-            <div className="flex flex-row mx-4 h-auto">
+            <div className="flex mx-4">
               {actividadData.foto ? (
-                <div className="w-full space-y-4 mb-4">
+                <div className="flex flex-col w-full space-y-4 mb-4">
                   {user.role !== "apoderado" && (
                     <div className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
                       <div className="flex flex-row justify-center space-x-6 py-4">
@@ -333,7 +333,7 @@ export default function Actividad() {
                       )}
                     </div>
                   )}
-                  <div className="flex flex-row justify-center">
+                  <div className="flex justify-center">
                     {picture(actividadData.foto, "actividad")}
                   </div>
                 </div>
