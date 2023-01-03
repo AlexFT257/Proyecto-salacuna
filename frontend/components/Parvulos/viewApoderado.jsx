@@ -41,6 +41,10 @@ export const ModalViewApoderado = ({ dataParvulo ,setShowModalViewApoderado }) =
                                 <td type="text" 
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
                                 > {dataApoderado.nombre}</td>
+                                <label className="form-label">Apellido</label>
+                                <td type="text"
+                                className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
+                                >{dataApoderado.apellido}</td>
                                 <label className="form-label">Rut</label>
                                 <td type="text"
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
@@ -53,7 +57,7 @@ export const ModalViewApoderado = ({ dataParvulo ,setShowModalViewApoderado }) =
                                 <label className="form-label">Direccion</label>
                                 <td type="text" 
                                 className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600" 
-                                > {dataApoderado.direccion}</td>
+                                > {dataApoderado.domicilio}</td>
 
                                 <label className="form-label">Email</label>
                                 <td type="text"
