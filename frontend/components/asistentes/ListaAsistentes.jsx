@@ -176,12 +176,14 @@ export const ListaAsistentes = () => {
         console.log(idFoto);
         // si el archivo se sube correctamente se guarda el id del archivo en el state
         if (response.status === 201) {
-          await setEditValues({
+          setEditValues({
             ...editValues,
             foto: idFoto,
           });
+          editValues.foto = idFoto;
         }
         console.log("foto post consulta: "+editValues.foto);
+
       }
       // verifica si hay valores vacios en el formulario
       const emptyValues = Object.values(editValues).some(
@@ -193,7 +195,17 @@ export const ListaAsistentes = () => {
         // si no hay valores vacios se envian todos los valores
         const response = await axios.put(
           `${process.env.API_URL}/asistente/${editValues.rut}`,
-          editValues,
+          {
+            nombre: editValues.nombre,
+            apellido: editValues.apellido,
+            rut: editValues.rut,
+            mail: editValues.mail,
+            role: editValues.role,
+            fechaNa: editValues.fechaNa,
+            domicilio: editValues.domicilio,
+            telefono: editValues.telefono,
+            foto: idFoto,
+          },
           {
             headers: {
               "X-Caller-Id": payload.sub,
