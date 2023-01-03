@@ -103,7 +103,16 @@ export const ModalUpdateParvulo = ({setShowModalEditParvulo,rut,setParvulos,parv
 
                     }
                     setShowModalEditParvulo(false);
-                    setParvulos(parvulos.map((parvulo) => parvulo.rut === rut ? putParvulo : parvulo));
+                    setParvulos(parvulos.map((parvulo) => parvulo.rut === rut ? {
+                        nombre:putParvulo.nombre,
+                        apoderado:putParvulo.apoderado,
+                        rut:putParvulo.rut,
+                        fechaNacimiento:putParvulo.fechaNacimiento,
+                        direccion:putParvulo.direccion,
+                        telefonoEmergencia:putParvulo.telefonoEmergencia,
+                        condicionesMedicas:putParvulo.condicionesMedicas,
+                        foto:response.data[0]._id,
+                    } : parvulo));
                 }
             
 
