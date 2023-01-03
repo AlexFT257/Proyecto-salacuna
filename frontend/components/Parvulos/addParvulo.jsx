@@ -54,6 +54,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                         },
                     }
                 );
+                console.log("res foto");
                 console.log(res);
                 if(res.status !== 201){
                     Swal.fire({
@@ -65,11 +66,23 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                     setNewParvulo({
                         ...newParvulo,
                         foto: res.data[0]._id,
+
                     });
+                    console.log("newParvulo foto");
+                    console.log(newParvulo.foto);
                     console.log(res.data[0]._id);
                     const response = await axios.post(
                         `${process.env.API_URL}/parvulo`,
-                        newParvulo,
+                        {
+                            nombre: newParvulo.nombre,
+                            apoderado: newParvulo.apoderado,
+                            rut: newParvulo.rut,
+                            fechaNacimiento: newParvulo.fechaNacimiento,
+                            direccion: newParvulo.direccion,
+                            telefonoEmergencia: newParvulo.telefonoEmergencia,
+                            condicionesMedicas: newParvulo.condicionesMedicas,
+                            foto: res.data[0]._id,
+                        },
                         {
                             headers: {
                                 "Content-Type": "application/json",
@@ -77,6 +90,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                             },
                         }
                     );
+                    console.log("responseCREACION");
                     console.log(response);
                     if(response.status !== 201){
                         Swal.fire({
@@ -101,6 +115,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                         },
                     }
                 );
+                console.log("responseCREACION eLSE");
                 console.log(response);
                 if(response.status !== 201){
                     Swal.fire({
