@@ -159,7 +159,7 @@ export default function Actividad() {
                       new Date().getFullYear() -
                       new Date(parvulo.fechaNacimiento).getFullYear();
                     return (
-                      <tr>
+                      <tr key={parvulo._id}>
                         <td> {picture(parvulo.foto, "parvulo")} </td>
                         <td>{parvulo.nombre}</td>
                         <td>{parvulo.rut}</td>

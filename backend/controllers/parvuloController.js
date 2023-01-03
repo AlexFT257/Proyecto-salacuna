@@ -129,6 +129,5 @@ module.exports = {
         updateParvulo,
         deleteParvulo,
         getOneParvulo,
-        createParvulo,
         getParvulosByApoderado
     }

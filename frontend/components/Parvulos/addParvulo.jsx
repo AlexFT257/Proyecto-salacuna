@@ -66,6 +66,7 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                         ...newParvulo,
                         foto: res.data[0]._id,
                     });
+                    console.log(res.data[0]._id);
                     const response = await axios.post(
                         `${process.env.API_URL}/parvulo`,
                         newParvulo,
@@ -146,6 +147,8 @@ export const ModalAddParvulo= ({setShowModalAddParvulo, parvulos, setParvulos}) 
                                 
                                     <label htmlFor="apoderado" className="form-label">Apoderado</label>
                                     <input type="text"
+                                    pattern="^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$"
+                                    placeholder="xx.xxx.xxx-x"
                                     className="form-control bg-inherit border-b-2 border-slate-900 rounded-lg p-2 focus:outline-emerald-600"
                                     id="apoderado" onChange={(e) => setNewParvulo({...newParvulo, apoderado: e.target.value})} required/>
                                 

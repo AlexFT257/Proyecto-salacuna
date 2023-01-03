@@ -7,12 +7,16 @@ import { ModalAddParvulo } from "./addParvulo";
 import { ModalUpdateParvulo } from "./updateParvulo";
 import { ModalDeleteParvulo } from "./deleteParvulo";
 
-
+import { useContext } from "react";
+import { UserContext } from "../../contexts/userContext";
 import { useState, useEffect } from "react";
 
 //Listar los parvulos en una tabla
 
 export const ListarParvulos = () => {
+    const { user } = useContext(UserContext);
+    console.log(user);
+    
     const [showModalAddParvulo, setShowModalAddParvulo] = useState(false);
     const [showModalEditParvulo, setShowModalEditParvulo] = useState(false);
     const [ShowModalDeleteParvulo,setShowModalDeleteParvulo] = useState(false);
@@ -20,7 +24,11 @@ export const ListarParvulos = () => {
 
     const [rut, setRut] = useState("");
     
+
     const getParvulos = async () => {
+        console.log(user.nombre);
+
+        if(user.role !== "apoderado"){
         const token = Cookies.get("token");
         const payload = jwt.decode(token, process.env.SECRET_KEY,true);
         const response = await axios.get(`${process.env.API_URL}/parvulos`, {
@@ -28,8 +36,17 @@ export const ListarParvulos = () => {
         });
         console.log(response);
         setParvulos(response.data);
+
+        }else{
+            const response = await axios.get(`${process.env.API_URL}/parvulo/searchByApoderado/${user.rut}`);
+            console.log(response);
+            setParvulos(response.data);
+        }
+        
     };
+
     useEffect(() => {
+        
         getParvulos();
 
     }, []);
@@ -70,12 +87,15 @@ export const ListarParvulos = () => {
                 </div>
 
                 <div className="m-4 h-fit">
-                    <div className="flex justify-center my-2">
+                    {user.role !== "apoderado" && (
+                        <div className="flex justify-center my-2">
                         <button className="bg-white border-black border-2 rounded-2xl p-3 shadow shadow-slate-900 hover:bg-emerald-300" onClick={() => setShowModalAddParvulo(true)}>
                             Añadir Parvulo
                         </button>
                     </div>
-                <div className="Parvulotable overflow-auto bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900 ">
+                    )}
+                    
+                 <div className="Parvulotable overflow-auto bg-white border-black border-2 rounded-2xl p-6 shadow mr-2 shadow-slate-900 ">
                     <table className="w-full table-auto">
                         <thead>
                             <tr className="text-left">
@@ -103,14 +123,19 @@ export const ListarParvulos = () => {
                                     <td>{parvulo.direccion}</td>
                                     <td>{parvulo.condicionesMedicas}</td>
                                     <td className="flex flex-row mt-2 justify-evenly">
-                                        <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
-                                        onClick={()=>modalEdit(parvulo.rut)}>
-                                            Editar
-                                        </button>
-                                        <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
-                                        onClick={() => modalDelete(parvulo.rut)}>
-                                            Eliminar
-                                        </button>
+                                        {user.role !=="apoderado" && (
+                                            <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
+                                            onClick={()=>modalEdit(parvulo.rut)}>
+                                             Editar
+                                            </button>
+                                        )}
+                                        {user.role !=="apoderado" && (
+                                            <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"
+                                            onClick={() => modalDelete(parvulo.rut)}>
+                                                Eliminar
+                                            </button>
+                                        )}
+                                        
                                         <Link href={`/parvulos/${parvulo._id}` }>
                                         <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"> ver</button>
                                         </Link>
@@ -121,7 +146,7 @@ export const ListarParvulos = () => {
                             }
                         </tbody>
                     </table>
-                </div>
+                 </div>
                 </div>
             </div>
             {showModalAddParvulo && (

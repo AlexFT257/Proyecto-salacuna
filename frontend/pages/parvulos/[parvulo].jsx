@@ -1,8 +1,6 @@
 import { useRouter } from "next/router";
 import { LeftBar } from "../../components/LeftBar";
 import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-const jwt = require("jwt-simple");
 import { Perfil } from "../../components/Perfil";
 import Link from "next/link";
 import axios from "axios";
@@ -22,14 +20,8 @@ export default function Parvulo() {
 
   useEffect(() => {
     const getParvulo = async () => {
-      const token = Cookies.get("token");
-      const payload = jwt.decode(token, process.env.SECRET_KEY, true);
       const response = await axios.get(
-        `${process.env.API_URL}/parvulo/search/${parvulo}`,
-        {
-          headers: { "X-Caller-Id": payload.sub },
-        }
-      );
+        `${process.env.API_URL}/parvulo/search/${parvulo}`);
       const data = await response.data;
       if (response.status === 200) {
         setDataParvulo(data);
