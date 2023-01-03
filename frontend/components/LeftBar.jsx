@@ -128,7 +128,19 @@ export const LeftBar = () => {
                   <h2 className="ml-2 ">Parvulos</h2>
                 </div>
 
-                
+                <div
+                  onClick={() => {
+                    router.push("/registro");
+                  }}
+                  className="navItem flex flex-row m-2 rounded-lg "
+                >
+                  <img
+                    src="/report.png"
+                    alt="icono de parvulos"
+                    className="w-6 h-6"
+                  />
+                  <h2 className="ml-2 ">Registro de pagos</h2>
+                </div>
                 <hr className="navDivider " />
                 <div
                   onClick={logingOut}
@@ -219,7 +231,33 @@ export const LeftBar = () => {
                   <h2 className="ml-2 max-lg:hidden">Parvulos</h2>
                 </div>
 
-                
+                <div
+                  onClick={() => {
+                    router.push("/asistencia");
+                  }}
+                  className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center"
+                >
+                  <img
+                    src="/asistencia.png"
+                    alt="icono de parvulos"
+                    className="w-6 h-6"
+                  />
+                  <h2 className="ml-2 max-lg:hidden">Asistencia</h2>
+                </div>
+
+                <div
+                  onClick={() => {
+                    router.push("/registro");
+                  }}
+                  className="navItem flex flex-row shadow-xl m-2 rounded-lg max-lg:content-center max-lg:justify-center"
+                >
+                  <img
+                    src="/report.png"
+                    alt="icono de parvulos"
+                    className="w-6 h-6"
+                  />
+                  <h2 className="ml-2 max-lg:hidden">Registro de pagos</h2>
+                </div>
               </div>
               {/* footer */}
               <hr className="navDivider p-1 max-sm:hidden mb-2" />
