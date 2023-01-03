@@ -61,7 +61,7 @@ export const ListarParvulos = () => {
         setRut(rut);
     };
     // obtener la foto del parvulo
-    const getFoto =(id) => {
+    const getFoto = (id) => {
         const pic = id ? `${process.env.API_URL}/file/download/${id}` : "";
         return (
             <img
@@ -135,7 +135,6 @@ export const ListarParvulos = () => {
                                                 Eliminar
                                             </button>
                                         )}
-                                        
                                         <Link href={`/parvulos/${parvulo._id}` }>
                                         <button className="bg-white border-black border-2 rounded-2xl p-2 shadow shadow-slate-900 hover:bg-emerald-300"> ver</button>
                                         </Link>
