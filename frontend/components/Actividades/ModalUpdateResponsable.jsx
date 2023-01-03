@@ -119,7 +119,7 @@ export const ModalUpdateResponsable = ({ actividad, setActividadData, setShowMod
                         return (
                             <option 
                                 value={responsable._id}
-                                hidden={((actividad.responsable) && actividad.responsable._id === responsable._id ) ? actividad.responsable._id : null}
+                                hidden={((actividad.responsable) && actividad.responsable._id === responsable._id ) ? true : false}
                             >{responsable.nombre}</option>
                         )
                     })

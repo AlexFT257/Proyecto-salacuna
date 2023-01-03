@@ -45,7 +45,7 @@ export const ActividadesTable = () => {
     <div className="w-full xl:w-3/4 xl:mx-auto ">
         
       {
-        user.role !== "apoderado" && 
+        user.role === "parvularia" && 
         <div className="flex justify-end mx-4 mt-6">
           <button 
               className="rounded-xl p-3 bg-white border-2 border-black shadow shadow-black hover:bg-teal-200 hover:shadow-md hover:shadow-black" 
@@ -80,13 +80,14 @@ export const ActividadesTable = () => {
                         (item.responsable != null) ? item.responsable.nombre : "Sin responsable"
                       }</td>
                       <td className="flex max-md:flex-col justify-items-center space-x-2 max-md:space-x-0">
-                        { user.role !== "apoderado" &&
-                          <>
-                          <button className="hover:text-red-600" onClick={() => deleteModal(item._id)}>Eliminar</button>
-                          <button className="hover:text-emerald-600" onClick={() => updateModal(item)}>Editar</button>
-                          </>
+                        {
+                          user.role === "parvularia" &&
+                         <button className="hover:text-red-600" onClick={() => deleteModal(item._id)}>Eliminar</button>  
                         }
-                        
+                        {
+                          (user.role === "parvularia" || (user.role === "asistente" && user._id === item.responsable._id)) &&
+                          <button className="hover:text-emerald-600" onClick={() => updateModal(item)}>Editar</button>
+                        }
                         <Link href={`/actividades/${item._id}`} className="flex justify-center">
                           <button className="hover:text-blue-600">Ver</button>
                         </Link>

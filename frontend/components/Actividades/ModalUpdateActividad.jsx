@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 const jwt = require("jwt-simple");
 import Swal from "sweetalert2";
 import axios from "axios";
+import { UserContext } from "../../contexts/userContext";
+import { useContext } from "react";
 
 export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActividades, actividad}) => {
   const [putActividad, setPutActividad] = useState({
@@ -21,6 +23,8 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
     responsable: (actividad.responsable) ? actividad.responsable._id : '',
     parvulos: (actividad.parvulos.length > 0) ? actividad.parvulos.map((parvulo) => parvulo._id) : [],
   });
+
+  const { user } = useContext(UserContext);
 
   const [parvulos, setParvulos] = useState([]);
   const [asistentes, setAsistentes] = useState([]);
@@ -244,6 +248,9 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                     })
                   }
                 />
+                {
+                  user.role === "parvularia" &&
+                <>
                 <span className="font-semibold">Responsable</span>
                 <select
                   className="bg-inherit border-b-2 border-slate-900 rounded-lg p-2"
@@ -256,12 +263,17 @@ export const ModalUpdateActividad = ({setShowModalUpdate, actividades, setActivi
                 >
                   
                   <option value={(actividad.responsable) ? actividad.responsable._id : null} selected>{(actividad.responsable) ? actividad.responsable.nombre : 'Responsable'}</option>
-                  {asistentes.map((asistente) => (
-                    <option value={asistente._id}>{asistente.nombre}</option>
-                  ))}
-
+                  {asistentes.map((asistente) => {
+                    return (<option
+                      value={asistente._id}
+                      hidden={((actividad.responsable) && actividad.responsable._id === asistente._id) ? true : false}
+                    >{asistente.nombre}</option>
+                    )
+                  })
+                }                  
                 </select>
-                
+                </>
+                }
                 <div className="flex flex-col space-y-3">
                   <span className="font-semibold">Parvulos</span>
                   <div className="flex flex-col space-y-3">

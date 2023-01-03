@@ -20,9 +20,9 @@ export default function Actividad() {
 
   const [showModalUpdateInfo, setShowModalUpdateInfo] = useState(false);
   const [showModalUpdateParvulos, setShowModalUpdateParvulos] = useState(false);
-  const [showModalUpdateResponsable, setShowModalUpdateResponsable] =
-    useState(false);
+  const [showModalUpdateResponsable, setShowModalUpdateResponsable] = useState(false);
   const [showUploadFotoSection, setShowUploadFotoSection] = useState(false);
+  const [showFoto, setShowFoto] = useState(false);
 
   const { user } = useContext(UserContext);
 
@@ -57,12 +57,26 @@ export default function Actividad() {
       );
     } else if (type === "actividad") {
       return (
+        <>
         <img
           src={pic}
           alt="
                 Foto Actividad"
-          className="text-xs rounded-2xl border-2 border-black shadow-md shadow-slate-900 h-96 content"
+          className="text-xs rounded-2xl border-2 border-black shadow-md shadow-slate-900 h-40"
+          onClick={() => setShowFoto(true)}
         />
+        { showFoto && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center" 
+                onClick={() => setShowFoto(false)}>
+            <img
+              src={pic}
+              alt="
+                    Foto Actividad"
+              className="text-xs rounded-2xl border-2 border-black shadow-md shadow-slate-900 h-max"
+            />
+          </div>
+        )}      
+      </>
       );
     } else if (type === "responsable") {
       return (
@@ -84,7 +98,7 @@ export default function Actividad() {
           <div className="bg-white border-black border-2 rounded-2xl p-4 shadow-md shadow-slate-900 h-full">
             <div className="flex flex-row justify-between">
               <h1 className="text-3xl font-bold">Informacion</h1>
-              {user.role !== "apoderado" && (
+              {(user.role === "parvularia" || (user.role === "asistente" && (actividadData.responsable && user._id === actividadData.responsable._id))) && (
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={() => setShowModalUpdateInfo(true)}
@@ -113,7 +127,7 @@ export default function Actividad() {
               <div className="flex flex-col">
                 <div className="flex flex-row justify-between">
                   <h1 className="text-3xl font-bold">Parvulos</h1>
-                  {user.role !== "apoderado" && (
+                  {(user.role === "parvularia" || (user.role === "asistente" && (actividadData.responsable && user._id === actividadData.responsable._id))) && (
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                       onClick={() => setShowModalUpdateParvulos(true)}
@@ -135,7 +149,7 @@ export default function Actividad() {
             <div className="flex flex-col">
               <div className="flex flex-row justify-between">
                 <h1 className="text-3xl font-bold">Parvulos</h1>
-                {user.role !== "apoderado" && (
+                {(user.role === "parvularia" || (user.role === "asistente" && (actividadData.responsable && user._id === actividadData.responsable._id))) && (
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => setShowModalUpdateParvulos(true)}
@@ -178,7 +192,7 @@ export default function Actividad() {
             <div className="flex flex-col">
               <div className="flex flex-row justify-between">
                 <h1 className="text-3xl font-bold">Responsable</h1>
-                {user.role !== "apoderado" && (
+                {(user.role === "parvularia" || (user.role === "asistente" && (actividadData.responsable && user._id === actividadData.responsable._id))) && (
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => setShowModalUpdateResponsable(true)}
@@ -198,7 +212,7 @@ export default function Actividad() {
           <div className="bg-white border-black border-2 rounded-2xl p-4 shadow-md shadow-slate-900 h-full">
             <div className="flex flex-row justify-between">
               <h1 className="text-3xl font-bold">Responsable</h1>
-              {user.role !== "apoderado" && (
+              {(user.role === "parvularia") && (
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={() => setShowModalUpdateResponsable(true)}
@@ -314,7 +328,7 @@ export default function Actividad() {
             <div className="flex mx-4">
               {actividadData.foto ? (
                 <div className="flex flex-col w-full space-y-4 mb-4">
-                  {user.role !== "apoderado" && (
+                  {(user.role === "parvularia" || (user.role === "asistente" && (actividadData.responsable && user._id === actividadData.responsable._id)))&& (
                     <div className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
                       <div className="flex flex-row justify-center space-x-6 py-4">
                         <button
@@ -341,7 +355,7 @@ export default function Actividad() {
                 <div className="bg-white border-black border-2 rounded-2xl shadow-md shadow-slate-900 w-full">
                   <div className="flex flex-row justify-center space-x-6 py-4">
                     <p>No se ha añadido foto de esta actividad :(</p>
-                    {user.role !== "apoderado" && (
+                    {(user.role === "parvularia" || (user.role === "asistente" && (actividadData.responsable && user._id === actividadData.responsable._id))) && (
                       <button
                         className="text-black hover:text-blue-600"
                         onClick={() => setShowUploadFotoSection(true)}
